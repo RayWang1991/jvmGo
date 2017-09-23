@@ -25,9 +25,8 @@ func (entry *DirEntry) ReadClass(className string) ([]byte, Entry, error) {
 // if the path can not be converted to an absolute path, it panics
 func NewDirEntry(path string) *DirEntry {
 	// check the path
-	abs, err := filepath.Abs(path)
-	if err != nil {
-		panic(err)
+	if !filepath.IsAbs(path) {
+		panic("not absolute path")
 	}
 	return &DirEntry{path}
 }

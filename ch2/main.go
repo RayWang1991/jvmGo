@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"./classpath"
+)
 
 func main() {
 	cmd := ParseCmd()
@@ -16,5 +19,6 @@ func main() {
 }
 
 func startJVM(cmd *Cmd) {
+	classpath.NewEntry("")
 	fmt.Printf("class path: %s class: %s args: %s\n", cmd.cpOption, cmd.class, cmd.args)
 }

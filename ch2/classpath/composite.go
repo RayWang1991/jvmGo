@@ -3,6 +3,7 @@ package classpath
 import (
 	"bytes"
 	"fmt"
+	"strings"
 )
 
 // CompositeEntry represent a list of entry
@@ -28,6 +29,12 @@ func (c CompositeEntry) String() string {
 	return buf.String()
 }
 
-func NewComposite(pathList string)CompositeEntry{
-
+func NewComposite(pathList string) CompositeEntry {
+	paths := strings.Split(pathList, string(seperator))
+	entrs := make([]Entry, 0, len(paths))
+	for _, p := range paths {
+		e := NewEntry(p)
+		entrs = append(entrs, e)
+	}
+	return CompositeEntry(entrs)
 }
