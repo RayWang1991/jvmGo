@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"./classpath"
+	"jvmGo/ch2/classpath"
+	"strings"
 )
 
 func main() {
@@ -19,6 +20,14 @@ func main() {
 }
 
 func startJVM(cmd *Cmd) {
-	classpath.NewEntry("")
+	cp := classpath.NewClassPath(cmd.xjreOption, cmd.cpOption)
 	fmt.Printf("class path: %s class: %s args: %s\n", cmd.cpOption, cmd.class, cmd.args)
+	className := strings.Replace(cmd.class, ".", "/", -1)
+	className += ".class"
+	classData, _, err := cp.ReadClass(className)
+	if err == nil {
+		fmt.Printf("data: %v", classData)
+	} else {
+		fmt.Printf("error: %s\n", err)
+	}
 }

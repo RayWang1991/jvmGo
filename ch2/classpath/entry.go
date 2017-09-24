@@ -18,13 +18,17 @@ const seperator = os.PathListSeparator
 
 // wrapper for initiation dir, wildcard, composite, zip
 func NewEntry(path string) Entry {
+	path, err := filepath.Abs(path)
+	if err != nil {
+		panic("can not get absolute path")
+	}
 	if strings.HasSuffix(path, "*") {
 		return NewWildcardEntry(path)
 	}
 	if strings.HasSuffix(path, "jar") || strings.HasSuffix(path, "JAR") {
 		return NewZipEntry(path)
 	}
-	if strings.Contains(path, strings(seperator)) {
+	if strings.Contains(path, string(seperator)) {
 		return NewComposite(path)
 	}
 	return NewDirEntry(path)
