@@ -1,4 +1,4 @@
-package classFile
+package classfile
 
 type ClassInfo struct {
 	nameIndex uint16 // index to constant pool, a utf8_info to represent the Full Qualified class name

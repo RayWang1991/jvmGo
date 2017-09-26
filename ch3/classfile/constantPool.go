@@ -1,7 +1,7 @@
 // constant pool contains two kinds of type datas
 // 1. Literals
 // 2. Symbolic references
-package classFile
+package classfile
 
 import (
 	"fmt"
@@ -83,3 +83,7 @@ const (
 	CONST_MethodType_Info         = 16
 	CONST_InvokeDynamic_Info      = 18
 )
+
+func (cp ConstantPool) getUtf8(index uint16) string {
+	return cp[index].(*Utf8Info).val
+}

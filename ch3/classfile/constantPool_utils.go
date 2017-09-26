@@ -1,4 +1,4 @@
-package classFile
+package classfile
 
 import (
 	"fmt"
