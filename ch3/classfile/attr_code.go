@@ -23,6 +23,7 @@ Code {
  */
 
 type AttrCode struct {
+	cp        ConstantPool
 	maxStack  uint16
 	maxLocals uint16
 	code      []byte
@@ -30,7 +31,7 @@ type AttrCode struct {
 	attrs     []AttrInfo
 }
 
-func (code *AttrCode) ReadInfo(cp ConstantPool, reader ClassReader) uint64 {
+func (code *AttrCode) ReadInfo(reader ClassReader) uint64 {
 	num := reader.ReadUint64()
 	code.maxStack = reader.ReadUint16()
 	code.maxLocals = reader.ReadUint16()
@@ -47,8 +48,8 @@ func (code *AttrCode) ReadInfo(cp ConstantPool, reader ClassReader) uint64 {
 	code.attrs = make([]AttrInfo, attrN)
 	for i := range code.attrs {
 		start := reader.length()
-		attr := NewAttributeInfo(reader, cp) // override point1
-		num := attr.ReadInfo(reader, cp)     // override point2
+		attr := NewAttributeInfo(reader, code.cp) // override point1
+		num := attr.ReadInfo(reader)              // override point2
 		code.attrs[i] = attr
 		if reader.length() != num+start { // verification
 			panic(fmt.Errorf("wrong number for parsing %s", attr))
