@@ -1,4 +1,5 @@
-public class ClassFileTest {
+import java.lang.Object;
+public class ClassFileTest extends Object{
   public static final boolean FLAG = true;
   public static final byte BYTE = 123;
   public static final char X = 'X';
