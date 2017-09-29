@@ -1,9 +1,17 @@
-package classFile
+package classfile
 
 import "encoding/binary"
 
 type ClassReader struct {
 	data []byte
+}
+
+func NewClassReader(data []byte) *ClassReader {
+	return &ClassReader{data}
+}
+
+func (cr *ClassReader) length() uint32 {
+	return uint32(len(cr.data))
 }
 
 // read a byte
@@ -35,7 +43,7 @@ func (cr *ClassReader) ReadUint64() uint64 {
 }
 
 func (cr *ClassReader) ReadBytes(n uint) []byte { // can do this? [n]byte
-	val := []byte(cr.data[:n])
+	val := cr.data[:n]
 	cr.data = cr.data[n:]
 	return val
 }
