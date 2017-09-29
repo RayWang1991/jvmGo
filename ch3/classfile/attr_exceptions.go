@@ -5,8 +5,8 @@ type AttrExceptions struct {
 	exceptionIndexes []uint16 // indexes to constant pool, must be class info
 }
 
-func (attrExt *AttrExceptions) ReadInfo(reader ClassReader) uint64 {
-	num := reader.ReadUint64()
+func (attrExt *AttrExceptions) ReadInfo(reader *ClassReader) uint32 {
+	num := reader.ReadUint32()
 	indexNum := reader.ReadUint16()
 	exceptions := make([]uint16, 0, indexNum)
 	for i := uint16(0); i < indexNum; i++ {

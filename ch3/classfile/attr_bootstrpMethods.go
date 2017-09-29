@@ -5,8 +5,8 @@ type AttrBootstrapMethods struct {
 	bootMethodTable []AttrBootstrapMethodEntry
 }
 
-func (bsm *AttrBootstrapMethods) ReadInfo(reader ClassReader) uint64 {
-	num := reader.ReadUint64()
+func (bsm *AttrBootstrapMethods) ReadInfo(reader *ClassReader) uint32 {
+	num := reader.ReadUint32()
 	tableN := reader.ReadUint16()
 	table := make([]AttrBootstrapMethodEntry, 0, tableN)
 	for i := uint16(0); i < tableN; i++ {
@@ -25,7 +25,7 @@ type AttrBootstrapMethodEntry struct {
 	// long, float, double, method handle, method type
 }
 
-func (entry *AttrBootstrapMethodEntry) ReadInfo(reader ClassReader) {
+func (entry *AttrBootstrapMethodEntry) ReadInfo(reader *ClassReader) {
 	entry.methodRef = reader.ReadUint16()
 	n := reader.ReadUint16()
 	args := make([]uint16, 0, n)

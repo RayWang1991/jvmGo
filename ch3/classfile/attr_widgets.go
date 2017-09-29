@@ -4,16 +4,16 @@ package classfile
 type AttrDeprecated struct {
 }
 
-func (dep *AttrDeprecated) ReadInfo(reader ClassReader) uint64 {
-	return reader.ReadUint64()
+func (dep *AttrDeprecated) ReadInfo(reader *ClassReader) uint32 {
+	return reader.ReadUint32()
 }
 
 // Synthetic
 type AttrSynthetic struct {
 }
 
-func (_ *AttrSynthetic) ReadInfo(reader ClassReader) uint64 {
-	return reader.ReadUint64()
+func (_ *AttrSynthetic) ReadInfo(reader *ClassReader) uint32 {
+	return reader.ReadUint32()
 }
 
 // Signature
@@ -22,8 +22,8 @@ type AttrSignature struct {
 	val string
 }
 
-func (sig *AttrSignature) ReadInfo(reader ClassReader) uint64 {
-	num := reader.ReadUint64()
+func (sig *AttrSignature) ReadInfo(reader *ClassReader) uint32 {
+	num := reader.ReadUint32()
 	index := reader.ReadUint16()
 	sig.val = sig.cp[index].(*Utf8Info).val
 	return num
@@ -35,8 +35,8 @@ type AttrSourceFile struct {
 	val string
 }
 
-func (s *AttrSourceFile) ReadInfo(reader ClassReader) uint64 {
-	num := reader.ReadUint64()
+func (s *AttrSourceFile) ReadInfo(reader *ClassReader) uint32 {
+	num := reader.ReadUint32()
 	index := reader.ReadUint16()
 	s.val = s.cp[index].(*Utf8Info).val
 	return num

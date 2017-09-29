@@ -4,8 +4,8 @@ type AttrLocalVarTable struct {
 	localVarTable []AttrLocalVarEntry
 }
 
-func (table *AttrLocalVarTable) ReadInfo(reader ClassReader) uint64 {
-	num := reader.ReadUint64()
+func (table *AttrLocalVarTable) ReadInfo(reader *ClassReader) uint32 {
+	num := reader.ReadUint32()
 	eNum := reader.ReadUint16()
 	entries := make([]AttrLocalVarEntry, 0, eNum)
 	for i := uint16(0); i < eNum; i++ {

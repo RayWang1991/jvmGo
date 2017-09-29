@@ -31,8 +31,8 @@ type AttrCode struct {
 	attrs     []AttrInfo
 }
 
-func (code *AttrCode) ReadInfo(reader ClassReader) uint64 {
-	num := reader.ReadUint64()
+func (code *AttrCode) ReadInfo(reader *ClassReader) uint32 {
+	num := reader.ReadUint32()
 	code.maxStack = reader.ReadUint16()
 	code.maxLocals = reader.ReadUint16()
 	codeLen := reader.ReadUint32()
@@ -51,8 +51,8 @@ func (code *AttrCode) ReadInfo(reader ClassReader) uint64 {
 		attr := NewAttributeInfo(reader, code.cp) // override point1
 		num := attr.ReadInfo(reader)              // override point2
 		code.attrs[i] = attr
-		if reader.length() != num+start { // verification
-			panic(fmt.Errorf("wrong number for parsing %s", attr))
+		if reader.length()+num+ATTRBASELEN != start { // verification
+			panic(fmt.Errorf("wrong number for parsing %#v", attr))
 		}
 	}
 	return num
@@ -65,7 +65,7 @@ type AttrExceptionTableEntry struct {
 	catchType uint16 // index into constant pool to class info
 }
 
-func (entry *AttrExceptionTableEntry) ReadInfo(reader ClassReader) {
+func (entry *AttrExceptionTableEntry) ReadInfo(reader *ClassReader) {
 	entry.startPC = reader.ReadUint16()
 	entry.endPC = reader.ReadUint16()
 	entry.handlerPC = reader.ReadUint16()

@@ -2,13 +2,10 @@ package classfile
 
 type AttrInfo interface {
 	// ReadInfo should read info from the byte stream and constant pool, and returns the should be byte numbers
-	ReadInfo(reader ClassReader) uint64
+	ReadInfo(reader *ClassReader) uint32
 }
 
-type AttrInfoBase struct {
-	nameIndex uint16
-	length    uint64
-}
+const ATTRBASELEN uint32 = 6
 
 const (
 	ATTRNAME_CONSTVALUE                          = "ConstantValue"
@@ -37,7 +34,7 @@ const (
 )
 
 // factory method for attribute info
-func NewAttributeInfo(reader ClassReader, cp ConstantPool) AttrInfo {
+func NewAttributeInfo(reader *ClassReader, cp ConstantPool) AttrInfo {
 	nameIndex := reader.ReadUint16()
 	name := cp.getUtf8(nameIndex)
 	switch name {

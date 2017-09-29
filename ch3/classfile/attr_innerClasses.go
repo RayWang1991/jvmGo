@@ -12,8 +12,8 @@ type AttrInnerClass struct {
 	innerClassAccessFlags uint16
 }
 
-func (innerClasses *AttrInnerClasses) ReadInfo(reader ClassReader) uint64 {
-	num := reader.ReadUint64()
+func (innerClasses *AttrInnerClasses) ReadInfo(reader *ClassReader) uint32 {
+	num := reader.ReadUint32()
 	classNum := reader.ReadUint16()
 	classes := make([]AttrInnerClass, 0, classNum)
 	var i uint16
@@ -26,7 +26,7 @@ func (innerClasses *AttrInnerClasses) ReadInfo(reader ClassReader) uint64 {
 	return num
 }
 
-func (innerClass *AttrInnerClass) ReadInfo(reader ClassReader) {
+func (innerClass *AttrInnerClass) ReadInfo(reader *ClassReader) {
 	innerClass.innerClassIndex = reader.ReadUint16()
 	innerClass.outerClassIndex = reader.ReadUint16()
 	innerClass.innerNameIndex = reader.ReadUint16()

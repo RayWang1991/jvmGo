@@ -9,8 +9,8 @@ type AttrLineNumberEntry struct {
 	lineNumber uint16
 }
 
-func (table *AttrLineNumberTable) ReadInfo(reader ClassReader) uint64 {
-	num := reader.ReadUint64()
+func (table *AttrLineNumberTable) ReadInfo(reader *ClassReader) uint32 {
+	num := reader.ReadUint32()
 	lineNum := reader.ReadUint16()
 	entries := make([]AttrLineNumberEntry, 0, lineNum)
 	for i := uint16(0); i < lineNum; i++ {

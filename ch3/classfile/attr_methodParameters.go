@@ -5,8 +5,8 @@ type AttrMethodParameters struct {
 	params []AttrMethodParameterEntry
 }
 
-func (ps *AttrMethodParameters) ReadInfo(reader ClassReader) uint64 {
-	num := reader.ReadUint64()
+func (ps *AttrMethodParameters) ReadInfo(reader *ClassReader) uint32 {
+	num := reader.ReadUint32()
 	n := reader.ReadUint8()
 	params := make([]AttrMethodParameterEntry, 0, n)
 	for i := uint8(0); i < n; i++ {
