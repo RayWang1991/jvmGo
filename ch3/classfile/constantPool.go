@@ -9,13 +9,13 @@ import (
 
 type ConstantPool []ConstInfo
 
-func NewConstantPool(reader ClassReader) ConstantPool {
+func NewConstantPool(reader *ClassReader) ConstantPool {
 	n := reader.ReadUint16()
 	cp := make([]ConstInfo, n) // nil initiated
 	var i uint16 = 1           // start from 1
 	var d uint16
 	for i < n {
-		tag := reader.ReadUint16()
+		tag := reader.ReadUint8()
 		cp[i], d = NewConstInfo(tag, reader)
 		i += d
 	}
@@ -23,7 +23,7 @@ func NewConstantPool(reader ClassReader) ConstantPool {
 }
 
 // init const info through tag and reader([]byte)
-func NewConstInfo(tag uint16, reader ClassReader) (info ConstInfo, l uint16) {
+func NewConstInfo(tag uint8, reader *ClassReader) (info ConstInfo, l uint16) {
 	l = 1
 	switch tag {
 	case CONST_Utf8_Info:
@@ -64,7 +64,7 @@ func NewConstInfo(tag uint16, reader ClassReader) (info ConstInfo, l uint16) {
 }
 
 type ConstInfo interface {
-	ReadInfo(reader ClassReader)
+	ReadInfo(reader *ClassReader)
 }
 
 const (

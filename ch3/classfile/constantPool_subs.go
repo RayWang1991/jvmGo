@@ -1,72 +1,76 @@
 package classfile
 
+import "math"
+
+// class info
 type ClassInfo struct {
 	nameIndex uint16 // index to constant pool, a utf8_info to represent the Full Qualified class name
 }
 
-func (self *ClassInfo) ReadInfo(reader ClassReader) {
-	self.nameIndex = reader.ReadUint16()
+func (c *ClassInfo) ReadInfo(reader *ClassReader) {
+	c.nameIndex = reader.ReadUint16()
 }
 
 type Utf8Info struct {
 	val string // []byte data
 }
 
-func (self *Utf8Info) ReadInfo(reader ClassReader) {
+func (u *Utf8Info) ReadInfo(reader *ClassReader) {
 	length := reader.ReadUint16() // length for the utf8 info in bytes
 	bs := reader.ReadBytes(uint(length))
-	self.val = decodeMUTF8(bs)
+	u.val = decodeMUTF8(bs)
 }
 
 type IntegerInfo struct {
 	val int32 // integer
 }
 
-func (self *IntegerInfo) ReadInfo(reader ClassReader) {
-	self.val = int32(reader.ReadUint32())
+func (i *IntegerInfo) ReadInfo(reader *ClassReader) {
+	i.val = int32(reader.ReadUint32())
 }
 
 type FloatInfo struct {
 	val float32 // float
 }
 
-func (self *FloatInfo) ReadInfo(reader ClassReader) {
-	self.val = float32(reader.ReadUint32())
+func (f *FloatInfo) ReadInfo(reader *ClassReader) {
+	f.val = math.Float32frombits(reader.ReadUint32())
 }
 
 type LongInfo struct {
 	val int64 // long
 }
 
-func (self *LongInfo) ReadInfo(reader ClassReader) {
-	self.val = int64(reader.ReadUint64())
+func (l *LongInfo) ReadInfo(reader *ClassReader) {
+	l.val = int64(reader.ReadUint64())
 }
 
 type DoubleInfo struct {
 	val float64 // double
 }
 
-func (self *DoubleInfo) ReadInfo(reader ClassReader) {
-	self.val = float64(reader.ReadUint64())
+func (d *DoubleInfo) ReadInfo(reader *ClassReader) {
+	d.val = math.Float64frombits(reader.ReadUint64())
 }
 
 type StringInfo struct {
 	index uint16 // index to constant pool, a utf8_info
 }
 
-func (self *StringInfo) ReadInfo(reader ClassReader) {
-	self.index = reader.ReadUint16()
+func (s *StringInfo) ReadInfo(reader *ClassReader) {
+	s.index = reader.ReadUint16()
 }
 
-type RefInfo struct{
+type RefInfo struct {
 	classIndex    uint16 // index to the class info
 	nameTypeIndex uint16 // index to the name and type info
 }
 
-func (self *RefInfo) ReadInfo(reader ClassReader) {
-	self.classIndex = reader.ReadUint16()
-	self.nameTypeIndex = reader.ReadUint16()
+func (r *RefInfo) ReadInfo(reader *ClassReader) {
+	r.classIndex = reader.ReadUint16()
+	r.nameTypeIndex = reader.ReadUint16()
 }
+
 type FieldRefInfo struct {
 	RefInfo
 }
@@ -84,9 +88,9 @@ type NameTypeInfo struct {
 	typeIndex uint16 // index to type
 }
 
-func (self *NameTypeInfo) ReadInfo(reader ClassReader) {
-	self.nameIndex = reader.ReadUint16()
-	self.typeIndex = reader.ReadUint16()
+func (n *NameTypeInfo) ReadInfo(reader *ClassReader) {
+	n.nameIndex = reader.ReadUint16()
+	n.typeIndex = reader.ReadUint16()
 }
 
 type MethodHandleInfo struct {
@@ -94,17 +98,17 @@ type MethodHandleInfo struct {
 	refIndex uint16 // index to method ref
 }
 
-func (self *MethodHandleInfo) ReadInfo(reader ClassReader) {
-	self.refKind = reader.ReadUint8()
-	self.refIndex = reader.ReadUint16()
+func (m *MethodHandleInfo) ReadInfo(reader *ClassReader) {
+	m.refKind = reader.ReadUint8()
+	m.refIndex = reader.ReadUint16()
 }
 
 type MethodTypeInfo struct {
 	descIndex uint16 // index to utf8_info
 }
 
-func (self *MethodTypeInfo) ReadInfo(reader ClassReader) {
-	self.descIndex = reader.ReadUint16()
+func (m *MethodTypeInfo) ReadInfo(reader *ClassReader) {
+	m.descIndex = reader.ReadUint16()
 }
 
 type InvokeDynamic_Info struct {
@@ -112,8 +116,7 @@ type InvokeDynamic_Info struct {
 	nameTypeIndex            uint16 // index to Name and Type info
 }
 
-func (self *InvokeDynamic_Info) ReadInfo(reader ClassReader) {
-	self.bootstrapMethodAttrIndex = reader.ReadUint16()
-	self.nameTypeIndex = reader.ReadUint16()
+func (i *InvokeDynamic_Info) ReadInfo(reader *ClassReader) {
+	i.bootstrapMethodAttrIndex = reader.ReadUint16()
+	i.nameTypeIndex = reader.ReadUint16()
 }
-

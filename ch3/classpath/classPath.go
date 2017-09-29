@@ -1,3 +1,5 @@
+// package class path provides methods to find the Jre path, extension path and user path,
+// in order to find the .class file in the disk
 package classpath
 
 import (

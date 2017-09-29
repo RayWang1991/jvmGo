@@ -7,6 +7,8 @@ import (
 )
 
 type Cmd struct {
+	debugFlag bool
+	//debug
 	versionFlag bool
 	helpFlag    bool
 	cpOption    string
@@ -17,6 +19,7 @@ type Cmd struct {
 
 func ParseCmd() *Cmd {
 	c := new(Cmd)
+	flag.BoolVar(&c.debugFlag, "debug", false, "debug flag")
 	flag.BoolVar(&c.helpFlag, "help", false, "print help message")
 	flag.BoolVar(&c.helpFlag, "?", false, "print help message")
 	flag.BoolVar(&c.versionFlag, "version", false, "print version and exit")

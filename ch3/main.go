@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
-	"jvmGo/ch2/classpath"
+	"jvmGo/ch3/classpath"
+	"jvmGo/ch3/classfile"
 	"strings"
+	"log"
 )
 
 func main() {
@@ -25,9 +27,16 @@ func startJVM(cmd *Cmd) {
 	className := strings.Replace(cmd.class, ".", "/", -1)
 	className += ".class"
 	classData, _, err := cp.ReadClass(className)
-	if err == nil {
-		fmt.Printf("data: %v", classData)
-	} else {
-		fmt.Printf("error: %s\n", err)
+	if err != nil {
+		log.Fatalf("open .class failed: %s", err)
 	}
+	if cmd.debugFlag {
+		fmt.Printf("data: %v", classData)
+	}
+	reader := classfile.NewClassReader(classData)
+	cf, err := classfile.NewClassFile(reader)
+	if err != nil {
+		log.Fatalf("parsing class file failed: %s", err)
+	}
+	cf.PrintDebugMessage()
 }
