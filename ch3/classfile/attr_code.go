@@ -1,6 +1,9 @@
 package classfile
 
-import "fmt"
+import (
+	"fmt"
+	"bytes"
+)
 
 /*
 Code {
@@ -56,6 +59,16 @@ func (code *AttrCode) ReadInfo(reader *ClassReader) uint32 {
 		}
 	}
 	return num
+}
+
+func (code *AttrCode) AttrString() string {
+	buf := &bytes.Buffer{}
+	buf.WriteString("Code:\n")
+	buf.WriteString(fmt.Sprintf("maxStack: %d", code.maxStack))
+	buf.WriteByte(',')
+	buf.WriteString(fmt.Sprintf("maxLocals: %d", code.maxLocals))
+	// TODO
+	return buf.String()
 }
 
 type AttrExceptionTableEntry struct {
