@@ -11,15 +11,26 @@ func readerPos(cr *ClassReader) string {
 	return fmt.Sprintf("len:%d", cr.length())
 }
 
+// Print Debug Message for Class File
 // TODO using template?
+// TODO debug string for attr info
 func (cf *ClassFile) PrintDebugMessage() {
 	fmt.Printf("magic: %X\n", cf.magic) // magic
 	fmt.Printf("version: %d.%d\n", cf.MajorVersion(), cf.MinorVersion())
+	fmt.Printf("flags: %s\n", flagsToString(cf.flags))
 	fmt.Print(cf.constantPool.String())
 	fmt.Printf("class: %s\n", cf.ClassName())
 	fmt.Printf("super class: %s\n", cf.SuperClassName())
 	fmt.Printf("interfaces(%d items): %s \n", len(cf.interfaces), strings.Join(cf.InterfaceNames(), ","))
-	// TODO fields, methods, attrinfos
+	// Fields and Methods
+	fmt.Printf("Fields(%d items):\n", len(cf.fields))
+	for i := range cf.fields {
+		fmt.Print(cf.fields[i].String(fmt.Sprintf("#%d\n", i)))
+	}
+	fmt.Printf("Mields(%d items):\n", len(cf.fields))
+	for i := range cf.methods {
+		fmt.Print(cf.methods[i].String(fmt.Sprintf("#%d\n", i)))
+	}
 }
 
 // constant pool entry format: #64 = Methodref       #6.#44      // java/lang/Object."<init>":()V
@@ -39,6 +50,7 @@ func (cp ConstantPool) String() string {
 	return buf.String()
 }
 
+// debug string for constant info in constant pool
 func debugString(cp ConstantPool, info ConstInfo) (string, string, string) {
 	switch info := info.(type) {
 	case *ClassInfo:
@@ -58,15 +70,15 @@ func debugString(cp ConstantPool, info ConstInfo) (string, string, string) {
 	case *FieldRefInfo:
 		return "Fieldref",
 			debugIndex(uint(info.classIndex)) + "." + debugIndex(uint(info.nameTypeIndex)),
-			"// " + info.NameTypeInfo(cp).String(cp)
+			"// " + info.ClassInfo(cp).ClassName(cp) + "." + info.NameTypeInfo(cp).String(cp)
 	case *MethodRefInfo:
 		return "Methodref",
 			debugIndex(uint(info.classIndex)) + "." + debugIndex(uint(info.nameTypeIndex)),
-			"// " + info.NameTypeInfo(cp).String(cp)
+			"// " + info.ClassInfo(cp).ClassName(cp) + "." + info.NameTypeInfo(cp).String(cp)
 	case *InterfaceMethodRefInfo:
 		return "InterfaceMethodref",
 			debugIndex(uint(info.classIndex)) + "." + debugIndex(uint(info.nameTypeIndex)),
-			"// " + info.NameTypeInfo(cp).String(cp)
+			"// " + info.ClassInfo(cp).ClassName(cp) + "." + info.NameTypeInfo(cp).String(cp)
 	case *NameTypeInfo:
 		return "NameAndType", debugIndex(uint(info.nameIndex)) + ":" +
 			debugIndex(uint(info.typeIndex)),
@@ -87,6 +99,35 @@ func debugIndex(i uint) string {
 	return "#" + strconv.Itoa(int(i))
 }
 
-// TODO
-func (memb *MemberInfo) String() {
+func (m *MemberInfo) String(title string) string {
+	buf := &bytes.Buffer{}
+	buf.WriteString(title)
+	buf.WriteString("name: ")
+	buf.WriteString(m.cp.getUtf8(m.nameIndex))
+	buf.WriteByte('\n')
+	buf.WriteString("flags: ")
+	buf.WriteString(flagNumToString(m.accessFlags))
+	buf.WriteByte('\n')
+	buf.WriteString("descriptor: ")
+	buf.WriteString(m.cp.getUtf8(m.descIndex))
+	buf.WriteByte('\n')
+	// TODO ignores the attrs
+	return buf.String()
+}
+
+func (cp ConstantPool) getConstDebugString(index uint16) string {
+	switch x := cp[index].(type) {
+	case *IntegerInfo:
+		return fmt.Sprintf("int %d", x.val)
+	case *LongInfo:
+		return fmt.Sprintf("long %dl", x.val)
+	case *FloatInfo:
+		return fmt.Sprintf("float %ff", x.val)
+	case *DoubleInfo:
+		return fmt.Sprintf("double %fd", x.val)
+	case *Utf8Info:
+		return fmt.Sprintf("String %s", x.val)
+	default:
+		return "Unknown ConstantValue"
+	}
 }
