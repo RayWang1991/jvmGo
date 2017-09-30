@@ -10,6 +10,7 @@ type ClassFile struct {
 	majorVersion uint16
 	constantPool ConstantPool
 	accessFlag   uint16
+	flags        []uint16
 	thisClass    uint16
 	superClass   uint16
 	interfaces   []uint16
@@ -86,7 +87,7 @@ func (cf *ClassFile) readAndCheckVersion(reader *ClassReader) error {
 // read access flag and check it
 func (cf *ClassFile) readAccessFlag(reader *ClassReader) error {
 	cf.accessFlag = reader.ReadUint16()
-	// TODO verify the class access flag
+	cf.flags = decomposeFlags(cf.accessFlag)
 	return nil
 }
 
