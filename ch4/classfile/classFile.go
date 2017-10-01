@@ -2,6 +2,7 @@ package classfile
 
 import (
 	"errors"
+	"jvmGo/ch4/errcode"
 )
 
 type ClassFile struct {
@@ -18,12 +19,6 @@ type ClassFile struct {
 	methods      []MethodInfo
 	attributes   []AttrInfo
 }
-
-// TODO methods
-//func Parse(classData []byte)(cf *ClassFile,err error)
-// parse from []byte, getting class file entity
-
-// func (cf *ClassFile)read(reader *ClassReader)
 
 // getter for minorVersion
 func (cf *ClassFile) MinorVersion() uint16 {
@@ -68,7 +63,7 @@ const magicNumber = 0xCAFEBABE
 func (cf *ClassFile) readAndCheckMagic(reader *ClassReader) error {
 	magic := reader.ReadUint32()
 	if magic != magicNumber {
-		return errors.New("java.lang.ClassFormatError:magic!")
+		return errors.New(errcode.ClassMagicError)
 	}
 	cf.magic = magic
 	return nil
@@ -80,7 +75,7 @@ func (cf *ClassFile) readAndCheckVersion(reader *ClassReader) error {
 	if cf.majorVersion >= 45 && cf.majorVersion <= 52 {
 		return nil
 	} else {
-		return errors.New("java.lang.UnsupportedClassVersionError!")
+		return errors.New(errcode.ClassVersionError)
 	}
 }
 
