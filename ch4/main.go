@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"jvmGo/ch3/classpath"
-	"jvmGo/ch3/classfile"
+	"jvmGo/ch4/classpath"
+	"jvmGo/ch4/classfile"
 	"strings"
 	"log"
 )
