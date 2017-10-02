@@ -1,9 +1,9 @@
-package main
+package ch5
 
 import (
 	"fmt"
-	"jvmGo/ch4/classpath"
-	"jvmGo/ch4/classfile"
+	"jvmGo/ch5/classpath"
+	"jvmGo/ch5/classfile"
 	"strings"
 	"log"
 )

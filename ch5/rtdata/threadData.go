@@ -1,6 +1,6 @@
 package rtdata
 
-import "jvmGo/ch4/errcode"
+import "jvmGo/ch5/errcode"
 
 // Thread represents a thread
 type Thread struct {

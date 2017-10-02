@@ -2,7 +2,7 @@ package classfile
 
 import (
 	"errors"
-	"jvmGo/ch4/errcode"
+	"jvmGo/ch5/errcode"
 )
 
 type ClassFile struct {
