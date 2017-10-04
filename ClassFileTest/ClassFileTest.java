@@ -12,6 +12,9 @@ public class ClassFileTest extends Object{
   public static final Number num = 10086;
   public Object obj;
   public static void main(String[] args) throws RuntimeException {
-    System.out.println("Hello, World!");
+    int res = 0;
+    for (int i = 0; i < 10 ; i++) {
+      res += i;
+    }
   }
 }
