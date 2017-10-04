@@ -8,7 +8,6 @@ type MemberInfo struct {
 	attrs       []AttrInfo
 }
 
-
 func (m *MemberInfo) ReadInfo(reader *ClassReader) {
 	m.accessFlags = reader.ReadUint16()
 	m.nameIndex = reader.ReadUint16()
@@ -29,4 +28,14 @@ type FieldInfo struct {
 
 type MethodInfo struct {
 	MemberInfo
+}
+
+// TODO reduce the loop
+func (m *MethodInfo) getCodeAttr() *AttrInfo {
+	for _, a := range m.attrs {
+		if a, ok := a.(*AttrCode); ok {
+			return a
+		}
+	}
+	return nil
 }

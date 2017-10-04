@@ -1,7 +1,7 @@
 package rtdata
 
 type Frame struct {
-	localVar     LocalVars // the local var represents the local variables, the length is given by compiler
-	operandStack *OperandStack
-	next         *Frame
+	LocalVar     LocalVars // the local var represents the local variables, the length is given by compiler
+	OperandStack *OperandStack
+	Next         *Frame
 }
