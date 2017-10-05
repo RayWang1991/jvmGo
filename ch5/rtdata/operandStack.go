@@ -87,3 +87,28 @@ func (o *OperandStack) PopDouble() float64 {
 	o.size -= 2
 	return math.Float64frombits(uint64(s1.num)<<32 | uint64(uint32(s2.num)))
 }
+
+// return the top slot, do not pop
+func (o *OperandStack) Top() *slot {
+	return o.GetSlot(0)
+}
+
+func (o *OperandStack) PushSlot(s *slot) {
+	o.data[o.size] = *s
+	o.size++
+}
+
+func (o *OperandStack) PopSlot() *slot {
+	r := &o.data[o.size]
+	r.ref = nil
+	o.size--
+	return r
+}
+
+// i is the index to the top of stack, just get, not pop
+func (o *OperandStack) GetSlot(i uint) *slot {
+	if i >= uint(o.size) {
+		panic("StackOutOfRange")
+	}
+	return &o.data[o.size-i-1]
+}
