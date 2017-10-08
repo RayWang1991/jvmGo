@@ -4,7 +4,8 @@ import "jvmGo/ch5/rtdata"
 
 // Loads
 // iload
-func iload(f *rtdata.Frame, i uint8) int32 {
+func iload(f *rtdata.Frame) int32 {
+	i := f.ReadU8()
 	return f.LocalVar.GetInt(uint(i))
 }
 func iload_0(f *rtdata.Frame) int32 {
@@ -21,7 +22,8 @@ func iload_3(f *rtdata.Frame) int32 {
 }
 
 //lload
-func lload(f *rtdata.Frame, i uint8) int64 {
+func lload(f *rtdata.Frame) int64 {
+	i := f.ReadU8()
 	return f.LocalVar.GetLong(uint(i))
 }
 func lload_0(f *rtdata.Frame) int64 {
@@ -38,7 +40,8 @@ func lload_3(f *rtdata.Frame) int64 {
 }
 
 // fload
-func fload(f *rtdata.Frame, i uint8) float32 {
+func fload(f *rtdata.Frame) float32 {
+	i := f.ReadU8()
 	return f.LocalVar.GetFloat(uint(i))
 }
 func fload_0(f *rtdata.Frame) float32 {
@@ -55,7 +58,8 @@ func fload_3(f *rtdata.Frame) float32 {
 }
 
 // dload
-func dload(f *rtdata.Frame, i uint8) float64 {
+func dload(f *rtdata.Frame) float64 {
+	i := f.ReadU8()
 	return f.LocalVar.GetDouble(uint(i))
 }
 func dload_0(f *rtdata.Frame) float64 {
@@ -71,7 +75,8 @@ func dload_3(f *rtdata.Frame) float64 {
 	return f.LocalVar.GetDouble(uint(3))
 }
 
-func aload(f *rtdata.Frame, i uint8) *rtdata.Object {
+func aload(f *rtdata.Frame) *rtdata.Object {
+	i := f.ReadU8()
 	return f.LocalVar.GetRef(uint(i))
 }
 func aload_0(f *rtdata.Frame) *rtdata.Object {
@@ -90,8 +95,9 @@ func aload_3(f *rtdata.Frame) *rtdata.Object {
 // TODO load int,float,refs... from array
 
 // Stores
-func istore(f *rtdata.Frame, i uint8) {
+func istore(f *rtdata.Frame) {
 	r := f.OperandStack.PopInt()
+	i := f.ReadU8()
 	f.LocalVar.SetInt(r, uint(i))
 }
 func istore_0(f *rtdata.Frame) {
@@ -111,7 +117,8 @@ func istore_3(f *rtdata.Frame) {
 	f.LocalVar.SetInt(r, 3)
 }
 
-func dstore(f *rtdata.Frame, i uint8) {
+func dstore(f *rtdata.Frame) {
+	i := f.ReadU8()
 	r := f.OperandStack.PopDouble()
 	f.LocalVar.SetDouble(r, uint(i))
 }
@@ -132,7 +139,8 @@ func dstore_3(f *rtdata.Frame) {
 	f.LocalVar.SetDouble(r, 3)
 }
 
-func fstore(f *rtdata.Frame, i uint8) {
+func fstore(f *rtdata.Frame) {
+	i := f.ReadU8()
 	r := f.OperandStack.PopFloat()
 	f.LocalVar.SetFloat(r, uint(i))
 }
@@ -153,7 +161,8 @@ func fstore_3(f *rtdata.Frame) {
 	f.LocalVar.SetFloat(r, 3)
 }
 
-func astore(f *rtdata.Frame, i uint8) {
+func astore(f *rtdata.Frame) {
+	i := f.ReadU8()
 	r := f.OperandStack.PopRef()
 	f.LocalVar.SetRef(r, uint(i))
 }
@@ -174,7 +183,8 @@ func astore_3(f *rtdata.Frame) {
 	f.LocalVar.SetRef(r, 3)
 }
 
-func lstore(f *rtdata.Frame, i uint8) {
+func lstore(f *rtdata.Frame) {
+	i := f.ReadU8()
 	r := f.OperandStack.PopLong()
 	f.LocalVar.SetLong(r, uint(i))
 }
@@ -194,4 +204,5 @@ func lstore_3(f *rtdata.Frame) {
 	r := f.OperandStack.PopLong()
 	f.LocalVar.SetLong(r, 3)
 }
+
 // TODO <T>a, fa,la,ia... store, store T to array
