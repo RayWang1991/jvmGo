@@ -411,6 +411,6 @@ var codeMap = map[int]string{
 	OPCODE_wide:            "OPCODE_wide",
 }
 
-func InsCode(i int) string {
+func InstructionCode(i int) string {
 	return codeMap[i]
 }
