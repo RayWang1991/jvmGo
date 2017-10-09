@@ -86,13 +86,15 @@ func dconst_1(f *rtdata.Frame){
 }
 
 // push int8(extended to int32) to operand stack
-func bipush(f *rtdata.Frame, b int8){
+func bipush(f *rtdata.Frame){
+	b := f.ReadU8()
 	f.OperandStack.PushInt(int32(b))
 }
 
 // push int16(extended to int32) to operand stack,
 // call codeReader.Read16I()method for the s parameter
-func sipush(f *rtdata.Frame, s int16){
+func sipush(f *rtdata.Frame){
+	s := f.ReadU16()
 	f.OperandStack.PushInt(int32(s))
 }
 

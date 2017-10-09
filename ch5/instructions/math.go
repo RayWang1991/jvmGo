@@ -263,7 +263,9 @@ func lxor(f *rtdata.Frame) {
 }
 
 // inc
-func iinc(f *rtdata.Frame, index uint8, c int8) {
+func iinc(f *rtdata.Frame) {
+	index := f.ReadU8()
+	c := int8(f.ReadU8())
 	v := f.LocalVar.GetInt(uint(index))
 	f.LocalVar.SetInt(v+int32(c), uint(index))
 }
