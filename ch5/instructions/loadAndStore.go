@@ -4,92 +4,117 @@ import "jvmGo/ch5/rtdata"
 
 // Loads
 // iload
-func iload(f *rtdata.Frame) int32 {
+func iload(f *rtdata.Frame) {
 	i := f.ReadU8()
-	return f.LocalVar.GetInt(uint(i))
+	v := f.LocalVar.GetInt(uint(i))
+	f.OperandStack.PushInt(v)
 }
-func iload_0(f *rtdata.Frame) int32 {
-	return f.LocalVar.GetInt(0)
+func iload_0(f *rtdata.Frame) {
+	v := f.LocalVar.GetInt(uint(0))
+	f.OperandStack.PushInt(v)
 }
-func iload_1(f *rtdata.Frame) int32 {
-	return f.LocalVar.GetInt(1)
+func iload_1(f *rtdata.Frame) {
+	v := f.LocalVar.GetInt(uint(1))
+	f.OperandStack.PushInt(v)
 }
-func iload_2(f *rtdata.Frame) int32 {
-	return f.LocalVar.GetInt(2)
+func iload_2(f *rtdata.Frame) {
+	v := f.LocalVar.GetInt(uint(2))
+	f.OperandStack.PushInt(v)
 }
-func iload_3(f *rtdata.Frame) int32 {
-	return f.LocalVar.GetInt(3)
+func iload_3(f *rtdata.Frame) {
+	v := f.LocalVar.GetInt(uint(3))
+	f.OperandStack.PushInt(v)
 }
 
 //lload
-func lload(f *rtdata.Frame) int64 {
+func lload(f *rtdata.Frame) {
 	i := f.ReadU8()
-	return f.LocalVar.GetLong(uint(i))
+	v := f.LocalVar.GetLong(uint(i))
+	f.OperandStack.PushLong(v)
 }
-func lload_0(f *rtdata.Frame) int64 {
-	return f.LocalVar.GetLong(uint(0))
+func lload_0(f *rtdata.Frame) {
+	v := f.LocalVar.GetLong(uint(0))
+	f.OperandStack.PushLong(v)
 }
-func lload_1(f *rtdata.Frame) int64 {
-	return f.LocalVar.GetLong(uint(1))
+func lload_1(f *rtdata.Frame) {
+	v := f.LocalVar.GetLong(uint(1))
+	f.OperandStack.PushLong(v)
 }
-func lload_2(f *rtdata.Frame) int64 {
-	return f.LocalVar.GetLong(uint(2))
+func lload_2(f *rtdata.Frame) {
+	v := f.LocalVar.GetLong(uint(2))
+	f.OperandStack.PushLong(v)
 }
-func lload_3(f *rtdata.Frame) int64 {
-	return f.LocalVar.GetLong(uint(3))
+func lload_3(f *rtdata.Frame) {
+	v := f.LocalVar.GetLong(uint(3))
+	f.OperandStack.PushLong(v)
 }
 
 // fload
-func fload(f *rtdata.Frame) float32 {
+func fload(f *rtdata.Frame) {
 	i := f.ReadU8()
-	return f.LocalVar.GetFloat(uint(i))
+	v := f.LocalVar.GetFloat(uint(i))
+	f.OperandStack.PushFloat(v)
 }
-func fload_0(f *rtdata.Frame) float32 {
-	return f.LocalVar.GetFloat(uint(0))
+func fload_0(f *rtdata.Frame) {
+	v := f.LocalVar.GetFloat(uint(0))
+	f.OperandStack.PushFloat(v)
 }
-func fload_1(f *rtdata.Frame) float32 {
-	return f.LocalVar.GetFloat(uint(1))
+func fload_1(f *rtdata.Frame) {
+	v := f.LocalVar.GetFloat(uint(1))
+	f.OperandStack.PushFloat(v)
 }
-func fload_2(f *rtdata.Frame) float32 {
-	return f.LocalVar.GetFloat(uint(2))
+func fload_2(f *rtdata.Frame) {
+	v := f.LocalVar.GetFloat(uint(2))
+	f.OperandStack.PushFloat(v)
 }
-func fload_3(f *rtdata.Frame) float32 {
-	return f.LocalVar.GetFloat(uint(3))
+func fload_3(f *rtdata.Frame) {
+	v := f.LocalVar.GetFloat(uint(3))
+	f.OperandStack.PushFloat(v)
 }
 
 // dload
-func dload(f *rtdata.Frame) float64 {
+func dload(f *rtdata.Frame) {
 	i := f.ReadU8()
-	return f.LocalVar.GetDouble(uint(i))
+	v := f.LocalVar.GetDouble(uint(i))
+	f.OperandStack.PushDouble(v)
 }
-func dload_0(f *rtdata.Frame) float64 {
-	return f.LocalVar.GetDouble(uint(0))
+func dload_0(f *rtdata.Frame) {
+	v := f.LocalVar.GetDouble(uint(0))
+	f.OperandStack.PushDouble(v)
 }
-func dload_1(f *rtdata.Frame) float64 {
-	return f.LocalVar.GetDouble(uint(1))
+func dload_1(f *rtdata.Frame) {
+	v := f.LocalVar.GetDouble(uint(1))
+	f.OperandStack.PushDouble(v)
 }
-func dload_2(f *rtdata.Frame) float64 {
-	return f.LocalVar.GetDouble(uint(2))
+func dload_2(f *rtdata.Frame) {
+	v := f.LocalVar.GetDouble(uint(2))
+	f.OperandStack.PushDouble(v)
 }
-func dload_3(f *rtdata.Frame) float64 {
-	return f.LocalVar.GetDouble(uint(3))
+func dload_3(f *rtdata.Frame) {
+	v := f.LocalVar.GetDouble(uint(3))
+	f.OperandStack.PushDouble(v)
 }
 
-func aload(f *rtdata.Frame) *rtdata.Object {
+func aload(f *rtdata.Frame) {
 	i := f.ReadU8()
-	return f.LocalVar.GetRef(uint(i))
+	v := f.LocalVar.GetRef(uint(i))
+	f.OperandStack.PushRef(v)
 }
-func aload_0(f *rtdata.Frame) *rtdata.Object {
-	return f.LocalVar.GetRef(uint(0))
+func aload_0(f *rtdata.Frame) {
+	v := f.LocalVar.GetRef(uint(0))
+	f.OperandStack.PushRef(v)
 }
-func aload_1(f *rtdata.Frame) *rtdata.Object {
-	return f.LocalVar.GetRef(uint(1))
+func aload_1(f *rtdata.Frame) {
+	v := f.LocalVar.GetRef(uint(1))
+	f.OperandStack.PushRef(v)
 }
-func aload_2(f *rtdata.Frame) *rtdata.Object {
-	return f.LocalVar.GetRef(uint(2))
+func aload_2(f *rtdata.Frame) {
+	v := f.LocalVar.GetRef(uint(2))
+	f.OperandStack.PushRef(v)
 }
-func aload_3(f *rtdata.Frame) *rtdata.Object {
-	return f.LocalVar.GetRef(uint(3))
+func aload_3(f *rtdata.Frame) {
+	v := f.LocalVar.GetRef(uint(3))
+	f.OperandStack.PushRef(v)
 }
 
 // TODO load int,float,refs... from array

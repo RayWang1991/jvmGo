@@ -2,7 +2,7 @@ package instructions
 
 import "jvmGo/ch5/rtdata"
 
-func nop(){
+func nop(f *rtdata.Frame){
 	// do nothing
 }
 

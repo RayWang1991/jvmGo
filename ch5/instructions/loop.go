@@ -8,13 +8,11 @@ import (
 func loop(t *rtdata.Thread) {
 	f := t.CurrentFrame()
 	for {
-		code := f.ReadU8()
-		excute(f, code)
+		code := f.ReadU8() // read next opcode
+		fn := InstFnc(code)
+		fn(f)
 	}
 }
 
-func excute(f *rtdata.Frame, opcode uint8) {
-	//switch opcode {
-	//case
-	//}
+func debug(f *rtdata.Frame){
 }

@@ -43,3 +43,11 @@ func (c *Frame) ReadI32() int32 {
 	c.pc += 4
 	return b0<<24 | b1<<16 | b2<<8 | b3
 }
+
+func (c *Frame) ReadI32s(n int) []int32 {
+	arr := make([]int32, n)
+	for i := 0; i < n; i++ {
+		arr[i] = c.ReadI32()
+	}
+	return arr
+}

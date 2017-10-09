@@ -73,3 +73,21 @@ func f2d(f *rtdata.Frame) {
 	v := f.OperandStack.PopFloat()
 	f.OperandStack.PushDouble(float64(v))
 }
+
+// double to int
+func d2i(f *rtdata.Frame) {
+	v := f.OperandStack.PopDouble()
+	f.OperandStack.PushInt(int32(v))
+}
+
+// double to long
+func d2l(f *rtdata.Frame) {
+	v := f.OperandStack.PopDouble()
+	f.OperandStack.PushLong(int64(v))
+}
+
+// double to float
+func d2f(f *rtdata.Frame) {
+	v := f.OperandStack.PopDouble()
+	f.OperandStack.PushFloat(float32(v))
+}

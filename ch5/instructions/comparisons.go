@@ -46,7 +46,7 @@ func fcmpg(f *rtdata.Frame) {
 	f.OperandStack.PushInt(res)
 }
 
-func dcml(f *rtdata.Frame) {
+func dcmpl(f *rtdata.Frame) {
 	v2 := f.OperandStack.PopDouble()
 	v1 := f.OperandStack.PopDouble()
 	var res int32
@@ -61,7 +61,7 @@ func dcml(f *rtdata.Frame) {
 	f.OperandStack.PushInt(res)
 }
 
-func dcmg(f *rtdata.Frame) {
+func dcmpg(f *rtdata.Frame) {
 	v2 := f.OperandStack.PopDouble()
 	v1 := f.OperandStack.PopDouble()
 	var res int32
@@ -133,42 +133,42 @@ func _icmp(f *rtdata.Frame) (int16, int32, int32) {
 	return b, v1, v2
 }
 
-func if_imcpeq(f *rtdata.Frame) {
+func if_icmpeq(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 == v2 {
 		branchI16(f,b)
 	}
 }
 
-func if_imcpne(f *rtdata.Frame) {
+func if_icmpne(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 != v2 {
 		branchI16(f,b)
 	}
 }
 
-func if_imcplt(f *rtdata.Frame) {
+func if_icmplt(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 < v2 {
 		branchI16(f,b)
 	}
 }
 
-func if_imcple(f *rtdata.Frame) {
+func if_icmple(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 <= v2 {
 		branchI16(f,b)
 	}
 }
 
-func if_imcpgt(f *rtdata.Frame) {
+func if_icmpgt(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 > v2 {
 		branchI16(f,b)
 	}
 }
 
-func if_imcpge(f *rtdata.Frame) {
+func if_icmpge(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 >= v2 {
 		branchI16(f,b)
@@ -193,6 +193,23 @@ func if_acmpeq(f *rtdata.Frame) {
 func if_acmpne(f *rtdata.Frame) {
 	b, v1, v2 := _acmp(f)
 	if v1 != v2 {
+		branchI16(f,b)
+	}
+}
+
+// extend for null
+func ifnull(f *rtdata.Frame){
+	b := f.ReadI16()
+	v := f.OperandStack.PopRef()
+	if v == nil {
+		branchI16(f,b)
+	}
+}
+
+func ifnonnull(f *rtdata.Frame){
+	b := f.ReadI16()
+	v := f.OperandStack.PopRef()
+	if v != nil {
 		branchI16(f,b)
 	}
 }
