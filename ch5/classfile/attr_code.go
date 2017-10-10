@@ -3,6 +3,7 @@ package classfile
 import (
 	"fmt"
 	"bytes"
+	"jvmGo/ch5/instructions"
 )
 
 /*
@@ -31,7 +32,20 @@ type AttrCode struct {
 	maxLocals uint16
 	code      []byte
 	excTable  []AttrExceptionTableEntry
-	attrs     []AttrInfo
+	attrs     []AttrInfo //LineNumberTable, LocalVariableTable, LocalVariableTypeTable, StackMapTable
+}
+
+// getter
+func (code *AttrCode) MaxStack() uint16 {
+	return code.maxStack
+}
+
+func (code *AttrCode) MaxLocals() uint16 {
+	return code.maxLocals
+}
+
+func (code *AttrCode) Code() []byte {
+	return code.code
 }
 
 func (code *AttrCode) ReadInfo(reader *ClassReader) uint32 {
@@ -63,11 +77,16 @@ func (code *AttrCode) ReadInfo(reader *ClassReader) uint32 {
 
 func (code *AttrCode) AttrString() string {
 	buf := &bytes.Buffer{}
-	buf.WriteString("Code:\n")
+	buf.WriteString("code:\n")
 	buf.WriteString(fmt.Sprintf("maxStack: %d", code.maxStack))
 	buf.WriteByte(',')
-	buf.WriteString(fmt.Sprintf("maxLocals: %d", code.maxLocals))
-	// TODO
+	buf.WriteString(fmt.Sprintf("maxLocals: %d\n", code.maxLocals))
+	// code
+	cr := instructions.NewCodeReader(code.code)
+	cr.ReadCode()
+	for i, c := range cr.Code() {
+		buf.WriteString(fmt.Sprintf("#%d %s\n", i, instructions.InstStr(c)))
+	}
 	return buf.String()
 }
 

@@ -27,9 +27,11 @@ func (cf *ClassFile) PrintDebugMessage() {
 	for i := range cf.fields {
 		fmt.Print(cf.fields[i].String(fmt.Sprintf("#%d\n", i)))
 	}
-	fmt.Printf("Mields(%d items):\n", len(cf.fields))
-	for i := range cf.methods {
-		fmt.Print(cf.methods[i].String(fmt.Sprintf("#%d\n", i)))
+	fmt.Printf("Mields(%d items):\n", len(cf.methods))
+	for i,m := range cf.methods {
+		fmt.Print(m.String(fmt.Sprintf("#%d\n", i)))
+		codeAttr := m.GetCodeAttr()
+		fmt.Print(codeAttr.AttrString())
 	}
 }
 
