@@ -31,7 +31,7 @@ func (cp *ClassPath) getBootAndExtClassPath(jreOption string) {
 	cp.extClassPath = NewWildcardEntry(jreExtLibPath)
 }
 
-// TODO, hard code here
+// TODO, hard code
 const jreDefault = "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home"
 
 func getJreDir(jreOption string) string {
