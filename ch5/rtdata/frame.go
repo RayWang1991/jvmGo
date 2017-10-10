@@ -3,10 +3,28 @@ package rtdata
 type Frame struct {
 	LocalVar     LocalVars // the local var represents the local variables, the length is given by compiler
 	OperandStack *OperandStack
-	Next         *Frame
+	next         *Frame
 	// code
 	pc   int32 // for code read and execute
 	code []byte
+}
+
+// new
+func NewFrame(maxLocals, maxOperands uint, code []byte) *Frame {
+	return &Frame{
+		LocalVar:     NewLocalVars(maxLocals),
+		OperandStack: NewOperandStack(maxOperands),
+		code:         code,
+	}
+}
+
+// next
+func (c *Frame) GetNext() *Frame {
+	return c.next
+}
+
+func (c *Frame) SetNext(next *Frame) {
+	c.next = next
 }
 
 // code & pc

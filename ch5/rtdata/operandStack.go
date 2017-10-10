@@ -5,7 +5,9 @@ import (
 	"fmt"
 )
 
+// TODO debug option
 // TODO, size check
+
 type OperandStack struct {
 	size uint
 	data []slot // the max depth of operands is given by compiler
@@ -21,7 +23,9 @@ func NewOperandStack(maxDepth uint) *OperandStack {
 // Get boolean, byte, char, short, int
 func (o *OperandStack) PopInt() int32 {
 	o.size--
-	fmt.Printf("%d %d\n", o.size, o.data[o.size].num)
+	if debugFlag {
+		fmt.Printf("%d %d\n", o.size, o.data[o.size].num)
+	}
 	return o.data[o.size].num // panic if size is 0u-1
 }
 
@@ -30,7 +34,9 @@ func (o *OperandStack) PushInt(i int32) {
 	s.num = i
 	s.ref = nil
 	o.size++
-	fmt.Printf("%d %d\n", o.size, s.num)
+	if debugFlag {
+		fmt.Printf("%d %d\n", o.size, s.num)
+	}
 }
 
 func (o *OperandStack) PopRef() *Object {

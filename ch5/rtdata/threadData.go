@@ -8,6 +8,18 @@ type Thread struct {
 	stack Stack
 }
 
+// fixed stack
+func NewThread(maxDep uint32) *Thread {
+	return &Thread{
+		pc: 0,
+		stack: Stack{
+			maxSize:     maxDep,
+			currentSize: 0,
+			top:         nil}}
+}
+
+// PC
+
 func (t *Thread) PC() int32 {
 	return t.pc
 }
@@ -15,6 +27,8 @@ func (t *Thread) PC() int32 {
 func (t *Thread) SetPC(p int32) {
 	t.pc = p
 }
+
+// Frame
 
 func (t *Thread) PushFrame(f *Frame) {
 	t.stack.push(f)
