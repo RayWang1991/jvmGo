@@ -1,4 +1,4 @@
-package ch5
+package main
 
 import (
 	"flag"
@@ -23,8 +23,8 @@ func ParseCmd() *Cmd {
 	flag.BoolVar(&c.helpFlag, "help", false, "print help message")
 	flag.BoolVar(&c.helpFlag, "?", false, "print help message")
 	flag.BoolVar(&c.versionFlag, "version", false, "print version and exit")
-	flag.StringVar(&c.cpOption, "classpath", "", "classpath")
-	flag.StringVar(&c.cpOption, "cp", "", "classpath")
+	flag.StringVar(&c.cpOption, "classpath", "", "user classpath")
+	flag.StringVar(&c.cpOption, "cp", "", "user classpath")
 	flag.StringVar(&c.cpOption, "Xjre", "", "path to jre(nonstandard)")
 	flag.Parse()
 	args := flag.Args()
