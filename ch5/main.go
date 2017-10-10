@@ -1,4 +1,4 @@
-package ch5
+package main
 
 import (
 	"fmt"
@@ -22,15 +22,24 @@ func main() {
 }
 
 func startJVM(cmd *Cmd) {
-	cp := classpath.NewClassPath(cmd.xjreOption, cmd.cpOption)
 	fmt.Printf("class path: %s class: %s args: %s\n", cmd.cpOption, cmd.class, cmd.args)
-	className := strings.Replace(cmd.class, ".", "/", -1)
+	cp := classpath.NewClassPath(cmd.xjreOption, cmd.cpOption)
+	cf := loadClass(cp, cmd.class, cmd.debugFlag)
+	main := getMain(cf)
+	if main == nil {
+		println("not found method 	'main'")
+	}
+	interpret(main)
+}
+
+func loadClass(cp *classpath.ClassPath, class string, debug bool) *classfile.ClassFile {
+	className := strings.Replace(class, ".", "/", -1)
 	className += ".class"
 	classData, _, err := cp.ReadClass(className)
 	if err != nil {
 		log.Fatalf("open .class failed: %s", err)
 	}
-	if cmd.debugFlag {
+	if debug {
 		fmt.Printf("data: %v", classData)
 	}
 	reader := classfile.NewClassReader(classData)
@@ -38,5 +47,17 @@ func startJVM(cmd *Cmd) {
 	if err != nil {
 		log.Fatalf("parsing class file failed: %s", err)
 	}
-	cf.PrintDebugMessage()
+	if debug {
+		cf.PrintDebugMessage()
+	}
+	return cf
+}
+
+func getMain(cf *classfile.ClassFile) *classfile.MethodInfo {
+	for _, m := range cf.MethodInfo() {
+		if m.Name() == "main" && m.Description() == "([Ljava/lang/String;)V" {
+			return m
+		}
+	}
+	return nil
 }
