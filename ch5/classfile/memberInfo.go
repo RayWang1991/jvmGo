@@ -22,6 +22,14 @@ func (m *MemberInfo) ReadInfo(reader *ClassReader) {
 	m.attrs = attrs
 }
 
+func (m *MemberInfo) Name() string {
+	return m.cp.getUtf8(m.nameIndex)
+}
+
+func (m *MemberInfo) Description() string {
+	return m.cp.getUtf8(m.descIndex)
+}
+
 type FieldInfo struct {
 	MemberInfo
 }
@@ -30,8 +38,7 @@ type MethodInfo struct {
 	MemberInfo
 }
 
-// TODO reduce the loop
-func (m *MethodInfo) getCodeAttr() *AttrInfo {
+func (m *MethodInfo) GetCodeAttr() *AttrCode {
 	for _, a := range m.attrs {
 		if a, ok := a.(*AttrCode); ok {
 			return a
