@@ -1,5 +1,7 @@
 package instructions
 
+import "fmt"
+
 type codeType int
 
 const (
@@ -244,22 +246,33 @@ type codeReader struct {
 	rawCode []byte // raw code
 	rawI    int
 	code    []byte // real code
-	cI      int
 }
 
-func (c *codeReader) ReadU8() byte {
+func NewCodeReader(rawCode []byte) *codeReader {
+	return &codeReader{
+		rawCode: rawCode,
+		code:    make([]byte, 0, len(rawCode)),
+	}
+}
+
+// getter
+func (c *codeReader) Code() []byte {
+	return c.code
+}
+
+func (c *codeReader) readU8() byte {
 	r := c.rawCode[c.rawI]
 	c.rawI++
 	return r
 }
 
-func (c *codeReader) ReadU16() uint16 {
+func (c *codeReader) readU16() uint16 {
 	high, low := c.rawCode[c.rawI], c.rawCode[c.rawI+1]
 	c.rawI += 2
 	return uint16(high)<<8 | uint16(low)
 }
 
-func (c *codeReader) ReadI32() int32 {
+func (c *codeReader) readI32() int32 {
 	b0 := int32(c.rawCode[c.rawI])
 	b1 := int32(c.rawCode[c.rawI+1])
 	b2 := int32(c.rawCode[c.rawI+2])
@@ -268,10 +281,10 @@ func (c *codeReader) ReadI32() int32 {
 	return b0<<24 | b1<<16 | b2<<8 | b3
 }
 
-func (c *codeReader) ReadI32s(n int) []int32 {
+func (c *codeReader) readI32s(n int) []int32 {
 	arr := make([]int32, n)
 	for i := 0; i < n; i++ {
-		arr[i] = c.ReadI32()
+		arr[i] = c.readI32()
 	}
 	return arr
 }
@@ -288,31 +301,33 @@ func (c *codeReader) skipPadding() {
 }
 
 func (c *codeReader) ReadCode() {
-	code := c.ReadU8()
-	t, ok := inst2Type[code]
-	if !ok {
-		panic("undefined code") // TODO, maybe valid
-	}
-	c.code[c.cI] = code
-	c.cI++
-	switch t {
-	case noL:
-	case u8L:
-		c.ReadU8()
-	case u8_2L, u16L:
-		c.ReadU16()
-	case u32L:
-		c.ReadI32()
-	case tables:
-		c.skipPadding()
-		c.ReadI32()         // default
-		low := c.ReadI32()  // low
-		high := c.ReadI32() // high
-		c.ReadI32s(int(high - low + 1))
-	case lookups:
-		c.skipPadding()
-		c.ReadI32()      // default
-		n := c.ReadI32() // high
-		c.ReadI32s(int(n) * 2)
+	n := len(c.rawCode)
+	for c.rawI < n {
+		code := c.readU8()
+		t, ok := inst2Type[code]
+		if !ok {
+			fmt.Errorf("undefined code %x\n", code) // maybe valid
+		}
+		c.code = append(c.code, code)
+		switch t {
+		case noL:
+		case u8L:
+			c.readU8()
+		case u8_2L, u16L:
+			c.readU16()
+		case u32L:
+			c.readI32()
+		case tables:
+			c.skipPadding()
+			c.readI32()         // default
+			low := c.readI32()  // low
+			high := c.readI32() // high
+			c.readI32s(int(high - low + 1))
+		case lookups:
+			c.skipPadding()
+			c.readI32()      // default
+			n := c.readI32() // high
+			c.readI32s(int(n) * 2)
+		}
 	}
 }
