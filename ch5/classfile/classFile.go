@@ -15,8 +15,8 @@ type ClassFile struct {
 	thisClass    uint16
 	superClass   uint16
 	interfaces   []uint16
-	fields       []FieldInfo
-	methods      []MethodInfo
+	fields       []*FieldInfo
+	methods      []*MethodInfo
 	attributes   []AttrInfo
 }
 
@@ -56,6 +56,16 @@ func (cf *ClassFile) InterfaceNames() []string {
 		res = append(res, cp[i].(*ClassInfo).ClassName(cp))
 	}
 	return res
+}
+
+// getter for Fields
+func (cf *ClassFile) FieldInfo() []*FieldInfo {
+	return cf.fields
+}
+
+// getter for Methods
+func (cf *ClassFile) MethodInfo() []*MethodInfo {
+	return cf.methods
 }
 
 const magicNumber = 0xCAFEBABE
@@ -108,17 +118,17 @@ func (cf *ClassFile) readInterfaces(reader *ClassReader) {
 // read fields
 func (cf *ClassFile) readFieldsAndMethods(reader *ClassReader) {
 	nf := reader.ReadUint16()
-	fields := make([]FieldInfo, 0, nf)
+	fields := make([]*FieldInfo, 0, nf)
 	for i := uint16(0); i < nf; i++ {
-		field := FieldInfo{MemberInfo{cp: cf.constantPool}}
+		field := &FieldInfo{MemberInfo{cp: cf.constantPool}}
 		field.ReadInfo(reader)
 		fields = append(fields, field)
 	}
 	cf.fields = fields
 	nm := reader.ReadUint16()
-	methods := make([]MethodInfo, 0, nm)
+	methods := make([]*MethodInfo, 0, nm)
 	for i := uint16(0); i < nm; i++ {
-		method := MethodInfo{MemberInfo{cp: cf.constantPool}}
+		method := &MethodInfo{MemberInfo{cp: cf.constantPool}}
 		method.ReadInfo(reader)
 		methods = append(methods, method)
 	}
