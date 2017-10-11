@@ -1,0 +1,48 @@
+#+TITLE: Instructions in JVM byte code
+#+AUTHOR: Ray Wang
+#+STARTUP: indent
+#DATE: <2017-10-16 Mon>
+
+* Pesudo loop:
+#+BEGIN_SRC 
+do {
+  atomically calculate pc and fetch opcode at pc;
+  if (operands) fetch operands;
+  execute the aciton for the opcode;
+} while (there is more to do);
+#+END_SRC
+
+* Reserved opcodes
+| mnemonics  | byte code | meaning          |
+|------------+-----------+------------------|
+| <c>        | <c>       | <c>              |
+| impdep1    | 0xFE      | reserved         |
+| impdep2    | 0xFF      | reserved         |
+| breakpoint | 0xca      | for debugger use |
+* Virtual machine Errors
+JVM implementation throws an object that is an instace of a subclass of the class /VirtualMachineError/ When an internal error 
+or resource limitaton prevents it from implementing the sematics described in the given context (opcode and oprande). These subclasses are:
+** InternalError
+** OutOfMemoryError
+** StackOverflowError
+** UnknownError
+
+* Instruction Set
+** Load and Store
+
+** Arithmetic
+
+** Type Conversion
+
+** Object Createion and Manipulation
+
+** Operand Stack management
+
+** Control Transfer
+
+** Method Invocation and Return
+
+** Throwing Exceptions
+
+** Synchronization
+ 

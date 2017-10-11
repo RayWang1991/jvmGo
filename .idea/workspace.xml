@@ -2,20 +2,58 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="809838e9-78a8-4dfa-81d7-c0628d1ebaa3" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/accFlags.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attrInfo.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attr_bootstrpMethods.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attr_code.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attr_constantValue.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attr_enclosingMethod.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attr_exceptions.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attr_innerClasses.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attr_lineNumberTable.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attr_localVarTable.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attr_methodParameters.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attr_unsupported.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/attr_widgets.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/classFile.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/classReader.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/constantPool.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/constantPool_subs.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/constantPool_utils.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/debug.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classfile/memberInfo.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classpath/classPath.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classpath/composite.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classpath/dir.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classpath/entry.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classpath/wildcard.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/classpath/zip.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/cmd.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/errcode/errors.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/inptr.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/branch.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/comparisons.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/constants.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/control.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/conversion.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/debug.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/instructions.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/loadAndStore.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/math.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/methodInvocationAndReturen.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/stack.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/instructions/synchronization.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/main.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/rtdata/debug.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/rtdata/frame.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/rtdata/localVars.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/rtdata/object.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/rtdata/operandStack.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/rtdata/rtdata_test.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/rtdata/slot.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/rtdata/threadData.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ch6/testOutline.org" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/classfile/attr_code.go" afterPath="$PROJECT_DIR$/ch5/classfile/attr_code.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/classfile/debug.go" afterPath="$PROJECT_DIR$/ch5/classfile/debug.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/classfile/memberInfo.go" afterPath="$PROJECT_DIR$/ch5/classfile/memberInfo.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/classpath/classPath.go" afterPath="$PROJECT_DIR$/ch5/classpath/classPath.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/cmd.go" afterPath="$PROJECT_DIR$/ch5/cmd.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/inptr.go" afterPath="$PROJECT_DIR$/ch5/inptr.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/instructions/debug.go" afterPath="$PROJECT_DIR$/ch5/instructions/debug.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/instructions/instructions.go" afterPath="$PROJECT_DIR$/ch5/instructions/instructions.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/main.go" afterPath="$PROJECT_DIR$/ch5/main.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/rtdata/debug.go" afterPath="$PROJECT_DIR$/ch5/rtdata/debug.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/rtdata/frame.go" afterPath="$PROJECT_DIR$/ch5/rtdata/frame.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/rtdata/operandStack.go" afterPath="$PROJECT_DIR$/ch5/rtdata/operandStack.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ch5/rtdata/threadData.go" afterPath="$PROJECT_DIR$/ch5/rtdata/threadData.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,109 +64,105 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="stack.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ch6/instructions/stack.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="14" lean-forward="false" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ch5/main.go">
+        <entry file="file://$PROJECT_DIR$/ch6/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="768">
-              <caret line="54" column="0" lean-forward="true" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+            <state relative-caret-position="75">
+              <caret line="5" column="11" lean-forward="false" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="threadData.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ch6/rtdata/threadData.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding>
-                <element signature="e#14#95#0" expanded="true" />
+                <element signature="e#16#42#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="attr_code.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ch5/classfile/attr_code.go">
+      <file leaf-file-name="attrInfo.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ch6/classfile/attrInfo.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-108">
-              <caret line="79" column="21" lean-forward="false" selection-start-line="79" selection-start-column="21" selection-end-line="79" selection-end-column="21" />
+            <state relative-caret-position="-358">
+              <caret line="22" column="67" lean-forward="false" selection-start-line="22" selection-start-column="67" selection-end-line="22" selection-end-column="67" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="accFlags.go" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ch5/classfile/accFlags.go">
+      <file leaf-file-name="classFile.go" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ch6/classfile/classFile.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-423">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="inptr.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ch5/inptr.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="32" column="50" lean-forward="false" selection-start-line="32" selection-start-column="50" selection-end-line="32" selection-end-column="50" />
+            <state relative-caret-position="222">
+              <caret line="95" column="13" lean-forward="false" selection-start-line="95" selection-start-column="13" selection-end-line="95" selection-end-column="13" />
               <folding>
-                <element signature="e#14#100#0" expanded="true" />
+                <element signature="e#19#60#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="loadAndStore.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ch5/instructions/loadAndStore.go">
+      <file leaf-file-name="accFlags.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ch6/classfile/accFlags.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
-              <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+            <state relative-caret-position="154">
+              <caret line="106" column="5" lean-forward="false" selection-start-line="106" selection-start-column="5" selection-end-line="106" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="localVars.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ch5/rtdata/localVars.go">
+      <file leaf-file-name="memberInfo.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ch6/classfile/memberInfo.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="15" column="19" lean-forward="false" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="operandStack.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ch5/rtdata/operandStack.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-943">
-              <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-              <folding>
-                <element signature="e#16#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="debug.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ch5/rtdata/debug.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="116">
+              <caret line="40" column="21" lean-forward="false" selection-start-line="40" selection-start-column="21" selection-end-line="40" selection-end-column="21" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="debug.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ch5/instructions/debug.go">
+        <entry file="file://$PROJECT_DIR$/ch6/classfile/debug.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3673">
-              <caret line="311" column="17" lean-forward="false" selection-start-line="311" selection-start-column="17" selection-end-line="311" selection-end-column="17" />
-              <folding>
-                <element signature="e#22#34#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-479">
+              <caret line="32" column="34" lean-forward="false" selection-start-line="32" selection-start-column="34" selection-end-line="32" selection-end-column="34" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="frame.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ch5/rtdata/frame.go">
+      <file leaf-file-name="constantPool.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ch6/classfile/constantPool.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
-              <caret line="52" column="28" lean-forward="false" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
+            <state relative-caret-position="251">
+              <caret line="53" column="23" lean-forward="false" selection-start-line="53" selection-start-column="23" selection-end-line="53" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="constantPool_subs.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ch6/classfile/constantPool_subs.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-14">
+              <caret line="95" column="5" lean-forward="false" selection-start-line="95" selection-start-column="5" selection-end-line="95" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -160,16 +194,22 @@
       <find>getCodeAttr</find>
       <find>AttrString</find>
       <find>ReadCode</find>
+      <find>checkcast</find>
+      <find>ch5</find>
+      <find>flagsToString</find>
+      <find>decomposeFlags</find>
     </findStrings>
     <replaceStrings>
       <replace />
       <replace>\(1\) uint32</replace>
       <replace>*ClassReader</replace>
+      <replace>ch6</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/ch3/classfile</dir>
       <dir>$PROJECT_DIR$/ch3</dir>
       <dir>$PROJECT_DIR$</dir>
+      <dir>$PROJECT_DIR$/ch6</dir>
     </dirStrings>
   </component>
   <component name="GOROOT" path="/usr/local/Cellar/go/1.9/libexec" />
@@ -179,23 +219,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/ch4/main.go" />
-        <option value="$PROJECT_DIR$/ch4/rtdata/Object.go" />
-        <option value="$PROJECT_DIR$/ch4/rtdata/object.go" />
-        <option value="$PROJECT_DIR$/ch4/classpath/classPath.go" />
-        <option value="$PROJECT_DIR$/ch4/errors/errors.go" />
-        <option value="$PROJECT_DIR$/ch4/errcode/errors.go" />
-        <option value="$PROJECT_DIR$/ch4/classfile/classFile.go" />
-        <option value="$PROJECT_DIR$/ch4/rtdata/threadData.go" />
-        <option value="$PROJECT_DIR$/ch4/rtdata/slot.go" />
-        <option value="$PROJECT_DIR$/ch4/rtdata/localVar.go" />
-        <option value="$PROJECT_DIR$/ch4/rtdata/localVars.go" />
-        <option value="$PROJECT_DIR$/ch4/rtdata/frame.go" />
-        <option value="$PROJECT_DIR$/ch4/rtdata/rtdata_test.go" />
-        <option value="$PROJECT_DIR$/ch4/rtdata/operandStack.go" />
-        <option value="$PROJECT_DIR$/ch5/instructions/loadAndStored.go" />
-        <option value="$PROJECT_DIR$/ch5/instructions/arithmetic.go" />
-        <option value="$PROJECT_DIR$/ch5/instructions/typeConversion.go" />
         <option value="$PROJECT_DIR$/ch5/instructions/objectCreateAndManipulation.go" />
         <option value="$PROJECT_DIR$/ch5/instructions/controlTransfer.go" />
         <option value="$PROJECT_DIR$/ch5/instructions/MethodInvocationAndReturen.go" />
@@ -230,6 +253,23 @@
         <option value="$PROJECT_DIR$/ch5/rtdata/operandStack.go" />
         <option value="$PROJECT_DIR$/ch5/inptr.go" />
         <option value="$PROJECT_DIR$/ch5/classfile/attr_code.go" />
+        <option value="$PROJECT_DIR$/ch6/classfile/attr_code.go" />
+        <option value="$PROJECT_DIR$/ch6/inptr.go" />
+        <option value="$PROJECT_DIR$/ch6/instructions/branch.go" />
+        <option value="$PROJECT_DIR$/ch6/instructions/comparisons.go" />
+        <option value="$PROJECT_DIR$/ch6/instructions/constants.go" />
+        <option value="$PROJECT_DIR$/ch6/instructions/control.go" />
+        <option value="$PROJECT_DIR$/ch6/instructions/conversion.go" />
+        <option value="$PROJECT_DIR$/ch6/instructions/instructions.go" />
+        <option value="$PROJECT_DIR$/ch6/instructions/loadAndStore.go" />
+        <option value="$PROJECT_DIR$/ch6/instructions/math.go" />
+        <option value="$PROJECT_DIR$/ch6/instructions/stack.go" />
+        <option value="$PROJECT_DIR$/ch6/main.go" />
+        <option value="$PROJECT_DIR$/ch6/rtdata/threadData.go" />
+        <option value="$PROJECT_DIR$/ch6/classfile/memberInfo.go" />
+        <option value="$PROJECT_DIR$/ch6/classfile/accFlags.go" />
+        <option value="$PROJECT_DIR$/ch6/classfile/debug.go" />
+        <option value="$PROJECT_DIR$/ch6/classfile/classFile.go" />
       </list>
     </option>
   </component>
@@ -240,9 +280,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="23" />
     <option name="width" value="1280" />
-    <option name="height" value="733" />
+    <option name="height" value="800" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -260,6 +299,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -271,6 +312,17 @@
               <item name="jvmGo" type="b2602c69:ProjectViewProjectNode" />
               <item name="jvmGo" type="462c0819:PsiDirectoryNode" />
               <item name="ch5" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jvmGo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jvmGo" type="462c0819:PsiDirectoryNode" />
+              <item name="ch6" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jvmGo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jvmGo" type="462c0819:PsiDirectoryNode" />
+              <item name="ch6" type="462c0819:PsiDirectoryNode" />
+              <item name="classfile" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jvmGo" type="b2602c69:ProjectViewProjectNode" />
@@ -291,8 +343,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -306,17 +356,18 @@
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/ch6" />
+      <recent name="$PROJECT_DIR$/ch4" />
+      <recent name="$PROJECT_DIR$/ch3" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/ch5" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/ch3/classfile" />
       <recent name="$PROJECT_DIR$/ch3/classfile/attribute" />
       <recent name="$PROJECT_DIR$/ch3/classFile" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/ch4" />
-      <recent name="$PROJECT_DIR$/ch3" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -372,7 +423,7 @@
       <kind value="DIRECTORY" />
       <filePath value="$PROJECT_DIR$/ch3" />
       <package value="jvmGo" />
-      <directory value="$PROJECT_DIR$/ch5" />
+      <directory value="$PROJECT_DIR$/ch6" />
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Go Application.jvmGo" />
@@ -399,18 +450,19 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="733" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2109375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2109375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6034483" sideWeight="0.5046875" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291536" sideWeight="0.5054687" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291536" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291536" sideWeight="0.49453124" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35893416" sideWeight="0.4953125" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3432602" sideWeight="0.4953125" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35893416" sideWeight="0.496875" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -451,6 +503,62 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/ch5/instructions/debug.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3673">
+          <caret line="311" column="17" lean-forward="false" selection-start-line="311" selection-start-column="17" selection-end-line="311" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch5/inptr.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="32" column="50" lean-forward="false" selection-start-line="32" selection-start-column="50" selection-end-line="32" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/accFlags.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-423">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/attr_bootstrpMethods.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-243">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/attr_code.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-108">
+          <caret line="79" column="21" lean-forward="false" selection-start-line="79" selection-start-column="21" selection-end-line="79" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/attr_constantValue.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/attr_enclosingMethod.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/attr_exceptions.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ch5/classfile/attr_lineNumberTable.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -458,161 +566,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/local/Cellar/go/1.9/libexec/src/builtin/builtin.go">
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/attr_localVarTable.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="87" column="5" lean-forward="false" selection-start-line="87" selection-start-column="5" selection-end-line="87" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/rtdata/object.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="5" lean-forward="false" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/errcode/errors.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="37" lean-forward="false" selection-start-line="4" selection-start-column="37" selection-end-line="4" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/Cellar/go/1.9/libexec/src/math/bits.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-125">
-          <caret line="30" column="5" lean-forward="false" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/Cellar/go/1.9/libexec/src/math/modf.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="5" lean-forward="false" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/Cellar/go/1.9/libexec/src/math/mod.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="5" lean-forward="false" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch3/classpath/classPath.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="548">
-          <caret line="78" column="31" lean-forward="true" selection-start-line="78" selection-start-column="31" selection-end-line="78" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch3/classpath/entry.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="11" column="4" lean-forward="false" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch3/classpath/dir.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state relative-caret-position="-168">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ch3/cmd.go">
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/attr_methodParameters.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-30">
+        <state relative-caret-position="-108">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/classfile/constantPool.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="11" column="5" lean-forward="false" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/utils.go" />
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/throwingExceptions.go" />
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/objectCreateAndManipulation.go" />
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/synchronization.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="20" lean-forward="false" selection-start-line="0" selection-start-column="20" selection-end-line="0" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/methodInvocationAndReturen.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="20" lean-forward="false" selection-start-line="0" selection-start-column="20" selection-end-line="0" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/testOutline.org">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="33" column="0" lean-forward="true" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/rtdata/rtdata_test.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="583">
-          <caret line="124" column="8" lean-forward="false" selection-start-line="124" selection-start-column="8" selection-end-line="124" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/rtdata/slot.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="15" lean-forward="false" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/codetype.go" />
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/codeReader.go" />
-    <entry file="file://$PROJECT_DIR$/ch5/rtdata/threadData.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/loop.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/classpath/entry.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="11" column="4" lean-forward="false" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/classpath/dir.go">
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/attr_widgets.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/classpath/classPath.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="17" column="5" lean-forward="false" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -627,43 +598,53 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ch5/classfile/classFile.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
+        <state relative-caret-position="1770">
           <caret line="121" column="36" lean-forward="false" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ch3/main.go">
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/classReader.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="e#14#95#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/cmd.go">
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/constantPool.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="11" column="5" lean-forward="false" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/constantPool_subs.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="11" lean-forward="false" selection-start-line="0" selection-start-column="11" selection-end-line="0" selection-end-column="11" />
-          <folding>
-            <element signature="e#14#45#0" expanded="true" />
-          </folding>
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/constantPool_utils.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch5/classfile/debug.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="33" column="32" lean-forward="false" selection-start-line="33" selection-start-column="32" selection-end-line="33" selection-end-column="32" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ch5/instructions/branch.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="e#22#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/comparisons.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
@@ -673,99 +654,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/constants.go">
+    <entry file="file://$PROJECT_DIR$/ch5/instructions/comparisons.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
-          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="e#22#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/control.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="e#22#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/conversion.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="e#22#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/math.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="e#22#81#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/stack.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="e#22#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/classfile/memberInfo.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
-          <caret line="44" column="8" lean-forward="false" selection-start-line="44" selection-start-column="8" selection-end-line="44" selection-end-column="8" />
+          <caret line="2" column="7" lean-forward="false" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/classfile/debug.go">
+    <entry file="file://$PROJECT_DIR$/ch5/classpath/classPath.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="33" column="32" lean-forward="false" selection-start-line="33" selection-start-column="32" selection-end-line="33" selection-end-column="32" />
+        <state relative-caret-position="195">
+          <caret line="17" column="5" lean-forward="false" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/instructions.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="228" column="27" lean-forward="false" selection-start-line="228" selection-start-column="27" selection-end-line="228" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="768">
-          <caret line="54" column="0" lean-forward="true" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#95#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/rtdata/localVars.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="15" column="19" lean-forward="false" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/rtdata/debug.go">
+    <entry file="file://$PROJECT_DIR$/ch5/classpath/dir.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -773,21 +678,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/rtdata/operandStack.go">
+    <entry file="file://$PROJECT_DIR$/ch5/classpath/zip.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-943">
-          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-          <folding>
-            <element signature="e#16#41#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/rtdata/frame.go">
+    <entry file="file://$PROJECT_DIR$/ch5/classpath/wildcard.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="52" column="28" lean-forward="false" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
+        <state relative-caret-position="195">
+          <caret line="17" column="14" lean-forward="false" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/Cellar/go/1.9/libexec/src/path/filepath/path.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-8">
+          <caret line="294" column="0" lean-forward="false" selection-start-line="294" selection-start-column="0" selection-end-line="294" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch5/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="36" column="24" lean-forward="false" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
+          <folding>
+            <element signature="e#14#95#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -799,39 +720,193 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/instructions/debug.go">
+    <entry file="file://$PROJECT_DIR$/ch5/instructions/instructions.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3673">
-          <caret line="311" column="17" lean-forward="false" selection-start-line="311" selection-start-column="17" selection-end-line="311" selection-end-column="17" />
-          <folding>
-            <element signature="e#22#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/inptr.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="32" column="50" lean-forward="false" selection-start-line="32" selection-start-column="50" selection-end-line="32" selection-end-column="50" />
-          <folding>
-            <element signature="e#14#100#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/classfile/attr_code.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-108">
-          <caret line="79" column="21" lean-forward="false" selection-start-line="79" selection-start-column="21" selection-end-line="79" selection-end-column="21" />
+        <state relative-caret-position="287">
+          <caret line="651" column="0" lean-forward="false" selection-start-line="651" selection-start-column="0" selection-end-line="651" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ch5/classfile/accFlags.go">
+    <entry file="file://$PROJECT_DIR$/ch6/cmd.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-423">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="240">
+          <caret line="16" column="23" lean-forward="false" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
+          <folding>
+            <element signature="e#14#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/rtdata/debug.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/classfile/attr_code.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="11" lean-forward="false" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/inptr.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="11" lean-forward="false" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/instructions/branch.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="14" lean-forward="false" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/instructions/comparisons.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="14" lean-forward="false" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/instructions/constants.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="14" lean-forward="false" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/instructions/control.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="14" lean-forward="false" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/instructions/conversion.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="14" lean-forward="false" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/instructions/instructions.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="14" lean-forward="false" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/instructions/loadAndStore.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="14" lean-forward="false" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/instructions/math.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="11" lean-forward="false" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/instructions/stack.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="14" lean-forward="false" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="11" lean-forward="false" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/rtdata/threadData.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding>
+            <element signature="e#16#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/classfile/constantPool.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="251">
+          <caret line="53" column="23" lean-forward="false" selection-start-line="53" selection-start-column="23" selection-end-line="53" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/classfile/constantPool_subs.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-14">
+          <caret line="95" column="5" lean-forward="false" selection-start-line="95" selection-start-column="5" selection-end-line="95" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/classfile/attrInfo.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-358">
+          <caret line="22" column="67" lean-forward="false" selection-start-line="22" selection-start-column="67" selection-end-line="22" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/classfile/memberInfo.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="116">
+          <caret line="40" column="21" lean-forward="false" selection-start-line="40" selection-start-column="21" selection-end-line="40" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/classfile/accFlags.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="106" column="5" lean-forward="false" selection-start-line="106" selection-start-column="5" selection-end-line="106" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/classfile/debug.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-479">
+          <caret line="32" column="34" lean-forward="false" selection-start-line="32" selection-start-column="34" selection-end-line="32" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ch6/classfile/classFile.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="95" column="13" lean-forward="false" selection-start-line="95" selection-start-column="13" selection-end-line="95" selection-end-column="13" />
+          <folding>
+            <element signature="e#19#60#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
