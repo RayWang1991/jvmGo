@@ -1,8 +1,6 @@
-package classfile
+package utils
 
-import (
-	"strings"
-)
+import "strings"
 
 type ACC_TYPE int
 
@@ -11,10 +9,6 @@ const (
 	ACC_TYPE_FIELD
 	ACC_TYPE_METHOD
 )
-
-// TODO distinguish class ,field and method acc
-
-// ACCESS FLAG For basic
 
 // All ACCESS FLAG
 const (
@@ -76,11 +70,11 @@ var flagMapMethod = map[uint16]string{
 	ACC_SYNTHETIC:    "ACC_SYNTHETIC",
 }
 
-func flagNumToString(num uint16, acc_type ACC_TYPE) string {
-	return flagsToString(decomposeFlags(num, acc_type), acc_type)
+func FlagNumToString(num uint16, acc_type ACC_TYPE) string {
+	return FlagsToString(DecomposeFlags(num, acc_type), acc_type)
 }
 
-func getFlagMap(acc_type ACC_TYPE) map[uint16]string {
+func GetFlagMap(acc_type ACC_TYPE) map[uint16]string {
 	switch acc_type {
 	case ACC_TYPE_CLASS:
 		return flagMapClass
@@ -93,8 +87,8 @@ func getFlagMap(acc_type ACC_TYPE) map[uint16]string {
 	}
 }
 
-func decomposeFlags(num uint16, acc_type ACC_TYPE) []uint16 {
-	flagMap := getFlagMap(acc_type)
+func DecomposeFlags(num uint16, acc_type ACC_TYPE) []uint16 {
+	flagMap := GetFlagMap(acc_type)
 	res := make([]uint16, 0, len(flagMap))
 	for f := range flagMap {
 		if f&num != 0 {
@@ -104,8 +98,8 @@ func decomposeFlags(num uint16, acc_type ACC_TYPE) []uint16 {
 	return res
 }
 
-func flagsToString(flags []uint16, acc_type ACC_TYPE) string {
-	flagMap := getFlagMap(acc_type)
+func FlagsToString(flags []uint16, acc_type ACC_TYPE) string {
+	flagMap := GetFlagMap(acc_type)
 	strs := make([]string, 0, len(flags))
 	for _, f := range flags {
 		strs = append(strs, flagMap[f])
