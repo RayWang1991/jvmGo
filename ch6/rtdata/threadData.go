@@ -1,6 +1,6 @@
 package rtdata
 
-import "jvmGo/ch6/errcode"
+import "jvmGo/ch6/utils"
 
 // Thread represents a thread
 type Thread struct {
@@ -52,7 +52,7 @@ type Stack struct {
 func (s *Stack) push(f *Frame) {
 	s.currentSize ++
 	if s.currentSize > s.maxSize {
-		panic(errcode.StackOverFlow)
+		panic(utils.StackOverFlow)
 	}
 	f.next = s.top
 	s.top = f

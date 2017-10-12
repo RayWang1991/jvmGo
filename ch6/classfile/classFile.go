@@ -2,7 +2,7 @@ package classfile
 
 import (
 	"errors"
-	"jvmGo/ch6/errcode"
+	"jvmGo/ch6/utils"
 )
 
 type ClassFile struct {
@@ -11,7 +11,6 @@ type ClassFile struct {
 	majorVersion uint16
 	constantPool ConstantPool
 	accessFlag   uint16
-	flags        []uint16
 	thisClass    uint16
 	superClass   uint16
 	interfaces   []uint16
@@ -73,7 +72,7 @@ const magicNumber = 0xCAFEBABE
 func (cf *ClassFile) readAndCheckMagic(reader *ClassReader) error {
 	magic := reader.ReadUint32()
 	if magic != magicNumber {
-		return errors.New(errcode.ClassMagicError)
+		return errors.New(utils.ClassMagicError)
 	}
 	cf.magic = magic
 	return nil
@@ -85,14 +84,13 @@ func (cf *ClassFile) readAndCheckVersion(reader *ClassReader) error {
 	if cf.majorVersion >= 45 && cf.majorVersion <= 52 {
 		return nil
 	} else {
-		return errors.New(errcode.ClassVersionError)
+		return errors.New(utils.ClassVersionError)
 	}
 }
 
 // read access flag and check it
 func (cf *ClassFile) readAccessFlag(reader *ClassReader) error {
 	cf.accessFlag = reader.ReadUint16()
-	cf.flags = decomposeFlags(cf.accessFlag, ACC_TYPE_CLASS)
 	return nil
 }
 

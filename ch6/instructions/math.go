@@ -2,7 +2,7 @@ package instructions
 
 import (
 	"jvmGo/ch6/rtdata"
-	"jvmGo/ch6/errcode"
+	"jvmGo/ch6/utils"
 	"math"
 )
 
@@ -87,7 +87,7 @@ func idiv(f *rtdata.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	if v1 == 0 {
-		panic(errcode.DivideByZero)
+		panic(utils.DivideByZero)
 	}
 	f.OperandStack.PushInt(v2 / v1)
 }
@@ -96,7 +96,7 @@ func ldiv(f *rtdata.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopLong()
 	if v1 == 0 {
-		panic(errcode.DivideByZero)
+		panic(utils.DivideByZero)
 	}
 	f.OperandStack.PushLong(v2 / v1)
 }
@@ -105,7 +105,7 @@ func fdiv(f *rtdata.Frame) {
 	v1 := f.OperandStack.PopFloat()
 	v2 := f.OperandStack.PopFloat()
 	if v1 == 0 {
-		panic(errcode.DivideByZero)
+		panic(utils.DivideByZero)
 	}
 	f.OperandStack.PushFloat(v2 / v1)
 }
@@ -114,7 +114,7 @@ func ddiv(f *rtdata.Frame) {
 	v1 := f.OperandStack.PopDouble()
 	v2 := f.OperandStack.PopDouble()
 	if v1 == 0 {
-		panic(errcode.DivideByZero)
+		panic(utils.DivideByZero)
 	}
 	f.OperandStack.PushDouble(v2 / v1)
 }
@@ -125,7 +125,7 @@ func irem(f *rtdata.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	if v1 == 0 {
-		panic(errcode.DivideByZero)
+		panic(utils.DivideByZero)
 	}
 	f.OperandStack.PushInt(v2 % v1)
 }
@@ -134,7 +134,7 @@ func lrem(f *rtdata.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopLong()
 	if v1 == 0 {
-		panic(errcode.DivideByZero)
+		panic(utils.DivideByZero)
 	}
 	f.OperandStack.PushLong(v2 % v1)
 }
@@ -143,7 +143,7 @@ func frem(f *rtdata.Frame) {
 	v1 := f.OperandStack.PopFloat()
 	v2 := f.OperandStack.PopFloat()
 	if v1 == 0 {
-		panic(errcode.DivideByZero)
+		panic(utils.DivideByZero)
 	}
 	f.OperandStack.PushFloat(float32(math.Mod(float64(v2), float64(v1))))
 }
@@ -152,7 +152,7 @@ func drem(f *rtdata.Frame) {
 	v1 := f.OperandStack.PopDouble()
 	v2 := f.OperandStack.PopDouble()
 	if v1 == 0 {
-		panic(errcode.DivideByZero)
+		panic(utils.DivideByZero)
 	}
 	f.OperandStack.PushDouble(math.Mod(v2, v1))
 }

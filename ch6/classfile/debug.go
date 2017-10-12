@@ -5,6 +5,7 @@ import (
 	"strings"
 	"bytes"
 	"strconv"
+	"jvmGo/ch6/utils"
 )
 
 func readerPos(cr *ClassReader) string {
@@ -17,7 +18,7 @@ func readerPos(cr *ClassReader) string {
 func (cf *ClassFile) PrintDebugMessage() {
 	fmt.Printf("magic: %X\n", cf.magic) // magic
 	fmt.Printf("version: %d.%d\n", cf.MajorVersion(), cf.MinorVersion())
-	fmt.Printf("flags: %s\n", flagsToString(cf.flags, ACC_TYPE_CLASS), ACC_TYPE_CLASS)
+	fmt.Printf("flags: %s\n", utils.FlagNumToString(cf.accessFlag, utils.ACC_TYPE_CLASS), utils.ACC_TYPE_CLASS)
 	fmt.Print(cf.constantPool.String())
 	fmt.Printf("class: %s\n", cf.ClassName())
 	fmt.Printf("super class: %s\n", cf.SuperClassName())
@@ -25,11 +26,11 @@ func (cf *ClassFile) PrintDebugMessage() {
 	// Fields and Methods
 	fmt.Printf("Fields(%d items):\n", len(cf.fields))
 	for i, f := range cf.fields {
-		fmt.Print(f.String(fmt.Sprintf("#%d\n", i), ACC_TYPE_FIELD))
+		fmt.Print(f.String(fmt.Sprintf("#%d\n", i), utils.ACC_TYPE_FIELD))
 	}
 	fmt.Printf("Mields(%d items):\n", len(cf.methods))
 	for i, m := range cf.methods {
-		fmt.Print(m.String(fmt.Sprintf("#%d\n", i), ACC_TYPE_METHOD))
+		fmt.Print(m.String(fmt.Sprintf("#%d\n", i), utils.ACC_TYPE_METHOD))
 		codeAttr := m.GetCodeAttr()
 		fmt.Print(codeAttr.AttrString())
 	}
@@ -101,14 +102,14 @@ func debugIndex(i uint) string {
 	return "#" + strconv.Itoa(int(i))
 }
 
-func (m *MemberInfo) String(title string, acc_type ACC_TYPE) string {
+func (m *MemberInfo) String(title string, acc_type utils.ACC_TYPE) string {
 	buf := &bytes.Buffer{}
 	buf.WriteString(title)
 	buf.WriteString("name: ")
 	buf.WriteString(m.cp.getUtf8(m.nameIndex))
 	buf.WriteByte('\n')
 	buf.WriteString("flags: ")
-	buf.WriteString(flagNumToString(m.accessFlags, acc_type))
+	buf.WriteString(utils.FlagNumToString(m.accessFlags, acc_type))
 	buf.WriteByte('\n')
 	buf.WriteString("descriptor: ")
 	buf.WriteString(m.cp.getUtf8(m.descIndex))
