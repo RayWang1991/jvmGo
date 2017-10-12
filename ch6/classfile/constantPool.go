@@ -55,7 +55,7 @@ func NewConstInfo(tag uint8, reader *ClassReader) (info ConstInfo, l uint16) {
 	case CONST_MethodType_Info:
 		info = &MethodTypeInfo{}
 	case CONST_InvokeDynamic_Info:
-		info = &InvokeDynamic_Info{}
+		info = &InvokeDynamicInfo{}
 	default:
 		panic(fmt.Errorf("java.lang.ClassFormatError: constant pool tag: %d !", tag))
 	}

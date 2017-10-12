@@ -90,7 +90,7 @@ func debugString(cp ConstantPool, info ConstInfo) (string, string, string) {
 		return "MethodHandle", debugIndex(uint(info.refKind)) + ":" + debugIndex(uint(info.refIndex)), ""
 	case *MethodTypeInfo:
 		return "MethodType", debugIndex(uint(info.descIndex)), "// " + cp.getUtf8(info.descIndex)
-	case *InvokeDynamic_Info: // I don't know how to print it
+	case *InvokeDynamicInfo: // I don't know how to print it
 		return "InvokeDynamic",
 			debugIndex(uint(info.bootstrapMethodAttrIndex)) + ":" + debugIndex(uint(info.nameTypeIndex)), ""
 	default:
