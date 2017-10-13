@@ -1,81 +1,81 @@
 package instructions
 
 import (
-	"jvmGo/ch6/rtdata"
+	"jvmGo/ch6/rtdt"
 	"jvmGo/ch6/utils"
 	"math"
 )
 
 // add
-func iadd(f *rtdata.Frame) {
+func iadd(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	f.OperandStack.PushInt(v1 + v2)
 }
 
-func ladd(f *rtdata.Frame) {
+func ladd(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopLong()
 	f.OperandStack.PushLong(v1 + v2)
 }
 
-func fadd(f *rtdata.Frame) {
+func fadd(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopFloat()
 	v2 := f.OperandStack.PopFloat()
 	f.OperandStack.PushFloat(v1 + v2)
 }
 
-func dadd(f *rtdata.Frame) {
+func dadd(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopDouble()
 	v2 := f.OperandStack.PopDouble()
 	f.OperandStack.PushDouble(v1 + v2)
 }
 
 // sub
-func isub(f *rtdata.Frame) {
+func isub(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	f.OperandStack.PushInt(v2 - v1)
 }
 
-func lsub(f *rtdata.Frame) {
+func lsub(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopLong()
 	f.OperandStack.PushLong(v2 - v1)
 }
 
-func fsub(f *rtdata.Frame) {
+func fsub(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopFloat()
 	v2 := f.OperandStack.PopFloat()
 	f.OperandStack.PushFloat(v2 - v1)
 }
 
-func dsub(f *rtdata.Frame) {
+func dsub(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopDouble()
 	v2 := f.OperandStack.PopDouble()
 	f.OperandStack.PushDouble(v2 - v1)
 }
 
 // mul
-func imul(f *rtdata.Frame) {
+func imul(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	f.OperandStack.PushInt(v2 * v1)
 }
 
-func lmul(f *rtdata.Frame) {
+func lmul(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopLong()
 	f.OperandStack.PushLong(v2 * v1)
 }
 
-func fmul(f *rtdata.Frame) {
+func fmul(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopFloat()
 	v2 := f.OperandStack.PopFloat()
 	f.OperandStack.PushFloat(v2 * v1)
 }
 
-func dmul(f *rtdata.Frame) {
+func dmul(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopDouble()
 	v2 := f.OperandStack.PopDouble()
 	f.OperandStack.PushDouble(v2 * v1)
@@ -83,7 +83,7 @@ func dmul(f *rtdata.Frame) {
 
 // div
 // TODO, NAN, Infinite
-func idiv(f *rtdata.Frame) {
+func idiv(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	if v1 == 0 {
@@ -92,7 +92,7 @@ func idiv(f *rtdata.Frame) {
 	f.OperandStack.PushInt(v2 / v1)
 }
 
-func ldiv(f *rtdata.Frame) {
+func ldiv(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopLong()
 	if v1 == 0 {
@@ -101,7 +101,7 @@ func ldiv(f *rtdata.Frame) {
 	f.OperandStack.PushLong(v2 / v1)
 }
 
-func fdiv(f *rtdata.Frame) {
+func fdiv(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopFloat()
 	v2 := f.OperandStack.PopFloat()
 	if v1 == 0 {
@@ -110,7 +110,7 @@ func fdiv(f *rtdata.Frame) {
 	f.OperandStack.PushFloat(v2 / v1)
 }
 
-func ddiv(f *rtdata.Frame) {
+func ddiv(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopDouble()
 	v2 := f.OperandStack.PopDouble()
 	if v1 == 0 {
@@ -121,7 +121,7 @@ func ddiv(f *rtdata.Frame) {
 
 // rem
 // TODO NAN, inf
-func irem(f *rtdata.Frame) {
+func irem(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	if v1 == 0 {
@@ -130,7 +130,7 @@ func irem(f *rtdata.Frame) {
 	f.OperandStack.PushInt(v2 % v1)
 }
 
-func lrem(f *rtdata.Frame) {
+func lrem(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopLong()
 	if v1 == 0 {
@@ -139,7 +139,7 @@ func lrem(f *rtdata.Frame) {
 	f.OperandStack.PushLong(v2 % v1)
 }
 
-func frem(f *rtdata.Frame) {
+func frem(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopFloat()
 	v2 := f.OperandStack.PopFloat()
 	if v1 == 0 {
@@ -148,7 +148,7 @@ func frem(f *rtdata.Frame) {
 	f.OperandStack.PushFloat(float32(math.Mod(float64(v2), float64(v1))))
 }
 
-func drem(f *rtdata.Frame) {
+func drem(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopDouble()
 	v2 := f.OperandStack.PopDouble()
 	if v1 == 0 {
@@ -158,35 +158,35 @@ func drem(f *rtdata.Frame) {
 }
 
 // neg
-func ineg(f *rtdata.Frame) {
+func ineg(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopInt()
 	f.OperandStack.PushInt(-v1)
 }
 
-func lneg(f *rtdata.Frame) {
+func lneg(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopLong()
 	f.OperandStack.PushLong(-v1)
 }
 
-func fneg(f *rtdata.Frame) {
+func fneg(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopFloat()
 	f.OperandStack.PushFloat(-v1)
 }
 
-func dneg(f *rtdata.Frame) {
+func dneg(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopDouble()
 	f.OperandStack.PushDouble(-v1)
 }
 
 // shl
-func ishl(f *rtdata.Frame) {
+func ishl(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	res := v1 << uint(v2&0x1F)
 	f.OperandStack.PushInt(res)
 }
 
-func lshl(f *rtdata.Frame) {
+func lshl(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopInt()
 	res := v1 << uint(v2&0x3F)
@@ -194,14 +194,14 @@ func lshl(f *rtdata.Frame) {
 }
 
 // shr
-func ishr(f *rtdata.Frame) {
+func ishr(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	res := v1 >> uint(v2&0x1F)
 	f.OperandStack.PushInt(res)
 }
 
-func lshr(f *rtdata.Frame) {
+func lshr(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopInt()
 	res := v1 >> uint(v2&0x3F)
@@ -209,14 +209,14 @@ func lshr(f *rtdata.Frame) {
 }
 
 // ushr
-func iushr(f *rtdata.Frame) {
+func iushr(f *rtdt.Frame) {
 	v1 := uint32(f.OperandStack.PopInt())
 	v2 := f.OperandStack.PopInt()
 	res := v1 >> uint(v2&0x1F)
 	f.OperandStack.PushInt(int32(res))
 }
 
-func lushr(f *rtdata.Frame) {
+func lushr(f *rtdt.Frame) {
 	v1 := uint64(f.OperandStack.PopLong())
 	v2 := f.OperandStack.PopInt()
 	res := v1 >> uint(v2&0x3F)
@@ -224,46 +224,46 @@ func lushr(f *rtdata.Frame) {
 }
 
 // and
-func iand(f *rtdata.Frame) {
+func iand(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	f.OperandStack.PushInt(v1 & v2)
 }
 
-func land(f *rtdata.Frame) {
+func land(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopLong()
 	f.OperandStack.PushLong(v1 & v2)
 }
 
 // or
-func ior(f *rtdata.Frame) {
+func ior(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	f.OperandStack.PushInt(v1 | v2)
 }
 
-func lor(f *rtdata.Frame) {
+func lor(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopLong()
 	f.OperandStack.PushLong(v1 | v2)
 }
 
 // xor
-func ixor(f *rtdata.Frame) {
+func ixor(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopInt()
 	v2 := f.OperandStack.PopInt()
 	f.OperandStack.PushInt(v1 ^ v2)
 }
 
-func lxor(f *rtdata.Frame) {
+func lxor(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopLong()
 	f.OperandStack.PushLong(v1 ^ v2)
 }
 
 // inc
-func iinc(f *rtdata.Frame) {
+func iinc(f *rtdt.Frame) {
 	index := f.ReadU8()
 	c := int8(f.ReadU8())
 	v := f.LocalVar.GetInt(uint(index))

@@ -1,6 +1,6 @@
 package instructions
 
-import "jvmGo/ch6/rtdata"
+import "jvmGo/ch6/rtdt"
 
 // instruction set
 const (
@@ -434,7 +434,7 @@ var code2StringMap = map[uint8]string{
 	OPCODE_wide:            "wide",
 }
 
-var code2FuncMap = map[uint8]func(*rtdata.Frame){
+var code2FuncMap = map[uint8]func(*rtdt.Frame){
 	// Constants
 	OPCODE_nop:         nop,
 	OPCODE_aconst_null: aconst_null,
@@ -670,11 +670,11 @@ func InstStrHit(i uint8) (string, bool) {
 	return res, ok
 }
 
-func InstFnc(i uint8) func(*rtdata.Frame) {
+func InstFnc(i uint8) func(*rtdt.Frame) {
 	return code2FuncMap[i]
 }
 
-func InstFncHit(i uint8) (func(*rtdata.Frame), bool) {
+func InstFncHit(i uint8) (func(*rtdt.Frame), bool) {
 	res, ok := code2FuncMap[i]
 	return res, ok
 }

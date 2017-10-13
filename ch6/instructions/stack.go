@@ -1,15 +1,15 @@
 package instructions
 
-import "jvmGo/ch6/rtdata"
+import "jvmGo/ch6/rtdt"
 
 // duplicate the top slot of the operand stack
-func dup(f *rtdata.Frame) {
+func dup(f *rtdt.Frame) {
 	s := f.OperandStack.Top()
 	ns := s.Copy()
 	f.OperandStack.PushSlot(ns)
 }
 
-func dup2(f *rtdata.Frame) {
+func dup2(f *rtdt.Frame) {
 	v1 := f.OperandStack.Top()
 	v2 := f.OperandStack.GetSlot(1)
 	v1d := v1.Copy()
@@ -20,7 +20,7 @@ func dup2(f *rtdata.Frame) {
 
 // duplicate the top operand stack value and insert two values down
 // TODO simplify
-func dup_x1(f *rtdata.Frame) {
+func dup_x1(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopSlot()
 	v2 := f.OperandStack.PopSlot()
 	v1d := v1.Copy()
@@ -29,7 +29,7 @@ func dup_x1(f *rtdata.Frame) {
 	f.OperandStack.PushSlot(v1)
 }
 
-func dup_x2(f *rtdata.Frame) {
+func dup_x2(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopSlot()
 	v2 := f.OperandStack.PopSlot()
 	v3 := f.OperandStack.PopSlot()
@@ -40,7 +40,7 @@ func dup_x2(f *rtdata.Frame) {
 	f.OperandStack.PushSlot(v1)
 }
 
-func dup2_x1(f *rtdata.Frame) {
+func dup2_x1(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopSlot()
 	v2 := f.OperandStack.PopSlot()
 	v3 := f.OperandStack.PopSlot()
@@ -53,7 +53,7 @@ func dup2_x1(f *rtdata.Frame) {
 	f.OperandStack.PushSlot(v1)
 }
 
-func dup2_x2(f *rtdata.Frame) {
+func dup2_x2(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopSlot()
 	v2 := f.OperandStack.PopSlot()
 	v3 := f.OperandStack.PopSlot()
@@ -68,16 +68,16 @@ func dup2_x2(f *rtdata.Frame) {
 	f.OperandStack.PushSlot(v1)
 }
 
-func pop(f *rtdata.Frame) {
+func pop(f *rtdt.Frame) {
 	f.OperandStack.PopSlot()
 }
 
-func pop2(f *rtdata.Frame) {
+func pop2(f *rtdt.Frame) {
 	f.OperandStack.PopSlot()
 	f.OperandStack.PopSlot()
 }
 
-func swap(f *rtdata.Frame) {
+func swap(f *rtdt.Frame) {
 	v1 := f.OperandStack.PopSlot()
 	v2 := f.OperandStack.PopSlot()
 	f.OperandStack.PushSlot(v1)

@@ -1,7 +1,11 @@
-package rtdata
+package rtdt
+
+import (
+	data "jvmGo/ch6/marea"
+)
 
 type Frame struct {
-	LocalVar     LocalVars // the local var represents the local variables, the length is given by compiler
+	LocalVar     data.Vars // the local var represents the local variables, the length is given by compiler
 	OperandStack *OperandStack
 	next         *Frame
 	// code
@@ -12,7 +16,7 @@ type Frame struct {
 // new
 func NewFrame(maxLocals, maxOperands uint, code []byte) *Frame {
 	return &Frame{
-		LocalVar:     NewLocalVars(maxLocals),
+		LocalVar:     data.NewLocalVars(maxLocals),
 		OperandStack: NewOperandStack(maxOperands),
 		code:         code,
 	}

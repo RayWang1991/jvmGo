@@ -1,9 +1,9 @@
-package rtdata
+package rtdt
 
 import (
 	"math"
 	"fmt"
-	"jvmGo/ch6/cmn"
+	data "jvmGo/ch6/marea"
 )
 
 // TODO debug option
@@ -11,13 +11,13 @@ import (
 
 type OperandStack struct {
 	size uint
-	data []cmn.Slot // the max depth of operands is given by compiler
+	data []data.Slot // the max depth of operands is given by compiler
 }
 
 func NewOperandStack(maxDepth uint) *OperandStack {
 	return &OperandStack{
 		0,
-		make([]cmn.Slot, maxDepth), // all cmn.Slot is initiated to {0,nil}
+		make([]data.Slot, maxDepth), // all data.Slot is initiated to {0,nil}
 	}
 }
 
@@ -40,12 +40,12 @@ func (o *OperandStack) PushInt(i int32) {
 	}
 }
 
-func (o *OperandStack) PopRef() *cmn.Object {
+func (o *OperandStack) PopRef() *data.Object {
 	o.size--
 	return o.data[o.size].Ref
 }
 
-func (o *OperandStack) PushRef(r *cmn.Object) {
+func (o *OperandStack) PushRef(r *data.Object) {
 	o.data[o.size].Ref = r
 	o.size++
 }
@@ -95,17 +95,17 @@ func (o *OperandStack) PopDouble() float64 {
 	return math.Float64frombits(uint64(s1.Num)<<32 | uint64(uint32(s2.Num)))
 }
 
-// return the top cmn.Slot, do not pop
-func (o *OperandStack) Top() *cmn.Slot {
+// return the top data.Slot, do not pop
+func (o *OperandStack) Top() *data.Slot {
 	return o.GetSlot(0)
 }
 
-func (o *OperandStack) PushSlot(s *cmn.Slot) {
+func (o *OperandStack) PushSlot(s *data.Slot) {
 	o.data[o.size] = *s
 	o.size++
 }
 
-func (o *OperandStack) PopSlot() *cmn.Slot {
+func (o *OperandStack) PopSlot() *data.Slot {
 	r := &o.data[o.size]
 	r.Ref = nil
 	o.size--
@@ -113,7 +113,7 @@ func (o *OperandStack) PopSlot() *cmn.Slot {
 }
 
 // i is the index to the top of stack, just get, not pop
-func (o *OperandStack) GetSlot(i uint) *cmn.Slot {
+func (o *OperandStack) GetSlot(i uint) *data.Slot {
 	if i >= uint(o.size) {
 		panic("StackOutOfRange")
 	}

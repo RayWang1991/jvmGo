@@ -1,4 +1,4 @@
-package rtdata
+package rtdt
 
 var debugFlag bool
 

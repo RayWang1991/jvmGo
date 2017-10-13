@@ -1,8 +1,8 @@
 package instructions
 
-import "jvmGo/ch6/rtdata"
+import "jvmGo/ch6/rtdt"
 
-func lcmp(f *rtdata.Frame) {
+func lcmp(f *rtdt.Frame) {
 	v2 := f.OperandStack.PopLong()
 	v1 := f.OperandStack.PopLong()
 	var res int32
@@ -16,7 +16,7 @@ func lcmp(f *rtdata.Frame) {
 	f.OperandStack.PushInt(res)
 }
 
-func fcmpl(f *rtdata.Frame) {
+func fcmpl(f *rtdt.Frame) {
 	v2 := f.OperandStack.PopFloat()
 	v1 := f.OperandStack.PopFloat()
 	var res int32
@@ -31,7 +31,7 @@ func fcmpl(f *rtdata.Frame) {
 	f.OperandStack.PushInt(res)
 }
 
-func fcmpg(f *rtdata.Frame) {
+func fcmpg(f *rtdt.Frame) {
 	v2 := f.OperandStack.PopFloat()
 	v1 := f.OperandStack.PopFloat()
 	var res int32
@@ -46,7 +46,7 @@ func fcmpg(f *rtdata.Frame) {
 	f.OperandStack.PushInt(res)
 }
 
-func dcmpl(f *rtdata.Frame) {
+func dcmpl(f *rtdt.Frame) {
 	v2 := f.OperandStack.PopDouble()
 	v1 := f.OperandStack.PopDouble()
 	var res int32
@@ -61,7 +61,7 @@ func dcmpl(f *rtdata.Frame) {
 	f.OperandStack.PushInt(res)
 }
 
-func dcmpg(f *rtdata.Frame) {
+func dcmpg(f *rtdt.Frame) {
 	v2 := f.OperandStack.PopDouble()
 	v1 := f.OperandStack.PopDouble()
 	var res int32
@@ -77,7 +77,7 @@ func dcmpg(f *rtdata.Frame) {
 }
 
 // if<cond>
-func ifeq(f *rtdata.Frame) {
+func ifeq(f *rtdt.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v == 0 {
@@ -85,7 +85,7 @@ func ifeq(f *rtdata.Frame) {
 	}
 }
 
-func ifne(f *rtdata.Frame) {
+func ifne(f *rtdt.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v != 0 {
@@ -93,7 +93,7 @@ func ifne(f *rtdata.Frame) {
 	}
 }
 
-func iflt(f *rtdata.Frame) {
+func iflt(f *rtdt.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v < 0 {
@@ -101,7 +101,7 @@ func iflt(f *rtdata.Frame) {
 	}
 }
 
-func ifle(f *rtdata.Frame) {
+func ifle(f *rtdt.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v <= 0 {
@@ -109,7 +109,7 @@ func ifle(f *rtdata.Frame) {
 	}
 }
 
-func ifgt(f *rtdata.Frame) {
+func ifgt(f *rtdt.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v > 0 {
@@ -117,7 +117,7 @@ func ifgt(f *rtdata.Frame) {
 	}
 }
 
-func ifge(f *rtdata.Frame) {
+func ifge(f *rtdt.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v >= 0 {
@@ -126,49 +126,49 @@ func ifge(f *rtdata.Frame) {
 }
 
 // if_icmp<cond>
-func _icmp(f *rtdata.Frame) (int16, int32, int32) {
+func _icmp(f *rtdt.Frame) (int16, int32, int32) {
 	b := f.ReadI16()
 	v2 := f.OperandStack.PopInt()
 	v1 := f.OperandStack.PopInt()
 	return b, v1, v2
 }
 
-func if_icmpeq(f *rtdata.Frame) {
+func if_icmpeq(f *rtdt.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 == v2 {
 		branchI16(f,b)
 	}
 }
 
-func if_icmpne(f *rtdata.Frame) {
+func if_icmpne(f *rtdt.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 != v2 {
 		branchI16(f,b)
 	}
 }
 
-func if_icmplt(f *rtdata.Frame) {
+func if_icmplt(f *rtdt.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 < v2 {
 		branchI16(f,b)
 	}
 }
 
-func if_icmple(f *rtdata.Frame) {
+func if_icmple(f *rtdt.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 <= v2 {
 		branchI16(f,b)
 	}
 }
 
-func if_icmpgt(f *rtdata.Frame) {
+func if_icmpgt(f *rtdt.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 > v2 {
 		branchI16(f,b)
 	}
 }
 
-func if_icmpge(f *rtdata.Frame) {
+func if_icmpge(f *rtdt.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 >= v2 {
 		branchI16(f,b)
@@ -176,21 +176,21 @@ func if_icmpge(f *rtdata.Frame) {
 }
 
 // if_acmp
-func _acmp(f *rtdata.Frame) (int16, *rtdata.Object, *rtdata.Object) {
+func _acmp(f *rtdt.Frame) (int16, *rtdt.Object, *rtdt.Object) {
 	b := f.ReadI16()
 	v2 := f.OperandStack.PopRef()
 	v1 := f.OperandStack.PopRef()
 	return b, v1, v2
 }
 
-func if_acmpeq(f *rtdata.Frame) {
+func if_acmpeq(f *rtdt.Frame) {
 	b, v1, v2 := _acmp(f)
 	if v1 == v2 {
 		branchI16(f,b)
 	}
 }
 
-func if_acmpne(f *rtdata.Frame) {
+func if_acmpne(f *rtdt.Frame) {
 	b, v1, v2 := _acmp(f)
 	if v1 != v2 {
 		branchI16(f,b)
@@ -198,7 +198,7 @@ func if_acmpne(f *rtdata.Frame) {
 }
 
 // extend for null
-func ifnull(f *rtdata.Frame){
+func ifnull(f *rtdt.Frame){
 	b := f.ReadI16()
 	v := f.OperandStack.PopRef()
 	if v == nil {
@@ -206,7 +206,7 @@ func ifnull(f *rtdata.Frame){
 	}
 }
 
-func ifnonnull(f *rtdata.Frame){
+func ifnonnull(f *rtdt.Frame){
 	b := f.ReadI16()
 	v := f.OperandStack.PopRef()
 	if v != nil {

@@ -1,33 +1,33 @@
 package instructions
 
-import "jvmGo/ch6/rtdata"
+import "jvmGo/ch6/rtdt"
 
-func ggoto(f *rtdata.Frame) {
+func ggoto(f *rtdt.Frame) {
 	b := f.ReadI16()
 	branchI16(f, b)
 }
 
-func ggoto_w(f *rtdata.Frame) {
+func ggoto_w(f *rtdt.Frame) {
 	b := f.ReadI32()
 	branchI32(f, b)
 }
 
 // jump subroutine
-func jsr(f *rtdata.Frame) {
+func jsr(f *rtdt.Frame) {
 	b := f.ReadI16()
 	// get next code's pc index and use it as address
 	f.OperandStack.PushInt(f.GetPC())
 	branchI16(f, b)
 }
 
-func jsr_w(f *rtdata.Frame) {
+func jsr_w(f *rtdt.Frame) {
 	b := f.ReadI32()
 	// get next code's pc index and use it as address
 	f.OperandStack.PushInt(f.GetPC())
 	branchI32(f, b)
 }
 
-func ret(f *rtdata.Frame) {
+func ret(f *rtdt.Frame) {
 	i := f.ReadU8()
 	l := f.LocalVar.GetInt(uint(i))
 	f.SetPC(l)
@@ -35,7 +35,7 @@ func ret(f *rtdata.Frame) {
 
 // skip the padding until the pc is multiple of 4
 // returns the pc skipped
-func skipPadding(f *rtdata.Frame) {
+func skipPadding(f *rtdt.Frame) {
 	var i int32
 	pc := f.GetPC()
 	for i = pc; i < 4+pc; i++ {
@@ -46,7 +46,7 @@ func skipPadding(f *rtdata.Frame) {
 	f.SetPC(i)
 }
 
-func tableswitch(f *rtdata.Frame) {
+func tableswitch(f *rtdt.Frame) {
 	pc := f.GetPC() - 1
 	skipPadding(f)
 	def := f.ReadI32()
@@ -61,7 +61,7 @@ func tableswitch(f *rtdata.Frame) {
 	}
 }
 
-func lookupswitch(f *rtdata.Frame) {
+func lookupswitch(f *rtdt.Frame) {
 	pc := f.GetPC() - 1
 	skipPadding(f)
 	def := f.ReadI32()
