@@ -34,6 +34,11 @@ func (cf *ClassFile) AccessFlag() uint16 {
 	return cf.accessFlag
 }
 
+// getter for ConstantPool
+func (cf *ClassFile) ConstantPool() ConstantPool {
+	return cf.constantPool
+}
+
 // getter for class name
 func (cf *ClassFile) ClassName() string {
 	cp := cf.constantPool
