@@ -106,3 +106,76 @@ func FlagsToString(flags []uint16, acc_type ACC_TYPE) string {
 	}
 	return strings.Join(strs, ", ")
 }
+
+// access verification methods
+func IsPublic(flags uint16) bool {
+	return ACC_PUBLIC&flags != 0
+}
+
+func IsFinal(flags uint16) bool {
+	return ACC_FINAL&flags != 0
+}
+
+func IsSuper(flags uint16) bool {
+	return ACC_SUPER&flags != 0
+}
+
+func IsInterface(flags uint16) bool {
+	return ACC_INTERFACE&flags != 0
+}
+
+func IsAbstract(flags uint16) bool {
+	return ACC_ABSTRACT&flags != 0
+}
+
+func IsSynthetic(flags uint16) bool {
+	return ACC_SYNTHETIC&flags != 0
+}
+
+func IsAnnotation(flags uint16) bool {
+	return ACC_ANNOTATION&flags != 0
+}
+
+func IsEnum(flags uint16) bool {
+	return ACC_ENUM&flags != 0
+}
+
+func IsPrivate(flags uint16) bool {
+	return ACC_PRIVATE&flags != 0
+}
+
+func IsProtected(flags uint16) bool {
+	return ACC_PROTECTED&flags != 0
+}
+
+func IsStatic(flags uint16) bool {
+	return ACC_STATIC&flags != 0
+}
+
+func IsSynchronized(flags uint16) bool {
+	return ACC_SYNCHRONIZED&flags != 0
+}
+
+func IsBridge(flags uint16) bool {
+	return ACC_BRIDGE&flags != 0
+}
+
+func IsVarargs(flags uint16) bool {
+	return ACC_VARARGS&flags != 0
+}
+
+func IsNative(flags uint16) bool {
+	return ACC_NATIVE&flags != 0
+}
+
+func IsStrict(flags uint16) bool {
+	return ACC_STRICT&flags != 0
+}
+
+func IsVolatile(flags uint16) bool {
+	return ACC_VOLATILE&flags != 0
+}
+
+func IsTransient(flags uint16) bool {
+	return ACC_TRANSIENT&flags != 0
+}
