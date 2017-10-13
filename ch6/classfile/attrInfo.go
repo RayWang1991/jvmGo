@@ -36,7 +36,7 @@ const (
 // factory method for attribute info
 func NewAttributeInfo(reader *ClassReader, cp ConstantPool) AttrInfo {
 	nameIndex := reader.ReadUint16()
-	name := cp.getUtf8(nameIndex)
+	name := cp.GetUTF8(nameIndex)
 	switch name {
 	case ATTRNAME_CONSTVALUE:
 		return &AttrConstantValue{cp: cp}
