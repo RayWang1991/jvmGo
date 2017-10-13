@@ -23,11 +23,11 @@ func (m *MemberInfo) ReadInfo(reader *ClassReader) {
 }
 
 func (m *MemberInfo) Name() string {
-	return m.cp.getUtf8(m.nameIndex)
+	return m.cp.GetUTF8(m.nameIndex)
 }
 
 func (m *MemberInfo) Description() string {
-	return m.cp.getUtf8(m.descIndex)
+	return m.cp.GetUTF8(m.descIndex)
 }
 
 type FieldInfo struct {

@@ -2,7 +2,7 @@ package main
 
 import (
 	"jvmGo/ch6/classfile"
-	"jvmGo/ch6/rtdata"
+	"jvmGo/ch6/rtdt"
 	"jvmGo/ch6/instructions"
 	"fmt"
 )
@@ -12,21 +12,21 @@ func interpret(m *classfile.MethodInfo) {
 	maxStackDep := uint(codeAttr.MaxStack())
 	maxLvals := uint(codeAttr.MaxLocals())
 	code := codeAttr.Code()
-	thread := rtdata.NewThread(1024)
-	frame := rtdata.NewFrame(maxLvals, maxStackDep, code)
+	thread := rtdt.NewThread(1024)
+	frame := rtdt.NewFrame(maxLvals, maxStackDep, code)
 	thread.PushFrame(frame)
 	defer catchErr(thread)
 	loop(thread)
 }
-func catchErr(t *rtdata.Thread) {
+func catchErr(t *rtdt.Thread) {
 	if r := recover(); r != nil {
-		fmt.Printf("LocalVars:%v\n", t.CurrentFrame().LocalVar)
+		fmt.Printf("Vars:%v\n", t.CurrentFrame().LocalVar)
 		fmt.Printf("OperandStack:%v\n", t.CurrentFrame().OperandStack)
 	}
 }
 
 // loop for current frame
-func loop(t *rtdata.Thread) {
+func loop(t *rtdt.Thread) {
 	f := t.CurrentFrame()
 	for {
 		code := f.ReadU8() // read next opcode
