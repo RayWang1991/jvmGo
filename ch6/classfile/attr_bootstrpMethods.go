@@ -1,7 +1,7 @@
 package classfile
 
 type AttrBootstrapMethods struct {
-	cp ConstantPool
+	cp              ConstantPool
 	bootMethodTable []AttrBootstrapMethodEntry
 }
 
@@ -18,6 +18,10 @@ func (bsm *AttrBootstrapMethods) ReadInfo(reader *ClassReader) uint32 {
 	return num
 }
 
+func (bsm *AttrBootstrapMethods) Table() []AttrBootstrapMethodEntry {
+	return bsm.bootMethodTable
+}
+
 type AttrBootstrapMethodEntry struct {
 	methodRef uint16
 	args      []uint16
@@ -32,4 +36,12 @@ func (entry *AttrBootstrapMethodEntry) ReadInfo(reader *ClassReader) {
 	for i := uint16(0); i < n; i ++ {
 		args = append(args, reader.ReadUint16())
 	}
+}
+
+func (entry *AttrBootstrapMethodEntry) MethodRefIndex() uint16 {
+	return entry.methodRef
+}
+
+func (entry *AttrBootstrapMethodEntry) ArgIndexes() []uint16 {
+	return entry.args
 }
