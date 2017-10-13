@@ -1,4 +1,4 @@
-package cmn
+package marea
 
 type Slot struct {
 	Num int32   // for return addr, boolean, byte, char, int

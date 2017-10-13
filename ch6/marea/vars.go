@@ -1,6 +1,8 @@
-package cmn
+package marea
 
-import "math"
+import (
+	"math"
+)
 
 type Vars []Slot // fixed-length array
 
@@ -48,10 +50,10 @@ func (l Vars) GetDouble(i uint) float64 {
 }
 
 // set the ref addr
-func (l Vars) SetRef(ref *cmn.Object, i uint) {
+func (l Vars) SetRef(ref *Object, i uint) {
 	l[i].Ref = ref
 }
 
-func (l Vars) GetRef(i uint) *cmn.Object {
+func (l Vars) GetRef(i uint) *Object {
 	return l[i].Ref
 }
