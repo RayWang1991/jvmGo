@@ -21,3 +21,23 @@ type MethodRefInfo struct {
 type InterfaceMethodRefInfo struct {
 	RefInfo
 }
+
+func (r *RefInfo) GetClassName(cp ConstantPool) string {
+	return cp[r.classIndex].(*ClassInfo).ClassName(cp)
+}
+
+func (r *RefInfo) GetNameAndType(cp ConstantPool) (n, t string) {
+	info := cp[r.nameTypeIndex].(*NameTypeInfo)
+	n = info.Name(cp)
+	t = info.Name(cp)
+	return
+}
+
+func (r *RefInfo) NameTypeInfo(cp ConstantPool) *NameTypeInfo {
+	return cp[r.nameTypeIndex].(*NameTypeInfo)
+}
+
+// get class info for field reference
+func (r *RefInfo) ClassInfo(cp ConstantPool) *ClassInfo {
+	return cp[r.classIndex].(*ClassInfo)
+}

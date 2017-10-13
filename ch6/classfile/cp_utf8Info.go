@@ -9,3 +9,7 @@ func (u *Utf8Info) ReadInfo(reader *ClassReader) {
 	bs := reader.ReadBytes(uint(length))
 	u.val = decodeMUTF8(bs)
 }
+
+func (u *Utf8Info) String() string {
+	return u.val
+}
