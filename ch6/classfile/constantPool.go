@@ -84,24 +84,22 @@ const (
 	CONST_InvokeDynamic_Info      = 18
 )
 
-func (cp ConstantPool) getUtf8(index uint16) string {
+func (cp ConstantPool) GetUTF8(index uint16) string {
 	return cp[index].(*Utf8Info).val
 }
 
-func (cp ConstantPool) getInteger(index uint16) int32 {
+func (cp ConstantPool) GetInteger(index uint16) int32 {
 	return cp[index].(*IntegerInfo).val
 }
 
-func (cp ConstantPool) getLong(index uint16) int64 {
+func (cp ConstantPool) GetLong(index uint16) int64 {
 	return cp[index].(*LongInfo).val
 }
 
-func (cp ConstantPool) getFloat(index uint16) float32 {
+func (cp ConstantPool) GetFloat(index uint16) float32 {
 	return cp[index].(*FloatInfo).val
 }
 
-func (cp ConstantPool) getDouble(index uint16) float64 {
+func (cp ConstantPool) GetDouble(index uint16) float64 {
 	return cp[index].(*DoubleInfo).val
 }
-
-
