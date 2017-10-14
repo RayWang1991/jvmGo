@@ -2,8 +2,8 @@ package classpath
 
 import (
 	"archive/zip"
-	"io/ioutil"
 	"fmt"
+	"io/ioutil"
 	"path/filepath"
 )
 

@@ -81,7 +81,7 @@ func ifeq(f *rtdata.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v == 0 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
@@ -89,7 +89,7 @@ func ifne(f *rtdata.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v != 0 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
@@ -97,7 +97,7 @@ func iflt(f *rtdata.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v < 0 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
@@ -105,7 +105,7 @@ func ifle(f *rtdata.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v <= 0 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
@@ -113,7 +113,7 @@ func ifgt(f *rtdata.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v > 0 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
@@ -121,7 +121,7 @@ func ifge(f *rtdata.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopInt()
 	if v >= 0 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
@@ -136,42 +136,42 @@ func _icmp(f *rtdata.Frame) (int16, int32, int32) {
 func if_icmpeq(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 == v2 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
 func if_icmpne(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 != v2 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
 func if_icmplt(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 < v2 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
 func if_icmple(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 <= v2 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
 func if_icmpgt(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 > v2 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
 func if_icmpge(f *rtdata.Frame) {
 	b, v1, v2 := _icmp(f)
 	if v1 >= v2 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
@@ -186,30 +186,30 @@ func _acmp(f *rtdata.Frame) (int16, *rtdata.Object, *rtdata.Object) {
 func if_acmpeq(f *rtdata.Frame) {
 	b, v1, v2 := _acmp(f)
 	if v1 == v2 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
 func if_acmpne(f *rtdata.Frame) {
 	b, v1, v2 := _acmp(f)
 	if v1 != v2 {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
 // extend for null
-func ifnull(f *rtdata.Frame){
+func ifnull(f *rtdata.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopRef()
 	if v == nil {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }
 
-func ifnonnull(f *rtdata.Frame){
+func ifnonnull(f *rtdata.Frame) {
 	b := f.ReadI16()
 	v := f.OperandStack.PopRef()
 	if v != nil {
-		branchI16(f,b)
+		branchI16(f, b)
 	}
 }

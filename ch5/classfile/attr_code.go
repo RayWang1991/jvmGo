@@ -1,8 +1,8 @@
 package classfile
 
 import (
-	"fmt"
 	"bytes"
+	"fmt"
 	"jvmGo/ch5/instructions"
 )
 
@@ -24,7 +24,7 @@ Code {
   u2 attributes_count;
   attribute_info attributes[attributes_count]
 }
- */
+*/
 
 type AttrCode struct {
 	cp        ConstantPool

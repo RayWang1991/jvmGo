@@ -1,10 +1,10 @@
 package rtdata
 
 import (
-	"testing"
-	"math/rand"
 	"fmt"
 	"math"
+	"math/rand"
+	"testing"
 )
 
 func TestLocalVal(t *testing.T) {

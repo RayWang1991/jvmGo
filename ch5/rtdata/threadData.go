@@ -50,7 +50,7 @@ type Stack struct {
 }
 
 func (s *Stack) push(f *Frame) {
-	s.currentSize ++
+	s.currentSize++
 	if s.currentSize > s.maxSize {
 		panic(errcode.StackOverFlow)
 	}

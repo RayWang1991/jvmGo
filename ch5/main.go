@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"jvmGo/ch5/classpath"
 	"jvmGo/ch5/classfile"
-	"strings"
+	"jvmGo/ch5/classpath"
 	"log"
+	"strings"
 )
 
 func main() {

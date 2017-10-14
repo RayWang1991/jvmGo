@@ -578,7 +578,6 @@ var code2FuncMap = map[uint8]func(*rtdata.Frame){
 	OPCODE_lxor:  lxor,
 	OPCODE_iinc:  iinc,
 
-
 	// Conversions
 	OPCODE_i2l: i2l,
 	OPCODE_i2f: i2f,
@@ -653,10 +652,10 @@ var code2FuncMap = map[uint8]func(*rtdata.Frame){
 	// Extended
 	//OPCODE_wide:           wide,
 	//OPCODE_multianewarray: multianewarray,
-	OPCODE_ifnull:         ifnull,
-	OPCODE_ifnonnull:      ifnonnull,
-	OPCODE_ggoto_w:        ggoto_w,
-	OPCODE_jsr_w:          jsr_w,
+	OPCODE_ifnull:    ifnull,
+	OPCODE_ifnonnull: ifnonnull,
+	OPCODE_ggoto_w:   ggoto_w,
+	OPCODE_jsr_w:     jsr_w,
 
 	// Reserved is not shown
 }

@@ -1,9 +1,9 @@
 package classpath
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
-	"fmt"
 )
 
 type ClassPath struct {

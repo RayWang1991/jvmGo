@@ -158,7 +158,6 @@ var inst2Type = map[uint8]codeType{
 	OPCODE_lxor:  noL,
 	OPCODE_iinc:  u8_2L,
 
-
 	// Conversions
 	OPCODE_i2l: noL,
 	OPCODE_i2f: noL,

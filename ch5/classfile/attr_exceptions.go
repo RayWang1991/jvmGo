@@ -1,7 +1,7 @@
 package classfile
 
 type AttrExceptions struct {
-	cp ConstantPool
+	cp               ConstantPool
 	exceptionIndexes []uint16 // indexes to constant pool, must be class info
 }
 

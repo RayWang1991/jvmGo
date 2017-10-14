@@ -1,10 +1,10 @@
 package main
 
 import (
-	"jvmGo/ch5/classfile"
-	"jvmGo/ch5/rtdata"
-	"jvmGo/ch5/instructions"
 	"fmt"
+	"jvmGo/ch5/classfile"
+	"jvmGo/ch5/instructions"
+	"jvmGo/ch5/rtdata"
 )
 
 func interpret(m *classfile.MethodInfo) {

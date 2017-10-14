@@ -1,7 +1,7 @@
 package classfile
 
 type AttrInnerClasses struct {
-	cp ConstantPool
+	cp      ConstantPool
 	classes []AttrInnerClass
 }
 
@@ -17,7 +17,7 @@ func (innerClasses *AttrInnerClasses) ReadInfo(reader *ClassReader) uint32 {
 	classNum := reader.ReadUint16()
 	classes := make([]AttrInnerClass, 0, classNum)
 	var i uint16
-	for i = 0; i < classNum; i ++ {
+	for i = 0; i < classNum; i++ {
 		class := AttrInnerClass{}
 		class.ReadInfo(reader)
 		classes = append(classes, class)

@@ -1,8 +1,8 @@
 package classfile
 
 import (
-	"fmt"
 	"bytes"
+	"fmt"
 )
 
 /*
@@ -23,7 +23,7 @@ Code {
   u2 attributes_count;
   attribute_info attributes[attributes_count]
 }
- */
+*/
 
 type AttrCode struct {
 	cp        ConstantPool

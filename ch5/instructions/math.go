@@ -1,8 +1,8 @@
 package instructions
 
 import (
-	"jvmGo/ch5/rtdata"
 	"jvmGo/ch5/errcode"
+	"jvmGo/ch5/rtdata"
 	"math"
 )
 

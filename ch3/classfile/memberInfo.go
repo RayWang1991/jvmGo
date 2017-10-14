@@ -8,7 +8,6 @@ type MemberInfo struct {
 	attrs       []AttrInfo
 }
 
-
 func (m *MemberInfo) ReadInfo(reader *ClassReader) {
 	m.accessFlags = reader.ReadUint16()
 	m.nameIndex = reader.ReadUint16()

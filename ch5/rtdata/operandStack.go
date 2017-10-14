@@ -1,8 +1,8 @@
 package rtdata
 
 import (
-	"math"
 	"fmt"
+	"math"
 )
 
 // TODO debug option
