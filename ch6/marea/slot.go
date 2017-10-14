@@ -9,4 +9,3 @@ type Slot struct {
 func (s *Slot) Copy() *Slot {
 	return &Slot{s.Num, s.Ref}
 }
-

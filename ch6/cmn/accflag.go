@@ -5,7 +5,7 @@ import "strings"
 type ACC_TYPE int
 
 const (
-	ACC_TYPE_CLASS  ACC_TYPE = iota
+	ACC_TYPE_CLASS ACC_TYPE = iota
 	ACC_TYPE_FIELD
 	ACC_TYPE_METHOD
 )

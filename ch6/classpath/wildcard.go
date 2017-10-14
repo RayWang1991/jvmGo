@@ -1,8 +1,8 @@
 package classpath
 
 import (
-	"path/filepath"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -10,7 +10,7 @@ import (
 // representing a '*' entry, it's a composite entry after all
 
 func NewWildcardEntry(entryPath string) CompositeEntry {
-	if !filepath.IsAbs(entryPath){
+	if !filepath.IsAbs(entryPath) {
 		panic("not absolute path")
 	}
 	baseName := entryPath[:len(entryPath)-1] // should check for the len

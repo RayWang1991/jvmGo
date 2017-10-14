@@ -1,16 +1,17 @@
 package rtdt
 
 import (
-	"testing"
-	"math/rand"
 	"fmt"
+	"jvmGo/ch6/marea"
 	"math"
+	"math/rand"
+	"testing"
 )
 
 func TestLocalVal(t *testing.T) {
 	const testLen = 10
 	f := Frame{
-		LocalVar: NewLocalVars(testLen),
+		LocalVar: marea.NewLocalVars(testLen),
 	}
 	// Test int
 	ints := make([]int32, testLen)

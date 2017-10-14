@@ -1,10 +1,11 @@
 package main
 
 import (
-	"jvmGo/ch6/classfile"
-	"jvmGo/ch6/rtdt"
-	"jvmGo/ch6/instructions"
 	"fmt"
+	"jvmGo/ch6/classfile"
+	"jvmGo/ch6/instructions"
+	"jvmGo/ch6/rtdt"
+	"jvmGo/ch6/cmn"
 )
 
 func interpret(m *classfile.MethodInfo) {
@@ -30,7 +31,7 @@ func loop(t *rtdt.Thread) {
 	f := t.CurrentFrame()
 	for {
 		code := f.ReadU8() // read next opcode
-		fmt.Printf("pc:%-4d code:%s\n", f.GetPC()-1, instructions.InstStr(code))
+		fmt.Printf("pc:%-4d code:%s\n", f.GetPC()-1, cmn.InstStr(code))
 		fn := instructions.InstFnc(code)
 		fn(f)
 	}

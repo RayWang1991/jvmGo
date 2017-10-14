@@ -21,7 +21,9 @@ func (cf *ClassFile) PrintDebugMessage() {
 	fmt.Printf("flags: %s\n", cmn.FlagNumToString(cf.accessFlag, cmn.ACC_TYPE_CLASS))
 	fmt.Print(cf.constantPool.String())
 	fmt.Printf("class: %s\n", cf.ClassName())
-	fmt.Printf("super class: %s\n", cf.SuperClassName())
+	if cf.ClassName() != "java/lang/Object" {
+		fmt.Printf("super class: %s\n", cf.SuperClassName())
+	}
 	fmt.Printf("interfaces(%d items): %s \n", len(cf.interfaces), strings.Join(cf.InterfaceNames(), ","))
 	// Fields and Methods
 	fmt.Printf("Fields(%d items):\n", len(cf.fields))
@@ -31,8 +33,12 @@ func (cf *ClassFile) PrintDebugMessage() {
 	fmt.Printf("Mields(%d items):\n", len(cf.methods))
 	for i, m := range cf.methods {
 		fmt.Print(m.String(fmt.Sprintf("#%d\n", i), cmn.ACC_TYPE_METHOD))
-		codeAttr := m.GetCodeAttr()
-		fmt.Print(codeAttr.AttrString())
+		if cmn.IsNative(m.accessFlags){
+			fmt.Println("Native Method")
+		} else {
+			codeAttr := m.GetCodeAttr()
+			fmt.Print(codeAttr.AttrString())
+		}
 	}
 }
 

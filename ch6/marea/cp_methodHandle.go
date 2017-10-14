@@ -5,7 +5,7 @@ import cf "jvmGo/ch6/classfile"
 type REF_Kind byte
 
 const (
-	REF_getField         REF_Kind = iota
+	REF_getField REF_Kind = iota
 	REF_getStatic
 	REF_putField
 	REF_putStatic
