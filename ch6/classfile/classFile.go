@@ -3,20 +3,22 @@ package classfile
 import (
 	"errors"
 	"jvmGo/ch6/utils"
+	"jvmGo/ch6/cmn"
 )
 
 type ClassFile struct {
-	magic        uint32 // magic number, always be 0xCAFEBABE
-	minorVersion uint16
-	majorVersion uint16
-	constantPool ConstantPool
-	accessFlag   uint16
-	thisClass    uint16
-	superClass   uint16
-	interfaces   []uint16
-	fields       []*FieldInfo
-	methods      []*MethodInfo
-	attributes   []AttrInfo
+	magic          uint32 // magic number, always be 0xCAFEBABE
+	minorVersion   uint16
+	majorVersion   uint16
+	constantPool   ConstantPool
+	accessFlag     uint16
+	thisClass      uint16
+	superClass     uint16
+	interfaces     []uint16
+	staticFields   []*FieldInfo
+	instanceFields []*FieldInfo
+	methods        []*MethodInfo
+	attributes     []AttrInfo
 }
 
 // getter for minorVersion
@@ -63,8 +65,12 @@ func (cf *ClassFile) InterfaceNames() []string {
 }
 
 // getter for Fields
-func (cf *ClassFile) FieldInfo() []*FieldInfo {
-	return cf.fields
+func (cf *ClassFile) StatFields() []*FieldInfo {
+	return cf.staticFields
+}
+
+func (cf *ClassFile) InstFields() []*FieldInfo {
+	return cf.instanceFields
 }
 
 // getter for Methods
@@ -121,13 +127,26 @@ func (cf *ClassFile) readInterfaces(reader *ClassReader) {
 // read fields
 func (cf *ClassFile) readFieldsAndMethods(reader *ClassReader) {
 	nf := reader.ReadUint16()
+	sn := uint16(0)
 	fields := make([]*FieldInfo, 0, nf)
 	for i := uint16(0); i < nf; i++ {
 		field := &FieldInfo{MemberInfo{cp: cf.constantPool}}
 		field.ReadInfo(reader)
+		if cmn.IsStatic(field.accessFlags) {
+			sn++
+		}
 		fields = append(fields, field)
 	}
-	cf.fields = fields
+	cf.instanceFields = make([]*FieldInfo, 0, nf-sn)
+	cf.staticFields = make([]*FieldInfo, 0, sn)
+	for _, f := range fields {
+		if cmn.IsStatic(f.accessFlags) {
+			cf.staticFields = append(cf.staticFields, f)
+		} else {
+			cf.instanceFields = append(cf.instanceFields, f)
+		}
+	}
+
 	nm := reader.ReadUint16()
 	methods := make([]*MethodInfo, 0, nm)
 	for i := uint16(0); i < nm; i++ {
@@ -138,7 +157,7 @@ func (cf *ClassFile) readFieldsAndMethods(reader *ClassReader) {
 	cf.methods = methods
 }
 
-// the sequence is important
+// read sequentially
 func NewClassFile(reader *ClassReader) (cf *ClassFile, err error) {
 	cf = &ClassFile{}
 	err = cf.readAndCheckMagic(reader)
