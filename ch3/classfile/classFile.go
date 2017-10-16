@@ -146,7 +146,7 @@ func NewClassFile(reader *ClassReader) (cf *ClassFile, err error) {
 	//	if e, ok := r.(error); ok {
 	//		err = e
 	//	} else {
-	//		err = fmt.Errorf("parsing Class File: %v", r)
+	//		err = fmt.Errorf("parsing FromClass File: %v", r)
 	//	}
 	//}()
 	cf.constantPool = NewConstantPool(reader)

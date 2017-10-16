@@ -11,7 +11,7 @@ func readerPos(cr *ClassReader) string {
 	return fmt.Sprintf("len:%d", cr.length())
 }
 
-// Print Debug Message for Class File
+// Print Debug Message for FromClass File
 // TODO using template?
 // TODO debug string for attr info
 func (cf *ClassFile) PrintDebugMessage() {
@@ -54,7 +54,7 @@ func (cp ConstantPool) String() string {
 func debugString(cp ConstantPool, info ConstInfo) (string, string, string) {
 	switch info := info.(type) {
 	case *ClassInfo:
-		return "Class", debugIndex(uint(info.nameIndex)), "// " + cp.getUtf8(info.nameIndex)
+		return "FromClass", debugIndex(uint(info.nameIndex)), "// " + cp.getUtf8(info.nameIndex)
 	case *Utf8Info:
 		return "Utf8", info.val, ""
 	case *IntegerInfo:
