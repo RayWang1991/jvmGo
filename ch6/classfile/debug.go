@@ -12,7 +12,7 @@ func readerPos(cr *ClassReader) string {
 	return fmt.Sprintf("len:%d", cr.length())
 }
 
-// Print Debug Message for Class File
+// Print Debug Message for FromClass File
 // TODO using template?
 // TODO debug string for attr info
 func (cf *ClassFile) PrintDebugMessage() {
@@ -21,19 +21,21 @@ func (cf *ClassFile) PrintDebugMessage() {
 	fmt.Printf("flags: %s\n", cmn.FlagNumToString(cf.accessFlag, cmn.ACC_TYPE_CLASS))
 	fmt.Print(cf.constantPool.String())
 	fmt.Printf("class: %s\n", cf.ClassName())
-	if cf.ClassName() != "java/lang/Object" {
-		fmt.Printf("super class: %s\n", cf.SuperClassName())
-	}
+	fmt.Printf("super class: %s\n", cf.SuperClassName())
 	fmt.Printf("interfaces(%d items): %s \n", len(cf.interfaces), strings.Join(cf.InterfaceNames(), ","))
 	// Fields and Methods
-	fmt.Printf("Fields(%d items):\n", len(cf.fields))
-	for i, f := range cf.fields {
+	fmt.Printf("Fields static (%d items):\n", len(cf.staticFields))
+	for i, f := range cf.staticFields {
 		fmt.Print(f.String(fmt.Sprintf("#%d\n", i), cmn.ACC_TYPE_FIELD))
 	}
-	fmt.Printf("Mields(%d items):\n", len(cf.methods))
+	fmt.Printf("Fields instance (%d items):\n", len(cf.instanceFields))
+	for i, f := range cf.instanceFields {
+		fmt.Print(f.String(fmt.Sprintf("#%d\n", i), cmn.ACC_TYPE_FIELD))
+	}
+	fmt.Printf("Methods(%d items):\n", len(cf.methods))
 	for i, m := range cf.methods {
 		fmt.Print(m.String(fmt.Sprintf("#%d\n", i), cmn.ACC_TYPE_METHOD))
-		if cmn.IsNative(m.accessFlags){
+		if cmn.IsNative(m.accessFlags) {
 			fmt.Println("Native Method")
 		} else {
 			codeAttr := m.GetCodeAttr()
@@ -63,7 +65,7 @@ func (cp ConstantPool) String() string {
 func debugString(cp ConstantPool, info ConstInfo) (string, string, string) {
 	switch info := info.(type) {
 	case *ClassInfo:
-		return "Class", debugIndex(uint(info.nameIndex)), "// " + cp.GetUTF8(info.nameIndex)
+		return "FromClass", debugIndex(uint(info.nameIndex)), "// " + cp.GetUTF8(info.nameIndex)
 	case *Utf8Info:
 		return "Utf8", info.val, ""
 	case *IntegerInfo:
