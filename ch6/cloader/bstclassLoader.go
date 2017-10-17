@@ -10,28 +10,11 @@ import (
 	"jvmGo/ch6/utils"
 )
 
-const (
-	BstLoaderId = 1001 + iota
-)
-
 // TODO
 
-type ClassLoader interface {
-	Delegate() ClassLoader
-	Initiate(n string) *marea.Class
-	Define(n string) *marea.Class
-	Verify(class *marea.Class)
-	Prepare(class *marea.Class)
-}
-
-const (
-	BootstrapClassLoaderId   = iota
-	UserDefinedClassLoaderId
-)
-
-func NewBstLoader(cp *classpath.ClassPath) ClassLoader {
+func NewBstLoader(cp *classpath.ClassPath) marea.ClassLoader {
 	return &bstLoader{
-		id: BootstrapClassLoaderId,
+		id: marea.BootstrapClassLoaderId,
 		cp: cp,
 	}
 }
@@ -44,19 +27,23 @@ type bstLoader struct {
 	cp *classpath.ClassPath
 }
 
-func (b *bstLoader) Delegate() ClassLoader {
+func (b *bstLoader) ID() int {
+	return b.id
+}
+
+func (b *bstLoader) Delegate() marea.ClassLoader {
 	return nil
 }
 func (b *bstLoader) Initiate(n string) *marea.Class {
 	if c := cache[n]; c != nil {
-		if c.InitLoaderId() == b.id {
+		if c.InitLoader().ID() == b.id {
 			return c
 		} else {
 			panic(utils.LinkageError)
 		}
 	} else {
 		c := b.Define(n)
-		c.SetInitLoaderId(b.id)
+		c.SetInitLoader(b)
 		b.Verify(c)
 		b.Prepare(c)
 		return c
@@ -75,7 +62,7 @@ func (b *bstLoader) Define(n string) *marea.Class {
 	if c == nil {
 		panic(utils.ClassFormatError)
 	}
-	c.SetDefineLoaderId(b.id)
+	c.SetDefineLoader(b)
 	cache[n] = c
 	return c
 }
@@ -92,7 +79,7 @@ func (b *bstLoader) Prepare(c *marea.Class) {
 func doLoadClassFile(class string, cp *classpath.ClassPath) (*classfile.ClassFile, error) {
 	className := strings.Replace(class, ".", "/", -1)
 	className += ".class"
-	classData, _, err := cp.ReadClass(className)
+	classData, entry, err := cp.ReadClass(className)
 	if err != nil {
 		fmt.Fprint(os.Stderr, fmt.Errorf("open .class failed: %s", err))
 		return nil, err
@@ -103,10 +90,13 @@ func doLoadClassFile(class string, cp *classpath.ClassPath) (*classfile.ClassFil
 		fmt.Fprint(os.Stderr, fmt.Errorf("parsing class file failed: %s", err))
 		return nil, err
 	}
-	cf.PrintDebugMessage()
+	//cf.PrintDebugMessage() TODO cf debug
+	fmt.Printf("Load Class File %s from %s\n",cf.ClassName(),entry.String())
 	return cf, nil
 }
 
 func doLoadClassFromFile(file *classfile.ClassFile) *marea.Class {
-	return marea.NewClass(file)
+	c := marea.NewClass(file)
+	c.PrintDebugMessage()
+	return c
 }
