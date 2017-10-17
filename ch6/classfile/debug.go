@@ -141,3 +141,18 @@ func (cp ConstantPool) getConstDebugString(index uint16) string {
 		return "Unknown ConstantValue"
 	}
 }
+
+// debug for code
+type CodeInst []byte
+
+func (code CodeInst) String() string {
+	buf := &bytes.Buffer{}
+	buf.WriteString("code:\n")
+	// code
+	cr := cmn.NewCodeReader(code)
+	cr.ReadCode()
+	for i, c := range cr.Code() {
+		buf.WriteString(fmt.Sprintf("#%d %s\n", i, cmn.InstStr(c)))
+	}
+	return buf.String()
+}
