@@ -13,9 +13,10 @@ type ClassFile struct {
 	constantPool   ConstantPool
 	accessFlag     uint16
 	thisClass      uint16
-	superClass     uint16
+	superClass     uint16 // Object doesn't have one
 	interfaces     []uint16
 	staticFields   []*FieldInfo
+	sSlotN         uint
 	instanceFields []*FieldInfo
 	methods        []*MethodInfo
 	attributes     []AttrInfo
@@ -49,6 +50,9 @@ func (cf *ClassFile) ClassName() string {
 
 // getter for super class name
 func (cf *ClassFile) SuperClassName() string {
+	if cf.ClassName() == utils.CLASSNAME_Object {
+		return ""
+	}
 	cp := cf.constantPool
 	return cp[cf.superClass].(*ClassInfo).ClassName(cp)
 }
@@ -71,6 +75,10 @@ func (cf *ClassFile) StatFields() []*FieldInfo {
 
 func (cf *ClassFile) InstFields() []*FieldInfo {
 	return cf.instanceFields
+}
+
+func (cf *ClassFile) StatSlotN() uint {
+	return cf.sSlotN
 }
 
 // getter for Methods
@@ -124,21 +132,32 @@ func (cf *ClassFile) readInterfaces(reader *ClassReader) {
 	}
 }
 
-// read fields
+// read fields and methods
 func (cf *ClassFile) readFieldsAndMethods(reader *ClassReader) {
 	nf := reader.ReadUint16()
-	sn := uint16(0)
+	statNum := uint16(0)
+	slts := uint(0)
 	fields := make([]*FieldInfo, 0, nf)
 	for i := uint16(0); i < nf; i++ {
-		field := &FieldInfo{MemberInfo{cp: cf.constantPool}}
-		field.ReadInfo(reader)
-		if cmn.IsStatic(field.accessFlags) {
-			sn++
+		field := &FieldInfo{
+			MemberInfo{cp: cf.constantPool},
+			0,
 		}
+		field.ReadInfo(reader)
+		var slotNum uint8
+		if cmn.IsStatic(field.accessFlags) {
+			statNum++
+			slotNum = cmn.SlotNum(field.Description())
+			slts += uint(slotNum)
+		} else {
+			slotNum = cmn.SlotNum(field.Description())
+		}
+		field.slotNum = slotNum
 		fields = append(fields, field)
 	}
-	cf.instanceFields = make([]*FieldInfo, 0, nf-sn)
-	cf.staticFields = make([]*FieldInfo, 0, sn)
+	cf.sSlotN = slts
+	cf.instanceFields = make([]*FieldInfo, 0, nf-statNum)
+	cf.staticFields = make([]*FieldInfo, 0, statNum)
 	for _, f := range fields {
 		if cmn.IsStatic(f.accessFlags) {
 			cf.staticFields = append(cf.staticFields, f)
@@ -173,7 +192,7 @@ func NewClassFile(reader *ClassReader) (cf *ClassFile, err error) {
 	//	if e, ok := r.(error); ok {
 	//		err = e
 	//	} else {
-	//		err = fmt.Errorf("parsing Class File: %v", r)
+	//		err = fmt.Errorf("parsing FromClass File: %v", r)
 	//	}
 	//}()
 	cf.constantPool = NewConstantPool(reader)
