@@ -30,8 +30,31 @@ func (m *MemberInfo) Description() string {
 	return m.cp.GetUTF8(m.descIndex)
 }
 
+func (m *MemberInfo) AccFlags() uint16 {
+	return m.accessFlags
+}
+
+func (m *MemberInfo) ConstantPool() ConstantPool {
+	return m.cp
+}
+
 type FieldInfo struct {
 	MemberInfo
+	slotNum uint8
+}
+
+// index to constant value in constant pool, -1 on non
+func (f *FieldInfo) GetConstantValueIndex() int {
+	for _, a := range f.attrs {
+		if a, ok := a.(*AttrConstantValue); ok {
+			return int(a.index)
+		}
+	}
+	return -1
+}
+
+func (f *FieldInfo) SlotNum() uint8 {
+	return f.slotNum
 }
 
 type MethodInfo struct {
@@ -45,8 +68,4 @@ func (m *MethodInfo) GetCodeAttr() *AttrCode {
 		}
 	}
 	return nil
-}
-
-func (m *MemberInfo) AccFlags() uint16 {
-	return m.accessFlags
 }
