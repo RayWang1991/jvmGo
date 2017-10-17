@@ -200,7 +200,7 @@ const (
 	OPCODE_getstatic       = 0xb2
 	OPCODE_putstatic       = 0xb3
 	OPCODE_getfield        = 0xb4
-	OPCODE_popfield        = 0xb5
+	OPCODE_putfield        = 0xb5
 	OPCODE_invokevirtual   = 0xb6
 	OPCODE_invokespecial   = 0xb7
 	OPCODE_invokestatic    = 0xb8
@@ -420,7 +420,7 @@ var code2StringMap = map[uint8]string{
 	OPCODE_nop:             "nop",
 	OPCODE_pop:             "pop",
 	OPCODE_pop2:            "pop2",
-	OPCODE_popfield:        "popfield",
+	OPCODE_putfield:        "putfield",
 	OPCODE_putstatic:       "putstatic",
 	OPCODE_ret:             "ret",
 	OPCODE_rreturn:         "rreturn",
