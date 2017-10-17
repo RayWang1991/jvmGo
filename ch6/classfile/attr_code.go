@@ -3,7 +3,8 @@ package classfile
 import (
 	"fmt"
 	"bytes"
-	"jvmGo/ch6/instructions"
+	//"jvmGo/ch6/instructions"
+	"jvmGo/ch6/cmn"
 )
 
 /*
@@ -31,7 +32,7 @@ type AttrCode struct {
 	maxStack  uint16
 	maxLocals uint16
 	code      []byte
-	excTable  []AttrExceptionTableEntry
+	excTable  []*AttrExceptionTableEntry
 	attrs     []AttrInfo //LineNumberTable, LocalVariableTable, LocalVariableTypeTable, StackMapTable
 }
 
@@ -48,6 +49,10 @@ func (code *AttrCode) Code() []byte {
 	return code.code
 }
 
+func (code *AttrCode) ExceptionTable() []*AttrExceptionTableEntry {
+	return code.excTable
+}
+
 func (code *AttrCode) ReadInfo(reader *ClassReader) uint32 {
 	num := reader.ReadUint32()
 	code.maxStack = reader.ReadUint16()
@@ -56,9 +61,11 @@ func (code *AttrCode) ReadInfo(reader *ClassReader) uint32 {
 	code.code = reader.ReadBytes(uint(codeLen))
 
 	entryN := reader.ReadUint16()
-	code.excTable = make([]AttrExceptionTableEntry, entryN)
-	for _, entry := range code.excTable {
+	code.excTable = make([]*AttrExceptionTableEntry, entryN)
+	for i := range code.excTable {
+		entry := &AttrExceptionTableEntry{}
 		entry.ReadInfo(reader)
+		code.excTable[i] = entry
 	}
 
 	attrN := reader.ReadUint16()
@@ -82,19 +89,19 @@ func (code *AttrCode) AttrString() string {
 	buf.WriteByte(',')
 	buf.WriteString(fmt.Sprintf("maxLocals: %d\n", code.maxLocals))
 	// code
-	cr := instructions.NewCodeReader(code.code)
+	cr := cmn.NewCodeReader(code.code)
 	cr.ReadCode()
 	for i, c := range cr.Code() {
-		buf.WriteString(fmt.Sprintf("#%d %s\n", i, instructions.InstStr(c)))
+		buf.WriteString(fmt.Sprintf("#%d %s\n", i, cmn.InstStr(c)))
 	}
 	return buf.String()
 }
 
 type AttrExceptionTableEntry struct {
 	startPC   uint16 // startPC and endPC specified the range of the exception handler code
-	endPC     uint16 // index into code array [startPC, endPC) historical bug for JVM designer
-	handlerPC uint16 // index into code array, indicating where to start the handler
-	catchType uint16 // index into constant pool to class info
+	endPC     uint16 // index to code array [startPC, endPC) historical bug for JVM designer
+	handlerPC uint16 // index to code array, indicating where to start the handler
+	catchType uint16 // index for constant pool to class info
 }
 
 func (entry *AttrExceptionTableEntry) ReadInfo(reader *ClassReader) {
@@ -102,4 +109,26 @@ func (entry *AttrExceptionTableEntry) ReadInfo(reader *ClassReader) {
 	entry.endPC = reader.ReadUint16()
 	entry.handlerPC = reader.ReadUint16()
 	entry.catchType = reader.ReadUint16()
+}
+
+// getter
+func (e *AttrExceptionTableEntry) StartPC() uint16 {
+	return e.startPC
+}
+
+func (e *AttrExceptionTableEntry) EndPC() uint16 {
+	return e.endPC
+}
+
+func (e *AttrExceptionTableEntry) HandlerPC() uint16 {
+	return e.handlerPC
+}
+
+func (e *AttrExceptionTableEntry) GetCatchType(cp ConstantPool) string {
+	i := e.catchType
+	if i == 0 {
+		return ""
+	}
+	cl := cp[i].(*ClassInfo)
+	return cl.ClassName(cp)
 }
