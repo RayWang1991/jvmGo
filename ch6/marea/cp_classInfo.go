@@ -1,9 +1,10 @@
 package marea
 
-import cf "jvmGo/ch6/classfile"
-
 type ClassInfo string
-
+// deprecated
+// use class ref instead
+/*
 func NewClassInfo(cp cf.ConstantPool, info *cf.ClassInfo) ClassInfo {
 	return ClassInfo(info.ClassName(cp))
 }
+*/

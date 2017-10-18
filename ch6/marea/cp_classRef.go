@@ -1,14 +1,16 @@
 package marea
 
 type ClassRef struct {
-	//from      *Class // point to Class where it is from
-	className string // Key for class
-	class     *Class
+	className string // Key for from
+	from      *Class
+	ref       *Class // cache
 }
 
-func NewClassRef(cn string) *ClassRef {
-	cr := &ClassRef{}
-	cr.className = cn
+func NewClassRef(cn string, cls *Class) *ClassRef {
+	cr := &ClassRef{
+		className: cn,
+		from:      cls,
+	}
 	return cr
 }
 
@@ -16,10 +18,24 @@ func (c *ClassRef) ClassName() string {
 	return c.className
 }
 
-func (c *ClassRef) Class() *Class {
-	return c.Class()
+func (c *ClassRef) FromClass() *Class {
+	return c.from
 }
 
-func (c *ClassRef) SetClass(cls *Class) {
-	c.class = cls
+// not concurrently safe
+func (c *ClassRef) Ref() *Class {
+	if c.ref == nil {
+		c.resolveRef()
+	}
+	return c.ref
+}
+
+func (c *ClassRef) SetFromClass(cls *Class) {
+	c.from = cls
+}
+
+func (c *ClassRef) resolveRef() {
+	l := c.from.defLoader
+	cls := l.Initiate(c.className)
+	c.ref = cls
 }

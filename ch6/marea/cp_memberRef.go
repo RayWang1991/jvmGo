@@ -16,8 +16,8 @@ func (m *MemberRef) Desc() string {
 	return m.desc
 }
 
-func NewRef(cp cf.ConstantPool, mi *cf.RefInfo) *MemberRef {
-	cr := NewClassRef(mi.GetClassName(cp))
+func NewRef(cp cf.ConstantPool, mi *cf.RefInfo, cls *Class) *MemberRef {
+	cr := NewClassRef(mi.GetClassName(cp), cls)
 	n, t := mi.GetNameAndType(cp)
 	m := &MemberRef{
 		ClassRef: *cr,
@@ -27,20 +27,12 @@ func NewRef(cp cf.ConstantPool, mi *cf.RefInfo) *MemberRef {
 	return m
 }
 
-func NewFieldRef(cp cf.ConstantPool, i *cf.FieldRefInfo) *FieldRef {
-	return &FieldRef{*NewRef(cp, &(i.RefInfo))}
+func NewMethodRef(cp cf.ConstantPool, i *cf.MethodRefInfo, cls *Class) *MethodRef {
+	return &MethodRef{*NewRef(cp, &(i.RefInfo), cls)}
 }
 
-func NewMethodRef(cp cf.ConstantPool, i *cf.MethodRefInfo) *MethodRef {
-	return &MethodRef{*NewRef(cp, &(i.RefInfo))}
-}
-
-func NewInterfaceMethodRef(cp cf.ConstantPool, i *cf.InterfaceMethodRefInfo) *InterfaceMethodRef {
-	return &InterfaceMethodRef{*NewRef(cp, &(i.RefInfo))}
-}
-
-type FieldRef struct {
-	MemberRef
+func NewInterfaceMethodRef(cp cf.ConstantPool, i *cf.InterfaceMethodRefInfo, cls *Class) *InterfaceMethodRef {
+	return &InterfaceMethodRef{*NewRef(cp, &(i.RefInfo), cls)}
 }
 
 type MethodRef struct {

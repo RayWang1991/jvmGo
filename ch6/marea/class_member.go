@@ -1,7 +1,7 @@
 package marea
 
 type ClassMember struct {
-	class *Class // pointer to class
+	class *Class // pointer to from
 	flags uint16
 	name  string
 	desc  string
