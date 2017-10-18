@@ -10,10 +10,12 @@ const (
 	noL     codeType = iota // no extra length
 	u8L                     // u8 length
 	u16L                    // u16 length
+	u24L                    // u24 length
 	u32L                    // u32 length
 	u8_2L                   // u8*2 length
 	tables                  // tableswitch
 	lookups                 // lookupswitch
+	wide                    // wide
 )
 
 var inst2Type = map[uint8]codeType{
@@ -36,9 +38,9 @@ var inst2Type = map[uint8]codeType{
 	OPCODE_dconst_1:    noL,
 	OPCODE_bipush:      u8L,
 	OPCODE_sipush:      u16L,
-	//OPCODE_ldc:         u8L,
-	//OPCODE_ldc_w:       u16L,
-	//OPCODE_ldc2_w:      u16L,
+	OPCODE_ldc:         u8L,
+	OPCODE_ldc_w:       u16L,
+	OPCODE_ldc2_w:      u16L,
 
 	// Loads
 	OPCODE_iload:   u8L,
@@ -66,14 +68,14 @@ var inst2Type = map[uint8]codeType{
 	OPCODE_aload_1: noL,
 	OPCODE_aload_2: noL,
 	OPCODE_aload_3: noL,
-	//OPCODE_iaload:  TODO iaload,
-	//OPCODE_laload:  TODO laload,
-	//OPCODE_faload:  TODO faload,
-	//OPCODE_daload:  TODO daload,
-	//OPCODE_aaload:  TODO aaload,
-	//OPCODE_baload:  TODO baload,
-	//OPCODE_caload:  TODO caload,
-	//OPCODE_saload:  TODO saload,
+	OPCODE_iaload:  noL,
+	OPCODE_laload:  noL,
+	OPCODE_faload:  noL,
+	OPCODE_daload:  noL,
+	OPCODE_aaload:  noL,
+	OPCODE_baload:  noL,
+	OPCODE_caload:  noL,
+	OPCODE_saload:  noL,
 
 	// Stores
 	OPCODE_istore:   u8L,
@@ -101,14 +103,14 @@ var inst2Type = map[uint8]codeType{
 	OPCODE_astore_1: noL,
 	OPCODE_astore_2: noL,
 	OPCODE_astore_3: noL,
-	//OPCODE_iastore:  iastore,
-	//OPCODE_lastore:  lastore,
-	//OPCODE_fastore:  fastore,
-	//OPCODE_dastore:  dastore,
-	//OPCODE_aastore:  aastore,
-	//OPCODE_bastore:  bastore,
-	//OPCODE_castore:  castore,
-	//OPCODE_sastore:  sastore,
+	OPCODE_iastore:  noL,
+	OPCODE_lastore:  noL,
+	OPCODE_fastore:  noL,
+	OPCODE_dastore:  noL,
+	OPCODE_aastore:  noL,
+	OPCODE_bastore:  noL,
+	OPCODE_castore:  noL,
+	OPCODE_sastore:  noL,
 
 	// Stack
 	OPCODE_pop:     noL,
@@ -204,40 +206,40 @@ var inst2Type = map[uint8]codeType{
 	OPCODE_ret:          u8L,
 	OPCODE_tableswitch:  tables,
 	OPCODE_lookupswitch: lookups,
-	//OPCODE_ireturn:      ireturn,
-	//OPCODE_lreturn:      lreturn,
-	//OPCODE_freturn:      freturn,
-	//OPCODE_dreturn:      dreturn,
-	//OPCODE_areturn:      areturn,
-	//OPCODE_rreturn:      rreturn,
+	OPCODE_ireturn:      noL,
+	OPCODE_lreturn:      noL,
+	OPCODE_freturn:      noL,
+	OPCODE_dreturn:      noL,
+	OPCODE_areturn:      noL,
+	OPCODE_rreturn:      noL,
 
 	// References
-	//OPCODE_getstatic:       getstatic,
-	//OPCODE_putstatic:       putstatic,
-	//OPCODE_getfield:        getfield,
-	//OPCODE_popfield:        popfield,
-	//OPCODE_invokevirtual:   invokevirtual,
-	//OPCODE_invokespecial:   invokespecial,
-	//OPCODE_invokestatic:    invokestatic,
-	//OPCODE_invokeinterface: invokeinterface,
-	//OPCODE_invokedynamic:   invokedynamic,
-	//OPCODE_new:             new,
-	//OPCODE_newarray:        newarray,
-	//OPCODE_anewarray:       anewarray,
-	//OPCODE_arraylength:     arraylength,
-	//OPCODE_athrow:          athrow,
-	//OPCODE_checkcast:       checkcast,
-	//OPCODE_instanceof:      instanceof,
-	//OPCODE_monitorenter:    monitorenter,
-	//OPCODE_monitorexit:     monitorexit,
+	OPCODE_getstatic:       u16L,
+	OPCODE_putstatic:       u16L,
+	OPCODE_getfield:        u16L,
+	OPCODE_putfield:        u16L,
+	OPCODE_invokevirtual:   u16L,
+	OPCODE_invokespecial:   u16L,
+	OPCODE_invokestatic:    u16L,
+	OPCODE_invokeinterface: u32L,
+	OPCODE_invokedynamic:   u32L,
+	OPCODE_new:             u16L,
+	OPCODE_newarray:        u8L,
+	OPCODE_anewarray:       u16L,
+	OPCODE_arraylength:     noL,
+	OPCODE_athrow:          noL,
+	OPCODE_checkcast:       u16L,
+	OPCODE_instanceof:      u16L,
+	OPCODE_monitorenter:    noL,
+	OPCODE_monitorexit:     noL,
 
 	// Extended
-	//OPCODE_wide:           wide,
-	//OPCODE_multianewarray: multianewarray,
-	OPCODE_ifnull:    u16L,
-	OPCODE_ifnonnull: u16L,
-	OPCODE_ggoto_w:   u32L,
-	OPCODE_jsr_w:     u32L,
+	OPCODE_wide:           wide,
+	OPCODE_multianewarray: u24L,
+	OPCODE_ifnull:         u16L,
+	OPCODE_ifnonnull:      u16L,
+	OPCODE_ggoto_w:        u32L,
+	OPCODE_jsr_w:          u32L,
 
 	// Reserved is not shown
 }
@@ -316,6 +318,9 @@ func (c *codeReader) ReadCode() {
 			c.readU8()
 		case u8_2L, u16L:
 			c.readU16()
+		case u24L:
+			c.readU16()
+			c.readU8()
 		case u32L:
 			c.readI32()
 		case tables:
@@ -329,6 +334,13 @@ func (c *codeReader) ReadCode() {
 			c.readI32()      // default
 			n := c.readI32() // high
 			c.readI32s(int(n) * 2)
+		case wide:
+			next := c.readU8()
+			if next == OPCODE_iinc {
+				c.readU16()
+			} else {
+				c.readI32()
+			}
 		}
 	}
 }
