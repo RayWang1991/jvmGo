@@ -201,16 +201,16 @@ var code2FuncMap = map[uint8]func(*rtdt.Frame){
 	//cmn.OPCODE_rreturn:      rreturn,
 
 	// References
-	//cmn.OPCODE_getstatic:       getstatic,
-	//cmn.OPCODE_putstatic:       putstatic,
-	//cmn.OPCODE_getfield:        getfield,
-	//cmn.OPCODE_popfield:        popfield,
+	cmn.OPCODE_getstatic: getstatic,
+	cmn.OPCODE_putstatic: putstatic,
+	cmn.OPCODE_getfield:  getfield,
+	cmn.OPCODE_putfield:  putfield,
 	//cmn.OPCODE_invokevirtual:   invokevirtual,
 	//cmn.OPCODE_invokespecial:   invokespecial,
 	//cmn.OPCODE_invokestatic:    invokestatic,
 	//cmn.OPCODE_invokeinterface: invokeinterface,
 	//cmn.OPCODE_invokedynamic:   invokedynamic,
-	//cmn.OPCODE_new:             new,
+	cmn.OPCODE_new: new,
 	//cmn.OPCODE_newarray:        newarray,
 	//cmn.OPCODE_anewarray:       anewarray,
 	//cmn.OPCODE_arraylength:     arraylength,
@@ -230,8 +230,6 @@ var code2FuncMap = map[uint8]func(*rtdt.Frame){
 
 	// Reserved is not shown
 }
-
-
 
 func InstFnc(i uint8) func(*rtdt.Frame) {
 	return code2FuncMap[i]
