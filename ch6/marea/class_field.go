@@ -1,17 +1,19 @@
 package marea
 
 import (
-	"jvmGo/ch6/cmn"
 	"jvmGo/ch6/classfile"
+	"jvmGo/ch6/cmn"
 )
 
 type Field struct {
 	ClassMember
-	vId uint16 // index to vars
+	vIdx uint  // index to vars
+	sn   uint8 // slotNum
 }
 
-func NewField(info *classfile.FieldInfo) *Field {
+func NewField(from *Class, info *classfile.FieldInfo) *Field {
 	f := &Field{}
+	f.class = from
 	f.name = info.Name()
 	f.flags = info.AccFlags()
 	f.desc = info.Description()
@@ -19,8 +21,14 @@ func NewField(info *classfile.FieldInfo) *Field {
 }
 
 // setter
-func (f *Field) SetVId(id uint16) {
-	f.vId = id
+
+// getter
+func (f *Field) VarIdx() uint {
+	return f.vIdx
+}
+
+func (f *Field) SlotNum() uint8 {
+	return f.sn
 }
 
 // access methods
