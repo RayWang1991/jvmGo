@@ -3,9 +3,8 @@ package main
 import (
 	"fmt"
 	"jvmGo/ch6/classpath"
-	"jvmGo/ch6/classfile"
-	"strings"
-	"log"
+	"jvmGo/ch6/cloader"
+	"jvmGo/ch6/marea"
 )
 
 func main() {
@@ -24,40 +23,16 @@ func main() {
 func startJVM(cmd *Cmd) {
 	fmt.Printf("class path: %s class: %s args: %s\n", cmd.cpOption, cmd.class, cmd.args)
 	cp := classpath.NewClassPath(cmd.xjreOption, cmd.cpOption)
-	cf := loadClass(cp, cmd.class, cmd.debugFlag)
-	main := getMain(cf)
-	if main == nil {
+	bstLoader := cloader.NewBstLoader(cp)
+	c := bstLoader.Initiate(cmd.class)
+	m := getMain(c)
+	if m == nil {
 		println("not found method 	'main'")
+	} else {
+		interpret(m)
 	}
-	interpret(main)
 }
 
-func loadClass(cp *classpath.ClassPath, class string, debug bool) *classfile.ClassFile {
-	className := strings.Replace(class, ".", "/", -1)
-	className += ".class"
-	classData, _, err := cp.ReadClass(className)
-	if err != nil {
-		log.Fatalf("open .class failed: %s", err)
-	}
-	if debug {
-		fmt.Printf("data: %v", classData)
-	}
-	reader := classfile.NewClassReader(classData)
-	cf, err := classfile.NewClassFile(reader)
-	if err != nil {
-		log.Fatalf("parsing class file failed: %s", err)
-	}
-	if debug {
-		cf.PrintDebugMessage()
-	}
-	return cf
-}
-
-func getMain(cf *classfile.ClassFile) *classfile.MethodInfo {
-	for _, m := range cf.MethodInfo() {
-		if m.Name() == "main" && m.Description() == "([Ljava/lang/String;)V" {
-			return m
-		}
-	}
-	return nil
+func getMain(c *marea.Class) *marea.Method {
+	return c.GetMethodDirect("main", "([Ljava/lang/String;)V")
 }
