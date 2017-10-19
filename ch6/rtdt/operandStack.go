@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"jvmGo/ch6/marea"
 	"math"
+	"jvmGo/ch6/utils"
 )
 
 // TODO debug option
 // TODO, size check
 
 type OperandStack struct {
-	size uint
+	size  uint
 	marea []marea.Slot // the max depth of operands is given by compiler
 }
 
@@ -43,6 +44,14 @@ func (o *OperandStack) PushInt(i int32) {
 func (o *OperandStack) PopRef() *marea.Object {
 	o.size--
 	return o.marea[o.size].Ref
+}
+
+func (o *OperandStack) PopNonnilRef() *marea.Object {
+	obj := o.PopRef() // instance object
+	if obj == nil {
+		panic(utils.NullPointerException)
+	}
+	return obj
 }
 
 func (o *OperandStack) PushRef(r *marea.Object) {

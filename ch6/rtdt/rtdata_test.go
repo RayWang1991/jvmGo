@@ -11,7 +11,7 @@ import (
 func TestLocalVal(t *testing.T) {
 	const testLen = 10
 	f := Frame{
-		LocalVar: marea.NewLocalVars(testLen),
+		LocalVar: marea.NewVars(testLen),
 	}
 	// Test int
 	ints := make([]int32, testLen)

@@ -6,7 +6,7 @@ import (
 
 type Vars []Slot // fixed-length array
 
-func NewLocalVars(l uint) Vars {
+func NewVars(l uint) Vars {
 	return make([]Slot, l)
 }
 

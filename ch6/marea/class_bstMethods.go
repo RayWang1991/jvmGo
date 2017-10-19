@@ -1,8 +1,8 @@
 package marea
 
 import (
-	cf "jvmGo/ch6/classfile"
 	"fmt"
+	cf "jvmGo/ch6/classfile"
 )
 
 type BootstrapMethodEntry struct {
