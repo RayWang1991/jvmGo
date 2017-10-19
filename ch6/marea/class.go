@@ -3,6 +3,8 @@ package marea
 import (
 	"jvmGo/ch6/classfile"
 	"jvmGo/ch6/cmn"
+	"strings"
+	"fmt"
 )
 
 type Class struct {
@@ -13,23 +15,23 @@ type Class struct {
 	superClass     *Class
 	interfaceNames []string // string as K
 	interfaces     []*Class
-	loaderId       int
-	fields         []*Field  // TODO map with K, name
-	methods        []*Method // TODO map with K, name + descriptor?
 
-	methodMap map[string]*Method
-	fieldMap  map[string]*Field // filed name to Field information
+	initLoader ClassLoader
+	defLoader  ClassLoader
+
+	methodMap map[string]*Method // map with K, name & desc
+	fieldMap  map[string]*Field  // map with K, name
 
 	/*
-	insFld2Inx map[string]int    // field name to slots, instance use
-	stcFld2Inx map[string]int    // field name to slots, static use
+		insFld2Inx map[string]int    // field name to slots, instance use
+		stcFld2Inx map[string]int    // field name to slots, static use
 	*/
 
-	insSlotN    int  // instance slot num
-	staticSlots Vars // should be initiated with constant attribute
+	insSlotN uint // instance slot num
+	Vars          // static vars, should be initiated with constant attribute
 
 	// TODO items
-	//innerClasses    []*Class
+	//innerClasses    []*FromClass
 	//enclosingMethod *Method
 	//bootStrapMethods BootstrapMethods
 	//sourceFile string
@@ -40,32 +42,199 @@ func NewClass(file *classfile.ClassFile) *Class {
 	c := &Class{}
 	c.flags = file.AccessFlag()
 	c.name = file.ClassName()
-	c.cp = NewConstantPool(file.ConstantPool())
+	c.cp = NewConstantPool(file.ConstantPool(), c)
 	c.superClassName = file.SuperClassName()
-	//leave super class to loader
+	//leave super from to loader
 	c.interfaceNames = file.InterfaceNames()
 
-	fs := file.FieldInfo()
-	c.fields = make([]*Field, len(fs))
-	//dup name should not be valid
-	for i, f := range fs {
-		c.fields[i] = NewField(f)
+	ifs := file.InstFields() // instance fields
+	sfs := file.StatFields() // static fields
+
+	fmap := make(map[string]*Field, len(sfs)+len(ifs))
+	c.fieldMap = fmap
+
+	// static fields
+	vs := NewVars(file.StatSlotN())
+	c.Vars = vs
+	vi := uint(0)
+	for _, f := range sfs {
+		fd := NewField(c, f)
+		fd.vIdx = vi
+		vi += uint(fd.sn)
+
+		// set default value if needed
+		if ind := f.GetConstantValueIndex(); ind >= 0 {
+			c.SetStatField(fd, uint16(ind))
+		}
+		fmap[ndStr(fd.name, fd.desc)] = fd
+	}
+
+	c.insSlotN = uint(len(ifs))
+	vi = 0
+	for _, f := range ifs {
+		fd := NewField(c, f)
+		vi += uint(fd.sn)
+		fmap[ndStr(fd.name, fd.desc)] = fd
 	}
 
 	ms := file.MethodInfo()
-	c.methods = make([]*Method, len(ms))
+	mmap := make(map[string]*Method, len(ms))
+	c.methodMap = mmap
 	//dup name+desc should not be valid
-	for i,m := range ms{
-		c.methods[i] = New
+	for _, m := range ms {
+		md := NewMethod(c, m)
+		mmap[ndStr(md.name, md.desc)] = md
+	}
+
+	return c
+}
+
+// functional
+func (c *Class) SetStatField(f *Field, i uint16) {
+	switch f.Desc() {
+	case "B", "C", "I", "S", "Z":
+		v := c.cp.GetInteger(i)
+		c.SetInt(v, f.vIdx)
+	case "D":
+		v := c.cp.GetDouble(i)
+		c.SetDouble(v, f.vIdx)
+	case "J":
+		v := c.cp.GetLong(i)
+		c.SetLong(v, f.vIdx)
+	case "F":
+		v := c.cp.GetFloat(i)
+		c.SetFloat(v, f.vIdx)
+	default:
+		//  unsupported now
+	}
+}
+
+// look up
+func (c *Class) InstField(name string) *Field {
+	f := c.fieldMap[name]
+	if f != nil && f.IsStatic() {
+		panic("not instance field")
+	}
+	return f
+}
+
+func (c *Class) StatField(name string) *Field {
+	f := c.fieldMap[name]
+	if f != nil && !f.IsStatic() {
+		panic("not static field")
+	}
+	return f
+}
+
+func (c *Class) Method(name, desc string) *Method {
+	s := ndStr(name, desc)
+	return c.methodMap[s]
+}
+
+// getters
+func (c *Class) ClassName() string {
+	return c.name
+}
+
+func (c *Class) SuperclassName() string {
+	return c.superClassName
+}
+
+func (c *Class) Superclass() *Class {
+	return c.superClass
+}
+
+func (c *Class) FlagString() string {
+	return cmn.FlagNumToString(c.flags, cmn.ACC_TYPE_CLASS)
+}
+
+func (c *Class) InterfaceNames() []string {
+	return c.interfaceNames
+}
+
+func (c *Class) Interfaces() []*Class {
+	return c.interfaces
+}
+
+func (c *Class) ConstantPool() ConstantPool {
+	return c.cp
+}
+
+// class loader
+
+func (c *Class) InitLoader() ClassLoader {
+	return c.initLoader
+}
+
+func (c *Class) SetInitLoader(l ClassLoader) {
+	c.initLoader = l
+}
+
+func (c *Class) DefineLoader() ClassLoader {
+	return c.defLoader
+}
+
+func (c *Class) SetDefineLoader(l ClassLoader) {
+	c.defLoader = l
+}
+
+// field & method
+func (c *Class) FieldMap() map[string]*Field {
+	return c.fieldMap
+}
+
+func (c *Class) MethodMap() map[string]*Method {
+	return c.methodMap
+}
+
+func (c *Class) InsSlotNum() uint {
+	return c.insSlotN
+}
+
+// getter for method
+func (c *Class) GetMethodDirect(name, desc string) *Method {
+	return c.methodMap[ndStr(name, desc)]
+}
+
+func (c *Class) GetFieldDirect(name, desc string) *Field {
+	return c.fieldMap[ndStr(name, desc)]
+}
+
+// look up field recursively
+func (c *Class) LookUpField(name string) *Field {
+	if f := c.fieldMap[name]; f != nil {
+		return f
+	}
+	if len(c.interfaces) > 0 {
+		for _, infc := range c.interfaces {
+			if f := infc.LookUpField(name); f != nil {
+				return f
+			}
+		}
+	}
+	if c.superClass != nil {
+		return c.superClass.LookUpField(name)
 	}
 	return nil
 }
 
-// TODO
-// getters
+// setters for static fields
 
-// TODO
-// setters
+// return the package name
+func (c *Class) PackageName() string {
+	n := c.name
+	i := strings.LastIndex(n, `/`)
+	if i > 0 {
+		return n[0:i]
+	} else {
+		return "" // default package
+	}
+}
+
+// array
+func (c *Class) IsArray() bool {
+	return cmn.IsArray(c.name)
+}
 
 // access methods
 func (c *Class) IsPublic() bool {
@@ -86,4 +255,32 @@ func (c *Class) IsAbstract() bool {
 
 func (c *Class) IsSuper() bool {
 	return cmn.IsSuper(c.flags) // treat superclass methods specially when invoked by invokespecial
+}
+
+// debug
+func (c *Class) PrintDebugMessage() {
+
+	fmt.Printf("class: %s\n", c.ClassName())      // magic
+	fmt.Printf("super: %s\n", c.SuperclassName()) // magic
+	fmt.Printf("flags: %s\n", cmn.FlagNumToString(c.flags, cmn.ACC_TYPE_CLASS))
+	//fmt.Print(c.cp.String())
+	fmt.Printf("interfaces(%d items): %s \n", len(c.interfaceNames), strings.Join(c.interfaceNames, ","))
+	// Fields and Methods
+	fmt.Printf("Fields (%d items):\n", len(c.fieldMap))
+	i := 0
+	for _, f := range c.fieldMap {
+		fmt.Printf("#%d: %s %s\n, %s\n", i, f.name, f.desc, cmn.FlagNumToString(f.flags, cmn.ACC_TYPE_FIELD))
+		i++
+	}
+	fmt.Printf("Methods(%d items):\n", len(c.methodMap))
+	i = 0
+	for _, m := range c.methodMap {
+		fmt.Printf("#%d: %s %s\n, %s\n", i, m.name, m.desc, cmn.FlagNumToString(m.flags, cmn.ACC_TYPE_METHOD))
+		if m.IsNative() {
+			fmt.Println("Native Method")
+		} else {
+			// TODO
+		}
+	}
+
 }
