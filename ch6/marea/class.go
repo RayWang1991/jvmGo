@@ -218,6 +218,17 @@ func (c *Class) LookUpField(name string) *Field {
 	return nil
 }
 
+// look up method recursively
+func (c *Class) LookUpMethod(name, desc string) *Method {
+	k := ndStr(name, desc)
+	for ; c != nil; c = c.superClass {
+		if m := c.methodMap[k]; m != nil {
+			return m
+		}
+	}
+	return nil
+}
+
 // setters for static fields
 
 // return the package name
