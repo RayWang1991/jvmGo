@@ -29,7 +29,7 @@ func (r *RefInfo) GetClassName(cp ConstantPool) string {
 func (r *RefInfo) GetNameAndType(cp ConstantPool) (n, t string) {
 	info := cp[r.nameTypeIndex].(*NameTypeInfo)
 	n = info.Name(cp)
-	t = info.Name(cp)
+	t = info.Type(cp)
 	return
 }
 
