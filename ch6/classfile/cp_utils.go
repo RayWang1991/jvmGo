@@ -82,8 +82,8 @@ func (info *ClassInfo) ClassName(cp ConstantPool) string {
 }
 
 // debug string for name and type
-func (info *NameTypeInfo)String(cp ConstantPool)string{
-	return info.Name(cp)+":"+info.Type(cp)
+func (info *NameTypeInfo) String(cp ConstantPool) string {
+	return info.Name(cp) + ":" + info.Type(cp)
 }
 
 // get field or method name through utf8 index
@@ -97,4 +97,3 @@ func (info *NameTypeInfo) Type(cp ConstantPool) string {
 	utf8I := cp[info.typeIndex].(*Utf8Info)
 	return utf8I.val
 }
-

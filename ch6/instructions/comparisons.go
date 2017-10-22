@@ -1,8 +1,8 @@
 package instructions
 
 import (
-	"jvmGo/ch6/rtdt"
 	"jvmGo/ch6/marea"
+	"jvmGo/ch6/rtdt"
 )
 
 func lcmp(f *rtdt.Frame) {

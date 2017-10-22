@@ -1,7 +1,7 @@
 package classfile
 
 type AttrEnclosingMethod struct {
-	cp ConstantPool
+	cp          ConstantPool
 	classIndex  uint16
 	methodIndex uint16
 }

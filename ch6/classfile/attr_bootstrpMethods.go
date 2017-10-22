@@ -33,7 +33,7 @@ func (entry *AttrBootstrapMethodEntry) ReadInfo(reader *ClassReader) {
 	entry.methodRef = reader.ReadUint16()
 	n := reader.ReadUint16()
 	args := make([]uint16, 0, n)
-	for i := uint16(0); i < n; i ++ {
+	for i := uint16(0); i < n; i++ {
 		args = append(args, reader.ReadUint16())
 	}
 }

@@ -1,6 +1,7 @@
 package marea
 
 type ClassInfo string
+
 // deprecated
 // use class ref instead
 /*

@@ -2,8 +2,8 @@ package classfile
 
 import (
 	"errors"
-	"jvmGo/ch6/utils"
 	"jvmGo/ch6/cmn"
+	"jvmGo/ch6/utils"
 )
 
 type ClassFile struct {

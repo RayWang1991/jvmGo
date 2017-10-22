@@ -49,4 +49,3 @@ func (d *DoubleInfo) ReadInfo(reader *ClassReader) {
 func (d *DoubleInfo) Value() float64 {
 	return d.val
 }
-

@@ -1,6 +1,8 @@
 package instructions
 
-import "jvmGo/ch6/rtdt"
+import (
+	"jvmGo/ch6/rtdt"
+)
 
 // duplicate the top slot of the operand stack
 func dup(f *rtdt.Frame) {

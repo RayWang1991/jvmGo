@@ -10,6 +10,6 @@ type ClassLoader interface {
 }
 
 const (
-	BootstrapClassLoaderId   = iota
+	BootstrapClassLoaderId = iota
 	UserDefinedClassLoaderId
 )

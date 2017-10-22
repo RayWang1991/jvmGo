@@ -3,8 +3,8 @@ package rtdt
 import (
 	"fmt"
 	"jvmGo/ch6/marea"
-	"math"
 	"jvmGo/ch6/utils"
+	"math"
 )
 
 // TODO debug option
@@ -12,13 +12,13 @@ import (
 
 type OperandStack struct {
 	size  uint
-	marea []marea.Slot // the max depth of operands is given by compiler
+	slots []marea.Slot // the max depth of operands is given by compiler
 }
 
 func NewOperandStack(maxDepth uint) *OperandStack {
 	return &OperandStack{
 		0,
-		make([]marea.Slot, maxDepth), // all marea.Slot is initiated to {0,nil}
+		make([]marea.Slot, maxDepth), // all slots.Slot is initiated to {0,nil}
 	}
 }
 
@@ -26,13 +26,13 @@ func NewOperandStack(maxDepth uint) *OperandStack {
 func (o *OperandStack) PopInt() int32 {
 	o.size--
 	if debugFlag {
-		fmt.Printf("%d %d\n", o.size, o.marea[o.size].Num)
+		fmt.Printf("%d %d\n", o.size, o.slots[o.size].Num)
 	}
-	return o.marea[o.size].Num // panic if size is 0u-1
+	return o.slots[o.size].Num // panic if size is 0u-1
 }
 
 func (o *OperandStack) PushInt(i int32) {
-	s := &o.marea[o.size]
+	s := &o.slots[o.size]
 	s.Num = i
 	s.Ref = nil
 	o.size++
@@ -43,7 +43,7 @@ func (o *OperandStack) PushInt(i int32) {
 
 func (o *OperandStack) PopRef() *marea.Object {
 	o.size--
-	return o.marea[o.size].Ref
+	return o.slots[o.size].Ref
 }
 
 func (o *OperandStack) PopNonnilRef() *marea.Object {
@@ -55,20 +55,20 @@ func (o *OperandStack) PopNonnilRef() *marea.Object {
 }
 
 func (o *OperandStack) PushRef(r *marea.Object) {
-	o.marea[o.size].Ref = r
+	o.slots[o.size].Ref = r
 	o.size++
 }
 
 func (o *OperandStack) PushLong(l int64) {
 	high := int32(l >> 32)
 	low := int32(l)
-	o.marea[o.size].Num = low
-	o.marea[o.size+1].Num = high // high is on top
+	o.slots[o.size].Num = low
+	o.slots[o.size+1].Num = high // high is on top
 	o.size += 2
 }
 
 func (o *OperandStack) PopLong() int64 {
-	s1, s2 := &o.marea[o.size-1], &o.marea[o.size-2]
+	s1, s2 := &o.slots[o.size-1], &o.slots[o.size-2]
 	s1.Ref = nil
 	s2.Ref = nil
 	o.size -= 2
@@ -76,12 +76,12 @@ func (o *OperandStack) PopLong() int64 {
 }
 
 func (o *OperandStack) PushFloat(f float32) {
-	o.marea[o.size].Num = int32(math.Float32bits(f))
+	o.slots[o.size].Num = int32(math.Float32bits(f))
 	o.size++
 }
 
 func (o *OperandStack) PopFloat() float32 {
-	s := &o.marea[o.size-1]
+	s := &o.slots[o.size-1]
 	s.Ref = nil
 	o.size--
 	return math.Float32frombits(uint32(s.Num))
@@ -91,40 +91,48 @@ func (o *OperandStack) PushDouble(f float64) {
 	n := math.Float64bits(f)
 	high := int32(n >> 32)
 	low := int32(n)
-	o.marea[o.size].Num = low
-	o.marea[o.size+1].Num = high // high is on top
+	o.slots[o.size].Num = low
+	o.slots[o.size+1].Num = high // high is on top
 	o.size += 2
 }
 
 func (o *OperandStack) PopDouble() float64 {
-	s1, s2 := &o.marea[o.size-1], &o.marea[o.size-2]
+	s1, s2 := &o.slots[o.size-1], &o.slots[o.size-2]
 	s1.Ref = nil
 	s2.Ref = nil
 	o.size -= 2
 	return math.Float64frombits(uint64(s1.Num)<<32 | uint64(uint32(s2.Num)))
 }
 
-// return the top marea.Slot, do not pop
+// return the top slots.Slot, do not pop
 func (o *OperandStack) Top() *marea.Slot {
 	return o.GetSlot(0)
 }
 
 func (o *OperandStack) PushSlot(s *marea.Slot) {
-	o.marea[o.size] = *s
+	o.slots[o.size] = *s
 	o.size++
 }
 
 func (o *OperandStack) PopSlot() *marea.Slot {
-	r := &o.marea[o.size]
-	r.Ref = nil
+	copy := o.slots[o.size-1] // copy slot
+	o.slots[o.size-1].Ref = nil
 	o.size--
-	return r
+	return &copy
 }
 
 // i is the index to the top of stack, just get, not pop
 func (o *OperandStack) GetSlot(i uint) *marea.Slot {
 	if i >= uint(o.size) {
-		panic("StackOutOfRange")
+		panic("OperandStackOutOfRange")
 	}
-	return &o.marea[o.size-i-1]
+	return &o.slots[o.size-i-1]
+}
+
+func (o *OperandStack) SetSlot(s *marea.Slot, i uint) {
+	o.slots[i] = *s
+}
+
+func (o *OperandStack) GetSize() uint {
+	return o.size
 }

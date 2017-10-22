@@ -1,13 +1,13 @@
 package cloader
 
 import (
-	"jvmGo/ch6/marea"
+	"fmt"
 	"jvmGo/ch6/classfile"
 	"jvmGo/ch6/classpath"
-	"strings"
-	"fmt"
-	"os"
+	"jvmGo/ch6/marea"
 	"jvmGo/ch6/utils"
+	"os"
+	"strings"
 )
 
 // TODO
@@ -91,7 +91,7 @@ func doLoadClassFile(class string, cp *classpath.ClassPath) (*classfile.ClassFil
 		return nil, err
 	}
 	//cf.PrintDebugMessage() TODO cf debug
-	fmt.Printf("Load Class File %s from %s\n",cf.ClassName(),entry.String())
+	fmt.Printf("Load Class File %s from %s\n", cf.ClassName(), entry.String())
 	return cf, nil
 }
 
