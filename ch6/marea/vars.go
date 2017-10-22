@@ -57,3 +57,8 @@ func (l Vars) SetRef(ref *Object, i uint) {
 func (l Vars) GetRef(i uint) *Object {
 	return l[i].Ref
 }
+
+// set Slot
+func (l Vars) SetSlot(s *Slot, i uint) {
+	l[i] = *s
+}
