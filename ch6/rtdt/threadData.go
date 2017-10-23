@@ -64,7 +64,6 @@ func (s *Stack) pop() *Frame {
 	}
 	s.currentSize--
 	r := s.top
-	r.next = nil // for gc
 	s.top = s.top.next
 	return r
 }
