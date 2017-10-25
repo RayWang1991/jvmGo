@@ -1,10 +1,10 @@
 package marea
 
 import (
+	"fmt"
 	"jvmGo/ch6/classfile"
 	"jvmGo/ch6/cmn"
 	"strings"
-	"fmt"
 )
 
 type Class struct {
@@ -15,6 +15,7 @@ type Class struct {
 	superClass     *Class
 	interfaceNames []string // string as K
 	interfaces     []*Class
+	hasInited      bool
 
 	initLoader ClassLoader
 	defLoader  ClassLoader
@@ -66,7 +67,7 @@ func NewClass(file *classfile.ClassFile) *Class {
 		if ind := f.GetConstantValueIndex(); ind >= 0 {
 			c.SetStatField(fd, uint16(ind))
 		}
-		fmap[ndStr(fd.name, fd.desc)] = fd
+		fmap[fd.name] = fd // TODO, for java language specification only
 	}
 
 	c.insSlotN = uint(len(ifs))
@@ -74,7 +75,7 @@ func NewClass(file *classfile.ClassFile) *Class {
 	for _, f := range ifs {
 		fd := NewField(c, f)
 		vi += uint(fd.sn)
-		fmap[ndStr(fd.name, fd.desc)] = fd
+		fmap[fd.name] = fd // TODO, for jls only, may use name and desc to unify a field
 	}
 
 	ms := file.MethodInfo()
@@ -109,7 +110,7 @@ func (c *Class) SetStatField(f *Field, i uint16) {
 	}
 }
 
-// look up
+// wrappers for look up field
 func (c *Class) InstField(name string) *Field {
 	f := c.fieldMap[name]
 	if f != nil && f.IsStatic() {
@@ -218,15 +219,42 @@ func (c *Class) LookUpField(name string) *Field {
 	return nil
 }
 
-// look up method recursively
+// look up method
 func (c *Class) LookUpMethod(name, desc string) *Method {
 	k := ndStr(name, desc)
+	if m := c.LookUpMethodInClass(k); m != nil {
+		return m
+	}
+	return c.LookUpMethodInInterface(k)
+}
+
+// look up method in class hierarchy
+func (c *Class) LookUpMethodInClass(key string) *Method {
 	for ; c != nil; c = c.superClass {
-		if m := c.methodMap[k]; m != nil {
+		if m := c.methodMap[key]; m != nil {
 			return m
 		}
 	}
 	return nil
+}
+
+// look up method in interfaces
+func (c *Class) LookUpMethodInInterface(key string) *Method {
+	for _, in := range c.interfaces {
+		if m := in.methodMap[key]; m != nil && !(m.IsAbstract() && m.IsPrivate() && m.IsStatic()) {
+			return m
+		}
+	}
+	for _, in := range c.interfaces {
+		if m := in.LookUpMethodInInterface(key); m != nil {
+			return m
+		}
+	}
+	return nil
+}
+
+func (c *Class) LookUpMethodDirectly(name, desc string) *Method {
+	return c.methodMap[ndStr(name, desc)]
 }
 
 // setters for static fields
@@ -247,6 +275,15 @@ func (c *Class) IsArray() bool {
 	return cmn.IsArray(c.name)
 }
 
+// init
+func (c *Class) hasInitiated() bool {
+	return c.hasInited
+}
+
+func (c *Class) setInitiated(b bool) {
+	c.hasInited = b
+}
+
 // access methods
 func (c *Class) IsPublic() bool {
 	return cmn.IsPublic(c.flags)
@@ -265,12 +302,13 @@ func (c *Class) IsAbstract() bool {
 }
 
 func (c *Class) IsSuper() bool {
-	return cmn.IsSuper(c.flags) // treat superclass methods specially when invoked by invokespecial
+	// treat superclass methods specially when invoked by invokespecial,
+	// changes from jdk 1.2 ~ 1.1
+	return cmn.IsSuper(c.flags)
 }
 
 // debug
 func (c *Class) PrintDebugMessage() {
-
 	fmt.Printf("class: %s\n", c.ClassName())      // magic
 	fmt.Printf("super: %s\n", c.SuperclassName()) // magic
 	fmt.Printf("flags: %s\n", cmn.FlagNumToString(c.flags, cmn.ACC_TYPE_CLASS))
@@ -291,7 +329,7 @@ func (c *Class) PrintDebugMessage() {
 			fmt.Println("Native Method")
 		} else {
 			// TODO
+			//fmt.Printf("%s",classfile.CodeInst(m.Code()).String())
 		}
 	}
-
 }

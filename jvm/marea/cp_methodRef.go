@@ -9,13 +9,13 @@ func NewMethodRef(cp cf.ConstantPool, i *cf.MethodRefInfo, cls *Class) *MethodRe
 	return &MethodRef{*NewRef(cp, &(i.RefInfo), cls), nil}
 }
 
-func NewInterfaceMethodRef(cp cf.ConstantPool, i *cf.InterfaceMethodRefInfo, cls *Class) *InterfaceMethodRef {
-	return &InterfaceMethodRef{*NewRef(cp, &(i.RefInfo), cls)}
-}
-
 type MethodRef struct {
 	MemberRef
 	method *Method
+}
+
+func (m *MethodRef) GetRef() *MemberRef {
+	return &m.MemberRef
 }
 
 func (m *MethodRef) GetMethod() *Method {
@@ -23,15 +23,11 @@ func (m *MethodRef) GetMethod() *Method {
 		return m.method
 	}
 	c := m.ClassRef.Ref()
-	m.method = c.LookUpMethod(m.name, m.desc)
-	if m.method == nil {
-		panic(utils.NoSuchMethodError)
-	} else {
-		// TODO check
+	if c.IsInterface() {
+		panic(utils.IncompatibleClassChangeError)
 	}
-	return
-}
-
-type InterfaceMethodRef struct {
-	MemberRef
+	//fmt.Printf("name : %s, desc : %s\n", m.name, m.desc)
+	m.method = c.LookUpMethod(m.name, m.desc)
+	m.method = LookUpMethodVirtual(c, m.from, m.name, m.desc)
+	return m.method
 }

@@ -97,6 +97,6 @@ func doLoadClassFile(class string, cp *classpath.ClassPath) (*classfile.ClassFil
 
 func doLoadClassFromFile(file *classfile.ClassFile) *marea.Class {
 	c := marea.NewClass(file)
-	c.PrintDebugMessage()
+	//c.PrintDebugMessage()
 	return c
 }

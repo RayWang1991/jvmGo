@@ -91,3 +91,20 @@ func (cp ConstantPool) GetMethodRef(index uint16) *MethodRef {
 func (cp ConstantPool) GetInterfaceMethodRef(index uint16) *InterfaceMethodRef {
 	return cp[index].(*InterfaceMethodRef)
 }
+
+// wrapper for methodRef and interfaceMethodRef
+
+type MethodGetter interface {
+	GetMethod() *Method
+	GetRef() *MemberRef
+}
+
+func (cp ConstantPool) GetMethodFromGetter(index uint16) *Method {
+	r := cp[index].(MethodGetter)
+	return r.GetMethod()
+}
+
+func (cp ConstantPool) GetMemberRefFromGetter(index uint16) *MemberRef {
+	r := cp[index].(MethodGetter)
+	return r.GetRef()
+}

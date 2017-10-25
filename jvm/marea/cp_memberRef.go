@@ -26,19 +26,3 @@ func NewRef(cp cf.ConstantPool, mi *cf.RefInfo, cls *Class) *MemberRef {
 	}
 	return m
 }
-
-func NewMethodRef(cp cf.ConstantPool, i *cf.MethodRefInfo, cls *Class) *MethodRef {
-	return &MethodRef{*NewRef(cp, &(i.RefInfo), cls)}
-}
-
-func NewInterfaceMethodRef(cp cf.ConstantPool, i *cf.InterfaceMethodRefInfo, cls *Class) *InterfaceMethodRef {
-	return &InterfaceMethodRef{*NewRef(cp, &(i.RefInfo), cls)}
-}
-
-type MethodRef struct {
-	MemberRef
-}
-
-type InterfaceMethodRef struct {
-	MemberRef
-}

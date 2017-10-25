@@ -22,6 +22,19 @@ func isAccessableField(want *Class, f *Field) bool {
 	return want.PackageName() == f.Class().PackageName()
 }
 
+func isAccessableMethod(want *Class, m *Method) bool {
+	if m.IsPublic() {
+		return true
+	}
+	if m.IsPrivate() {
+		return want == m.Class()
+	}
+	if m.IsProtected() && IsDescandent(want, m.Class()) {
+		return true
+	}
+	return want.PackageName() == m.Class().PackageName()
+}
+
 // class hierarchy
 // whether S is assignable to T
 func IsAssignable(S, T *Class) bool {

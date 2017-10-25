@@ -94,3 +94,43 @@ func lookupswitch(f *rtdt.Frame) {
 		f.SetPC(pc + def)
 	}
 }
+
+// return family
+func rreturn(f *rtdt.Frame) {
+	f.Thread().PopFrame()
+}
+
+func areturn(f *rtdt.Frame) {
+	ret := f.OperandStack.PopRef()
+	t := f.Thread()
+	t.PopFrame()
+	t.CurrentFrame().OperandStack.PushRef(ret)
+}
+
+func ireturn(f *rtdt.Frame) {
+	ret := f.OperandStack.PopInt()
+	t := f.Thread()
+	t.PopFrame()
+	t.CurrentFrame().OperandStack.PushInt(ret)
+}
+
+func lreturn(f *rtdt.Frame) {
+	ret := f.OperandStack.PopLong()
+	t := f.Thread()
+	t.PopFrame()
+	t.CurrentFrame().OperandStack.PushLong(ret)
+}
+
+func freturn(f *rtdt.Frame) {
+	ret := f.OperandStack.PopFloat()
+	t := f.Thread()
+	t.PopFrame()
+	t.CurrentFrame().OperandStack.PushFloat(ret)
+}
+
+func dreturn(f *rtdt.Frame) {
+	ret := f.OperandStack.PopDouble()
+	t := f.Thread()
+	t.PopFrame()
+	t.CurrentFrame().OperandStack.PushDouble(ret)
+}

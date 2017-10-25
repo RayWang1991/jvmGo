@@ -9,6 +9,9 @@ type Method struct {
 	ClassMember
 	maxStackDep uint16
 	maxLocalVar uint16
+	argDs       []string
+	argSlotN    int
+	retD        string
 	code        []byte
 	exceptions  []*AttrExceptionEntry //strings of exception from name
 }
@@ -26,6 +29,7 @@ func NewMethod(from *Class, info *classfile.MethodInfo) *Method {
 	m.name = info.Name()
 	m.flags = info.AccFlags()
 	m.desc = info.Description()
+	m.parseDesc()
 	if m.IsNative() {
 		// TODO native methods
 		return m
@@ -49,6 +53,57 @@ func NewMethod(from *Class, info *classfile.MethodInfo) *Method {
 	return m
 }
 
+func (m *Method) parseDesc() {
+	args := []string{}
+	type descState int
+	const (
+		START = iota
+		NEEDBR
+	)
+	inArg := true
+	state := START
+	res := 0
+	lst := 1                         // skip '('
+	for ptr, c := range m.desc[1:] { // must be ascii bytes,skip '('
+		if c == ')' {
+			inArg = false
+		}
+		switch state {
+		case START:
+			if c == 'L' || c == '[' {
+				lst = ptr
+				state = NEEDBR
+			} else {
+				d := string(c)
+				if inArg {
+					args = append(args, d)
+					if c == 'D' || c == 'L' {
+						res += 2
+					} else {
+						res++
+					}
+				} else {
+					m.retD = d
+				}
+			}
+		case NEEDBR:
+			if c == ';' {
+				d := m.desc[lst:ptr]
+				ptr++
+				if inArg {
+					res++
+					args = append(args, d)
+				} else {
+					m.retD = d
+				}
+				state = START
+			}
+		}
+	}
+	m.argDs = args
+	m.argSlotN = res
+}
+
 // getters
 func (m *Method) Code() []byte {
 	return m.code
@@ -60,6 +115,18 @@ func (m *Method) MaxStackDep() uint16 {
 
 func (m *Method) MaxLocalVars() uint16 {
 	return m.maxLocalVar
+}
+
+func (m *Method) ArgSlotNum() int {
+	return m.argSlotN
+}
+
+func (m *Method) RetD() string {
+	return m.retD
+}
+
+func (m *Method) ArgDs() []string {
+	return m.argDs
 }
 
 // access methods
@@ -77,6 +144,10 @@ func (m *Method) IsProtected() bool {
 
 func (m *Method) IsFinal() bool {
 	return cmn.IsFinal(m.flags)
+}
+
+func (m *Method) IsStatic() bool {
+	return cmn.IsStatic(m.flags)
 }
 
 func (m *Method) IsSynchronized() bool {
