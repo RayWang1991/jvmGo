@@ -1,6 +1,6 @@
 package instructions
 
-import "jvmGo/ch6/rtdt"
+import "jvmGo/jvm/rtdt"
 
 // Loads
 // iload

@@ -1,8 +1,8 @@
 package instructions
 
 import (
-	"jvmGo/ch6/rtdt"
-	"jvmGo/ch6/utils"
+	"jvmGo/jvm/rtdt"
+	"jvmGo/jvm/utils"
 	"math"
 )
 

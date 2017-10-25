@@ -2,7 +2,7 @@ package rtdt
 
 import (
 	"fmt"
-	"jvmGo/ch6/marea"
+	"jvmGo/jvm/marea"
 	"math"
 	"math/rand"
 	"testing"

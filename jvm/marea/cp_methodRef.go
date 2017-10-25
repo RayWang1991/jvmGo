@@ -1,8 +1,8 @@
 package marea
 
 import (
-	cf "jvmGo/ch6/classfile"
-	"jvmGo/ch6/utils"
+	cf "jvmGo/jvm/classfile"
+	"jvmGo/jvm/utils"
 )
 
 func NewMethodRef(cp cf.ConstantPool, i *cf.MethodRefInfo, cls *Class) *MethodRef {

@@ -1,7 +1,7 @@
 package instructions
 
 import (
-	"jvmGo/ch6/rtdt"
+	"jvmGo/jvm/rtdt"
 )
 
 // duplicate the top slot of the operand stack

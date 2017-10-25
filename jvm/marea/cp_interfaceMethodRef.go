@@ -1,8 +1,8 @@
 package marea
 
 import (
-	cf "jvmGo/ch6/classfile"
-	"jvmGo/ch6/utils"
+	cf "jvmGo/jvm/classfile"
+	"jvmGo/jvm/utils"
 )
 
 func NewInterfaceMethodRef(cp cf.ConstantPool, i *cf.InterfaceMethodRefInfo, cls *Class) *InterfaceMethodRef {

@@ -1,8 +1,8 @@
 package instructions
 
 import (
-	"jvmGo/ch6/cmn"
-	"jvmGo/ch6/rtdt"
+	"jvmGo/jvm/cmn"
+	"jvmGo/jvm/rtdt"
 )
 
 var code2FuncMap = map[uint8]func(*rtdt.Frame){
@@ -201,14 +201,14 @@ var code2FuncMap = map[uint8]func(*rtdt.Frame){
 	cmn.OPCODE_rreturn:      rreturn,
 
 	// References
-	cmn.OPCODE_getstatic:     getstatic,
-	cmn.OPCODE_putstatic:     putstatic,
-	cmn.OPCODE_getfield:      getfield,
-	cmn.OPCODE_putfield:      putfield,
-	cmn.OPCODE_invokevirtual: invokevirtual,
-	cmn.OPCODE_invokespecial: invokespecial,
-	//cmn.OPCODE_invokestatic:    invokestatic,
-	//cmn.OPCODE_invokeinterface: invokeinterface,
+	cmn.OPCODE_getstatic:       getstatic,
+	cmn.OPCODE_putstatic:       putstatic,
+	cmn.OPCODE_getfield:        getfield,
+	cmn.OPCODE_putfield:        putfield,
+	cmn.OPCODE_invokevirtual:   invokevirtual,
+	cmn.OPCODE_invokespecial:   invokespecial,
+	cmn.OPCODE_invokestatic:    invokestatic,
+	cmn.OPCODE_invokeinterface: invokeinterface,
 	//cmn.OPCODE_invokedynamic:   invokedynamic,
 	cmn.OPCODE_new: new,
 	//cmn.OPCODE_newarray:        newarray,

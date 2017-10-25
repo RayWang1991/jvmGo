@@ -2,8 +2,8 @@ package rtdt
 
 import (
 	"fmt"
-	"jvmGo/ch6/marea"
-	"jvmGo/ch6/utils"
+	"jvmGo/jvm/marea"
+	"jvmGo/jvm/utils"
 	"math"
 )
 

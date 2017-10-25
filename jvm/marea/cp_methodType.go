@@ -1,6 +1,6 @@
 package marea
 
-import cf "jvmGo/ch6/classfile"
+import cf "jvmGo/jvm/classfile"
 
 type MethodType string
 

@@ -1,6 +1,6 @@
 package marea
 
-import "jvmGo/ch6/utils"
+import "jvmGo/jvm/utils"
 
 func ndStr(name, desc string) string {
 	return name + "&" + desc

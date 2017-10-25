@@ -1,6 +1,6 @@
 package instructions
 
-import "jvmGo/ch6/rtdt"
+import "jvmGo/jvm/rtdt"
 
 // int to long
 func i2l(f *rtdt.Frame) {

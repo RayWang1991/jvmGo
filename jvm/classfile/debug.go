@@ -3,7 +3,7 @@ package classfile
 import (
 	"bytes"
 	"fmt"
-	"jvmGo/ch6/cmn"
+	"jvmGo/jvm/cmn"
 	"strconv"
 	"strings"
 )

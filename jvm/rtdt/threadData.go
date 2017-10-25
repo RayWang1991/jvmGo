@@ -1,10 +1,12 @@
 package rtdt
 
-import "jvmGo/ch6/utils"
+import (
+	"jvmGo/jvm/utils"
+)
 
 // Thread represents a thread
 type Thread struct {
-	pc    int32 // pc register, TODO
+	pc    int32 // pc register for current executing code
 	stack Stack
 }
 
@@ -42,6 +44,14 @@ func (t *Thread) CurrentFrame() *Frame {
 	return t.stack.top
 }
 
+func (t *Thread) RollBackPCIfNeeded() {
+	f := t.CurrentFrame()
+	if nil == f {
+		return
+	}
+	f.SetPC(t.PC())
+}
+
 // Stack represents a program stack for a thread
 type Stack struct {
 	maxSize     uint32 // max frame num
@@ -67,3 +77,5 @@ func (s *Stack) pop() *Frame {
 	s.top = s.top.next
 	return r
 }
+
+// run loop

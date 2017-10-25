@@ -2,7 +2,7 @@ package rtdt
 
 import (
 	"fmt"
-	"jvmGo/ch6/marea"
+	"jvmGo/jvm/marea"
 )
 
 type Frame struct {
@@ -17,7 +17,7 @@ type Frame struct {
 
 // new
 func NewFrame(method *marea.Method, t *Thread) *Frame {
-	fmt.Println("New Frame")
+	fmt.Println("\nNew Frame")
 	fmt.Println("MaxStack:", method.MaxStackDep())
 	return &Frame{
 		method:       method,

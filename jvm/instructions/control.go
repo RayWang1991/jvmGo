@@ -1,6 +1,6 @@
 package instructions
 
-import "jvmGo/ch6/rtdt"
+import "jvmGo/jvm/rtdt"
 
 func ggoto(f *rtdt.Frame) {
 	b := f.ReadI16()

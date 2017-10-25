@@ -1,6 +1,6 @@
 package marea
 
-import "jvmGo/ch6/classfile"
+import "jvmGo/jvm/classfile"
 
 type NameTypeInfo struct {
 	nameIndex uint16 // index to the name

@@ -1,6 +1,6 @@
 package marea
 
-import "jvmGo/ch6/utils"
+import "jvmGo/jvm/utils"
 
 func isAccessableCls(want, wanted *Class) bool {
 	if wanted.IsPublic() {

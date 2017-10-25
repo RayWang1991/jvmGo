@@ -1,8 +1,8 @@
 package marea
 
 import (
-	"jvmGo/ch6/classfile"
-	"jvmGo/ch6/cmn"
+	"jvmGo/jvm/classfile"
+	"jvmGo/jvm/cmn"
 )
 
 type Method struct {

@@ -3,8 +3,8 @@ package classfile
 import (
 	"bytes"
 	"fmt"
-	//"jvmGo/ch6/instructions"
-	"jvmGo/ch6/cmn"
+	//"jvmGo/jvm/instructions"
+	"jvmGo/jvm/cmn"
 )
 
 /*

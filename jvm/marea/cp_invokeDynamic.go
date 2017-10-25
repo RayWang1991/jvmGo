@@ -1,6 +1,6 @@
 package marea
 
-import "jvmGo/ch6/classfile"
+import "jvmGo/jvm/classfile"
 
 type InvokeDynamic struct {
 	bstmI uint16 // index to a bootstrap_method
