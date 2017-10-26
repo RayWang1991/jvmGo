@@ -1,6 +1,9 @@
 package marea
 
-import "jvmGo/jvm/utils"
+import (
+	"jvmGo/jvm/cmn"
+	"jvmGo/jvm/utils"
+)
 
 func isAccessableCls(want, wanted *Class) bool {
 	if wanted.IsPublic() {
@@ -39,18 +42,50 @@ func isAccessableMethod(want *Class, m *Method) bool {
 // whether S is assignable to T
 func IsAssignable(S, T *Class) bool {
 	if !S.IsArray() {
-		if T.IsInterface() {
-			if !S.IsInterface() {
-				return S.ClassName() == utils.CLASSNAME_Object
+		if S.IsInterface() {
+			// S is interface type
+			if !T.IsInterface() {
+				// T is Class type
+				return T.ClassName() == utils.CLASSNAME_Object
 			} else {
+				// T is Interface Type
 				return IsDescandent(S, T)
 			}
 		} else {
-			return DoesImplement(S, T)
+			// S is Class type
+			if !T.IsInterface() {
+				// T is Class type
+				return IsDescandent(S, T)
+			} else {
+				// T is Interface type
+				return DoesImplement(S, T)
+			}
 		}
 	} else {
-		// TODO array
-		panic("todo array")
+		// s is an array type
+		if !T.IsInterface() {
+			if T.IsArray() {
+				// T  array type
+				sn := cmn.ElementName(S.ClassName())
+				tn := cmn.ElementName(T.ClassName())
+				if cmn.IsPrimitiveType(sn) {
+					return tn == sn
+				} else {
+					if cmn.IsPrimitiveType(tn) {
+						return false
+					}
+					Ss := S.DefineLoader().Load(sn) // element type for S
+					Ts := S.DefineLoader().Load(tn) // element type for T
+					return IsAssignable(Ss, Ts)
+				}
+			} else {
+				// T is Class type
+				return T.name == utils.CLASSNAME_Object
+			}
+		} else {
+			// T is interface type
+			return T.name == utils.CLASSNAME_Cloneable || T.name == utils.CLASSNAME_Serilizable
+		}
 	}
 }
 
