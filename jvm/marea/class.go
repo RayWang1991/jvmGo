@@ -2,8 +2,8 @@ package marea
 
 import (
 	"fmt"
-	"jvmGo/ch6/classfile"
-	"jvmGo/ch6/cmn"
+	"jvmGo/jvm/classfile"
+	"jvmGo/jvm/cmn"
 	"strings"
 )
 
@@ -82,6 +82,7 @@ func NewClass(file *classfile.ClassFile) *Class {
 	mmap := make(map[string]*Method, len(ms))
 	c.methodMap = mmap
 	//dup name+desc should not be valid
+	// TODO debug
 	for _, m := range ms {
 		md := NewMethod(c, m)
 		mmap[ndStr(md.name, md.desc)] = md
@@ -130,6 +131,31 @@ func (c *Class) StatField(name string) *Field {
 func (c *Class) Method(name, desc string) *Method {
 	s := ndStr(name, desc)
 	return c.methodMap[s]
+}
+
+// setters
+func (c *Class) SetClassName(n string) {
+	c.name = n
+}
+
+func (c *Class) SetSuperClassName(n string) {
+	c.superClassName = n
+}
+
+func (c *Class) SetSuperClass(n *Class) {
+	c.superClass = n
+}
+
+func (c *Class) SetInterfaceNames(n []string) {
+	c.interfaceNames = n
+}
+
+func (c *Class) SetInterfaces(n [](Class)) {
+	c.interfaces = n
+}
+
+func (c *Class) SetFlags(n uint16) {
+	c.flags = n
 }
 
 // getters
@@ -262,10 +288,16 @@ func (c *Class) LookUpMethodDirectly(name, desc string) *Method {
 // return the package name
 func (c *Class) PackageName() string {
 	n := c.name
+
+	// skip the array '[' s, get the core type
+	for len(n) > 0 && n[0] == '[' {
+		n = n[1:]
+	}
 	i := strings.LastIndex(n, `/`)
 	if i > 0 {
 		return n[0:i]
 	} else {
+		// may be primary type
 		return "" // default package
 	}
 }
@@ -276,15 +308,19 @@ func (c *Class) IsArray() bool {
 }
 
 // init
-func (c *Class) hasInitiated() bool {
+func (c *Class) HasInitiated() bool {
 	return c.hasInited
 }
 
-func (c *Class) setInitiated(b bool) {
+func (c *Class) SetInitiated(b bool) {
 	c.hasInited = b
 }
 
 // access methods
+func (c *Class) GetFlags() uint16 {
+	return c.flags
+}
+
 func (c *Class) IsPublic() bool {
 	return cmn.IsPublic(c.flags)
 }
@@ -309,8 +345,8 @@ func (c *Class) IsSuper() bool {
 
 // debug
 func (c *Class) PrintDebugMessage() {
-	fmt.Printf("class: %s\n", c.ClassName())      // magic
-	fmt.Printf("super: %s\n", c.SuperclassName()) // magic
+	fmt.Printf("class: %s\n", c.ClassName())
+	fmt.Printf("super: %s\n", c.SuperclassName())
 	fmt.Printf("flags: %s\n", cmn.FlagNumToString(c.flags, cmn.ACC_TYPE_CLASS))
 	//fmt.Print(c.cp.String())
 	fmt.Printf("interfaces(%d items): %s \n", len(c.interfaceNames), strings.Join(c.interfaceNames, ","))
@@ -318,18 +354,19 @@ func (c *Class) PrintDebugMessage() {
 	fmt.Printf("Fields (%d items):\n", len(c.fieldMap))
 	i := 0
 	for _, f := range c.fieldMap {
-		fmt.Printf("#%d: %s %s\n, %s\n", i, f.name, f.desc, cmn.FlagNumToString(f.flags, cmn.ACC_TYPE_FIELD))
+		fmt.Printf("F #%d: %s %s, %s\n", i, f.name, f.desc, cmn.FlagNumToString(f.flags, cmn.ACC_TYPE_FIELD))
 		i++
 	}
 	fmt.Printf("Methods(%d items):\n", len(c.methodMap))
 	i = 0
 	for _, m := range c.methodMap {
-		fmt.Printf("#%d: %s %s\n, %s\n", i, m.name, m.desc, cmn.FlagNumToString(m.flags, cmn.ACC_TYPE_METHOD))
+		fmt.Printf("M #%d: %s %s, %s\n", i, m.name, m.desc, cmn.FlagNumToString(m.flags, cmn.ACC_TYPE_METHOD))
 		if m.IsNative() {
-			fmt.Println("Native Method")
+			fmt.Println("^-Native Method-^")
 		} else {
 			// TODO
 			//fmt.Printf("%s",classfile.CodeInst(m.Code()).String())
 		}
+		i++
 	}
 }
