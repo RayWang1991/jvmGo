@@ -2,15 +2,18 @@ package cloader
 
 import (
 	"fmt"
-	"jvmGo/ch6/classfile"
-	"jvmGo/ch6/classpath"
-	"jvmGo/ch6/marea"
-	"jvmGo/ch6/utils"
+	"jvmGo/jvm/classfile"
+	"jvmGo/jvm/classpath"
+	"jvmGo/jvm/cmn"
+	"jvmGo/jvm/marea"
+	"jvmGo/jvm/rtdt"
+	"jvmGo/jvm/utils"
 	"os"
 	"strings"
 )
 
 // TODO
+// TODO the loader thread is just memory keeper now, add concurrent logic
 
 func NewBstLoader(cp *classpath.ClassPath) marea.ClassLoader {
 	return &bstLoader{
@@ -34,6 +37,15 @@ func (b *bstLoader) ID() int {
 func (b *bstLoader) Delegate() marea.ClassLoader {
 	return nil
 }
+
+func (b *bstLoader) Load(n string) *marea.Class {
+	if cmn.IsArray(n) {
+		return b.LoadArrayClass(n)
+	} else {
+		return b.Initiate(n)
+	}
+}
+
 func (b *bstLoader) Initiate(n string) *marea.Class {
 	if c := cache[n]; c != nil {
 		if c.InitLoader().ID() == b.id {
@@ -43,7 +55,6 @@ func (b *bstLoader) Initiate(n string) *marea.Class {
 		}
 	} else {
 		c := b.Define(n)
-		c.SetInitLoader(b)
 		b.Verify(c)
 		b.Prepare(c)
 		return c
@@ -51,19 +62,21 @@ func (b *bstLoader) Initiate(n string) *marea.Class {
 }
 
 func (b *bstLoader) Define(n string) *marea.Class {
-	cf, err := doLoadClassFile(n, b.cp)
+	cf, err := b.doLoadClassFile(n, b.cp)
 	if cf == nil {
 		panic(utils.ClassNotFoundException)
 	}
 	if err != nil {
 		panic(err)
 	}
-	c := doLoadClassFromFile(cf)
+	c := b.doLoadClassFromFile(cf)
 	if c == nil {
 		panic(utils.ClassFormatError)
 	}
+	c.SetInitLoader(b)
 	c.SetDefineLoader(b)
 	cache[n] = c
+	b.doInitClass(c)
 	return c
 }
 
@@ -76,7 +89,7 @@ func (b *bstLoader) Prepare(c *marea.Class) {
 }
 
 // bst loader is the top level class loader
-func doLoadClassFile(class string, cp *classpath.ClassPath) (*classfile.ClassFile, error) {
+func (b *bstLoader) doLoadClassFile(class string, cp *classpath.ClassPath) (*classfile.ClassFile, error) {
 	className := strings.Replace(class, ".", "/", -1)
 	className += ".class"
 	classData, entry, err := cp.ReadClass(className)
@@ -90,13 +103,111 @@ func doLoadClassFile(class string, cp *classpath.ClassPath) (*classfile.ClassFil
 		fmt.Fprint(os.Stderr, fmt.Errorf("parsing class file failed: %s", err))
 		return nil, err
 	}
-	//cf.PrintDebugMessage() TODO cf debug
+	if LoaderDebugFlag {
+		cf.PrintDebugMessage()
+	}
 	fmt.Printf("Load Class File %s from %s\n", cf.ClassName(), entry.String())
 	return cf, nil
 }
 
-func doLoadClassFromFile(file *classfile.ClassFile) *marea.Class {
+func (loader *bstLoader) doLoadClassFromFile(file *classfile.ClassFile) *marea.Class {
 	c := marea.NewClass(file)
-	//c.PrintDebugMessage()
+	if LoaderDebugFlag {
+		c.PrintDebugMessage()
+	}
+	return c
+}
+
+var scheduleInit = map[string]bool{}
+
+func (loader *bstLoader) doInitClass(c *marea.Class) {
+	if c.HasInitiated() || scheduleInit[c.ClassName()] {
+		return
+	}
+	// set up loader thread
+	if InitDebugFlag {
+		fmt.Printf("\n##INIT CLASS## %s\n", c.ClassName())
+	}
+	t := GetLoaderThread()
+	for c != nil {
+		if !c.HasInitiated() && !scheduleInit[c.ClassName()] {
+			scheduleInit[c.ClassName()] = true
+			m := c.GetClinit()
+			if m != nil {
+				f := rtdt.NewFrame(m, t)
+				// TODO, hack
+				/*
+					if c.ClassName() == "utils.CLASSNAME_System" {
+						// call initializeSystemClass
+						m = c.GetMethodDirect(cmn.METHOD_initializeSystemClass_NAME, cmn.METHOD_initializeSystemClass_DESC)
+						t.PushFrame(rtdt.NewFrame(m, t))
+					}
+				*/
+				t.PushFrame(f)
+				defer func(c *marea.Class) { // TODO, actually init is done earlier
+					c.SetInitiated(true)
+					delete(scheduleInit, c.ClassName())
+				}(c)
+			}
+		} else if c.HasInitiated() {
+			break
+		}
+		s := c.SuperclassName()
+		if s != "" {
+			c = loader.Initiate(c.SuperclassName())
+		} else {
+			c = nil
+		}
+	}
+
+	// loop
+	loop(t)
+}
+
+// for load array class
+func (b *bstLoader) LoadArrayClass(n string) *marea.Class {
+	if c := cache[n]; c != nil {
+		if c.InitLoader().ID() == b.id {
+			return c
+		} else {
+			panic(utils.LinkageError)
+		}
+	} else {
+		c = b.doLoadArrayClass(n)
+		return c
+	}
+}
+
+func (b *bstLoader) doLoadArrayClass(n string) *marea.Class { // support load array recursively
+	c := &marea.Class{}
+
+	c.SetClassName(n)
+	c.SetSuperClassName(utils.CLASSNAME_Object)
+	c.SetSuperClass(b.Initiate(utils.CLASSNAME_Object))
+	c.SetInterfaceNames([]string{
+		utils.CLASSNAME_Cloneable, utils.CLASSNAME_Serilizable,
+	})
+	c.SetInterfaces([]*marea.Class{
+		b.Initiate(utils.CLASSNAME_Cloneable), b.Initiate(utils.CLASSNAME_Serilizable),
+	})
+
+	elen := cmn.ElementName(n)
+	if cmn.IsPrimitiveType(elen) { // the element is primitive type
+		// just create the array class
+		c.SetFlags(cmn.ACC_PUBLIC)
+	} else if cmn.IsArray(elen) { // the element is still array type
+		elec := b.LoadArrayClass(elen)
+		c.SetFlags(elec.GetFlags())
+	} else { // for non array Objects
+		// should load the element type first
+		var elec *marea.Class
+		if elec = cache[elen]; elec == nil {
+			elec = b.Initiate(elen) // TODO, for b to init element ?
+		}
+		c.SetFlags(elec.GetFlags())
+	}
+	c.SetInitLoader(b)
+	c.SetDefineLoader(b)
+	cache[n] = c
 	return c
 }
