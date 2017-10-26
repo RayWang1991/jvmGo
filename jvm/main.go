@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
-	"jvmGo/ch6/classpath"
-	"jvmGo/ch6/cloader"
-	"jvmGo/ch6/marea"
+	"jvmGo/jvm/classpath"
+	"jvmGo/jvm/cloader"
 )
 
 func main() {
@@ -25,14 +24,10 @@ func startJVM(cmd *Cmd) {
 	cp := classpath.NewClassPath(cmd.xjreOption, cmd.cpOption)
 	bstLoader := cloader.NewBstLoader(cp)
 	c := bstLoader.Initiate(cmd.class)
-	m := getMain(c)
+	m := c.GetMain()
 	if m == nil {
 		println("not found method 	'main'")
 	} else {
 		interpret(m)
 	}
-}
-
-func getMain(c *marea.Class) *marea.Method {
-	return c.GetMethodDirect("main", "([Ljava/lang/String;)V")
 }
