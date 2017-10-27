@@ -2,6 +2,10 @@ package marea
 
 import (
 	"math"
+	"bytes"
+	"fmt"
+	"unsafe"
+	"jvmGo/jvm/cmn"
 )
 
 // An Object represents a reference type (non-array type and array type is different)
@@ -250,4 +254,34 @@ func (o *Object) GetRef(i uint) *Object {
 func (o *Object) SetSlot(s *Slot, i uint) {
 	l := o.data.(Vars)
 	l[i] = *s
+}
+
+// debug, TODO
+func (o *Object) String() string {
+	buf := bytes.Buffer{}
+	buf.WriteString(fmt.Sprintf("Type: %s addr: 0x%x", o.class.name, unsafe.Pointer(o)))
+	if o.class.IsArray() {
+		elen := cmn.ElementName(o.class.name)
+		if cmn.IsPrimitiveType(elen) {
+			switch elen {
+			case "B", "Z":
+				buf.WriteString(fmt.Sprintf("%v ", o.ArrGetBytes()))
+			case "I":
+				buf.WriteString(fmt.Sprintf("%v ", o.ArrGetInts()))
+			case "C":
+				buf.WriteString(fmt.Sprintf("%v ", o.ArrGetChars()))
+			case "S":
+				buf.WriteString(fmt.Sprintf("%v ", o.ArrGetShorts()))
+			case "J":
+				buf.WriteString(fmt.Sprintf("%v ", o.ArrGetLongs()))
+			case "F":
+				buf.WriteString(fmt.Sprintf("%v ", o.ArrGetFloats()))
+			case "D":
+				buf.WriteString(fmt.Sprintf("%v ", o.ArrGetDoubles()))
+			default:
+				buf.WriteString(fmt.Sprintf("%v ", o.ArrGetRefs()))
+			}
+		}
+	}
+	return buf.String()
 }
