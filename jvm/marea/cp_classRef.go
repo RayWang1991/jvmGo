@@ -1,5 +1,7 @@
 package marea
 
+import "jvmGo/jvm/cmn"
+
 type ClassRef struct {
 	className string // Key for from
 	from      *Class
@@ -36,6 +38,7 @@ func (c *ClassRef) SetFromClass(cls *Class) {
 
 func (c *ClassRef) resolveRef() {
 	l := c.from.defLoader
-	cls := l.Initiate(c.className)
+	name := cmn.SimClassName(c.className)
+	cls := l.Load(name)
 	c.ref = cls
 }

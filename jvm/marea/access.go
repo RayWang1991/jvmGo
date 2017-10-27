@@ -84,7 +84,7 @@ func IsAssignable(S, T *Class) bool {
 			}
 		} else {
 			// T is interface type
-			return T.name == utils.CLASSNAME_Cloneable || T.name == utils.CLASSNAME_Serilizable
+			return T.name == utils.CLASSNAME_Cloneable || T.name == utils.CLASSNAME_Serializable
 		}
 	}
 }

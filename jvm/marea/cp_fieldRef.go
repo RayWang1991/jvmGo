@@ -1,7 +1,6 @@
 package marea
 
 import (
-	"fmt"
 	cf "jvmGo/jvm/classfile"
 	"jvmGo/jvm/utils"
 )
@@ -21,8 +20,6 @@ func (r *FieldRef) GetField() *Field {
 	}
 	c := r.Ref()
 	f := c.LookUpField(r.name)
-	fmt.Println(r.name)
-	fmt.Println(c.FieldMap())
 	if f == nil {
 		panic(utils.NoSuchFieldError)
 	}

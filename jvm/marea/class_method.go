@@ -1,6 +1,7 @@
 package marea
 
 import (
+	"fmt"
 	"jvmGo/jvm/classfile"
 	"jvmGo/jvm/cmn"
 )
@@ -24,14 +25,17 @@ type AttrExceptionEntry struct {
 }
 
 func NewMethod(from *Class, info *classfile.MethodInfo) *Method {
+	if info.Name() == "write" {
+		fmt.Println()
+	}
 	m := &Method{}
 	m.class = from
 	m.name = info.Name()
 	m.flags = info.AccFlags()
 	m.desc = info.Description()
 	m.parseDesc()
-	if m.IsNative() {
-		// TODO native methods
+	if m.IsNative() || m.IsAbstract() {
+		// TODO native methods ,and abstract methods do not have code attr but may have exception table
 		return m
 	}
 

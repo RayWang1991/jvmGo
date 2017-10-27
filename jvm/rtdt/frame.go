@@ -17,8 +17,10 @@ type Frame struct {
 
 // new
 func NewFrame(method *marea.Method, t *Thread) *Frame {
-	fmt.Println("\nNew Frame")
-	fmt.Println("MaxStack:", method.MaxStackDep())
+	if ThreadDebugFlag {
+		fmt.Println("\nNew Frame for ", method.Name(), " ", method.Class().ClassName())
+	}
+	//fmt.Println("MaxStack:", method.MaxStackDep())
 	return &Frame{
 		method:       method,
 		LocalVar:     marea.NewVars(uint(method.MaxLocalVars())),

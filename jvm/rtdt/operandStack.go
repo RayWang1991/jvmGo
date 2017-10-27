@@ -1,7 +1,6 @@
 package rtdt
 
 import (
-	"fmt"
 	"jvmGo/jvm/marea"
 	"jvmGo/jvm/utils"
 	"math"
@@ -25,8 +24,8 @@ func NewOperandStack(maxDepth uint) *OperandStack {
 // Get boolean, byte, char, short, int
 func (o *OperandStack) PopInt() int32 {
 	o.size--
-	if debugFlag {
-		fmt.Printf("%d %d\n", o.size, o.slots[o.size].Num)
+	if ThreadDebugFlag {
+		//fmt.Printf("%d %d\n", o.size, o.slots[o.size].Num)
 	}
 	return o.slots[o.size].Num // panic if size is 0u-1
 }
@@ -36,8 +35,8 @@ func (o *OperandStack) PushInt(i int32) {
 	s.Num = i
 	s.Ref = nil
 	o.size++
-	if debugFlag {
-		fmt.Printf("%d %d\n", o.size, s.Num)
+	if ThreadDebugFlag {
+		//fmt.Printf("%d %d\n", o.size, s.Num)
 	}
 }
 

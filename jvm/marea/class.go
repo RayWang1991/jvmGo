@@ -150,7 +150,7 @@ func (c *Class) SetInterfaceNames(n []string) {
 	c.interfaceNames = n
 }
 
-func (c *Class) SetInterfaces(n [](Class)) {
+func (c *Class) SetInterfaces(n []*Class) {
 	c.interfaces = n
 }
 
