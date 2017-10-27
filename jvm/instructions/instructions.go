@@ -25,9 +25,9 @@ var code2FuncMap = map[uint8]func(*rtdt.Frame){
 	cmn.OPCODE_dconst_1:    dconst_1,
 	cmn.OPCODE_bipush:      bipush,
 	cmn.OPCODE_sipush:      sipush,
-	//cmn.OPCODE_ldc:         ldc,
-	//cmn.OPCODE_ldc_w:       ldc_w,
-	//cmn.OPCODE_ldc2_w:      ldc2_w,
+	cmn.OPCODE_ldc:    ldc,
+	cmn.OPCODE_ldc_w:  ldc_w,
+	cmn.OPCODE_ldc2_w: ldc2_w,
 
 	// Loads
 	cmn.OPCODE_iload:   iload,
