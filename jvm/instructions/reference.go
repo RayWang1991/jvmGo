@@ -2,9 +2,11 @@ package instructions
 
 import (
 	"fmt"
-	"jvmGo/ch6/marea"
-	"jvmGo/ch6/rtdt"
-	"jvmGo/ch6/utils"
+	"jvmGo/jvm/cmn"
+	"jvmGo/jvm/lib"
+	"jvmGo/jvm/marea"
+	"jvmGo/jvm/rtdt"
+	"jvmGo/jvm/utils"
 )
 
 func getfield(frame *rtdt.Frame) {
@@ -16,6 +18,10 @@ func getfield(frame *rtdt.Frame) {
 
 	stack := frame.OperandStack
 	obj := stack.PopNonnilRef()
+
+	if InstDebugFlag {
+		fmt.Printf("GET FIELD %s %s %s\n", field.Name(), field.Desc(), field.Class().ClassName())
+	}
 
 	i := field.VarIdx()
 	switch field.Desc() {
@@ -47,6 +53,10 @@ func getstatic(frame *rtdt.Frame) {
 
 	class := field.Class()
 	stack := frame.OperandStack
+
+	if InstDebugFlag {
+		fmt.Printf("GET STATIC %s %s %s\n", field.Name(), field.Desc(), class.ClassName())
+	}
 
 	i := field.VarIdx()
 	switch field.Desc() {
@@ -82,6 +92,10 @@ func putfield(frame *rtdt.Frame) {
 	stack := frame.OperandStack
 	i := field.VarIdx()
 
+	if InstDebugFlag {
+		fmt.Printf("PUT FIELD %s %s %s\n", field.Name(), field.Desc(), field.Class().ClassName())
+	}
+
 	switch field.Desc() {
 	case "B", "C", "I", "S", "Z":
 		v := stack.PopInt()
@@ -114,13 +128,18 @@ func putstatic(frame *rtdt.Frame) {
 	if !field.IsStatic() {
 		panic(utils.IncompatibleClassChangeError)
 	}
-	if field.IsFinal() && frame.Method().Name() != "<cinit>" {
+	if field.IsFinal() && frame.Method().Name() != cmn.METHOD_CLINIT_NAME {
+		fmt.Println(frame.Method().Name())
 		panic(utils.IllegalAccessError)
 	}
 
 	class := field.Class()
 	stack := frame.OperandStack
 	i := field.VarIdx()
+
+	if InstDebugFlag {
+		fmt.Printf("PUT FIELD %s %s %s\n", field.Name(), field.Desc(), class.ClassName())
+	}
 
 	switch field.Desc() {
 	case "B", "C", "I", "S", "Z":
@@ -147,9 +166,136 @@ func new(frame *rtdt.Frame) {
 	if class.IsAbstract() || class.IsInterface() || class.IsArray() {
 		panic(utils.InstantiationError)
 	}
-	//fmt.Println("new obj from class", class.ClassName())
+	if InstDebugFlag {
+		fmt.Println("new obj from class", class.ClassName())
+	}
 	obj := marea.NewObject(class)
 	frame.OperandStack.PushRef(obj)
+}
+
+func newarray(frame *rtdt.Frame) {
+	const (
+		T_BOOLEAN = iota + 4
+		T_CHAR
+		T_FLOAT
+		T_DOUBLE
+		T_BYTE
+		T_SHORT
+		T_INT
+		T_LONG
+	)
+	atype := frame.ReadU8()
+	length := frame.OperandStack.PopInt()
+	if length < 0 {
+		panic(utils.NegativeArraySizeException)
+	}
+	var obj *marea.Object
+	loader := frame.Method().Class().InitLoader() // TODO, may be use other loader
+	switch atype {
+	case T_BOOLEAN:
+		c := loader.LoadArrayClass("[Z")
+		obj = marea.NewArrayB(c, length) // use byte array
+	case T_BYTE:
+		c := loader.LoadArrayClass("[B")
+		obj = marea.NewArrayB(c, length)
+	case T_CHAR:
+		c := loader.LoadArrayClass("[C")
+		obj = marea.NewArrayC(c, length)
+	case T_FLOAT:
+		c := loader.LoadArrayClass("[F")
+		obj = marea.NewArrayF(c, length)
+	case T_DOUBLE:
+		c := loader.LoadArrayClass("[D")
+		obj = marea.NewArrayD(c, length)
+	case T_SHORT:
+		c := loader.LoadArrayClass("[S")
+		obj = marea.NewArrayS(c, length)
+	case T_INT:
+		c := loader.LoadArrayClass("[I")
+		obj = marea.NewArrayI(c, length)
+	case T_LONG:
+		c := loader.LoadArrayClass("[J")
+		obj = marea.NewArrayJ(c, length)
+	}
+	if InstDebugFlag {
+		fmt.Printf("New Primative array %s \n", obj.Class().ClassName())
+	}
+	frame.OperandStack.PushRef(obj)
+}
+
+func anewarray(frame *rtdt.Frame) {
+	length := frame.OperandStack.PopInt()
+	if length < 0 {
+		panic(utils.NegativeArraySizeException)
+	}
+	elec := getClassRefU16(frame)
+	arrName := "[" + elec.ClassName()
+	arrC := elec.DefineLoader().LoadArrayClass(arrName)
+	obj := marea.NewArrayA(arrC, length)
+	frame.OperandStack.PushRef(obj)
+}
+
+func multianewarray(frame *rtdt.Frame) {
+	elec := getClassRefU16(frame)
+	dim := frame.ReadU8() // dim must >= 1
+	if dim < 1 { // 0 - dim array ??? can not be
+		panic("0 dim array")
+	}
+
+	// preparation
+	eleClsArr := make([]*marea.Class, dim) // want element class array
+	eleCntArr := make([]int32, dim)        // element count array
+	eleName := elec.ClassName()
+
+	maxL := 1
+	for i := uint8(0); i < dim; i++ {
+		length := frame.OperandStack.PopInt()
+		if length < 0 {
+			panic(utils.NegativeArraySizeException)
+		}
+		if i < dim-1 {
+			maxL *= int(length)
+		}
+		eleClsArr[dim-1-i] = elec
+		eleCntArr[dim-1-i] = length
+		eleName = eleName[1:]
+		elec = elec.DefineLoader().LoadArrayClass(eleName)
+	}
+
+	// bfs allocate and link all obj arrays, TODO dfs maybe
+	workList := make([]*marea.Object, 0, maxL)
+	tempList := make([]*marea.Object, 0, maxL)
+
+	ret := marea.NewArrayA(eleClsArr[0], eleCntArr[0])
+	workList = append(workList, ret)
+
+	for i := uint8(0); i < dim-1; i++ {
+		// for certain array type
+		// want num is total
+		// current num is cnt (for array length)
+		arrCnt := eleCntArr[i]
+		nextCnt := eleCntArr[i+1]
+		cls := eleClsArr[i+1]
+		for _, container := range workList {
+			for j := int32(0); j < arrCnt; j++ {
+				a := marea.NewArrayA(cls, nextCnt)
+				container.ArrGetRefs()[j] = a
+				tempList = append(tempList, a)
+			}
+		}
+		workList = tempList
+		tempList = tempList[:0]
+	}
+
+	frame.OperandStack.PushRef(ret)
+}
+
+func arraylength(frame *rtdt.Frame) {
+	arref := frame.OperandStack.PopRef()
+	if arref == nil {
+		panic(utils.NullPointerException)
+	}
+	frame.OperandStack.PushInt(arref.ArrayLength())
 }
 
 func instanceof(frame *rtdt.Frame) {
@@ -239,12 +385,12 @@ func invokevirtual(f *rtdt.Frame) {
 	}
 
 	// call method
-	nf := rtdt.NewFrame(realMethod, t)
-	t.PushFrame(nf)
-	for i := realMethod.ArgSlotNum(); i >= 0; i-- {
-		slot := f.OperandStack.PopSlot()
-		nf.LocalVar.SetSlot(slot, uint(i))
+	if InstDebugFlag {
+		fmt.Printf("INVOKE VIRTUAL, raw %s %s %s, REAL call %s %s %s\n",
+			m.Name(), m.Desc(), m.Class().ClassName(),
+			realMethod.Name(), realMethod.Desc(), realMethod.Class().ClassName())
 	}
+	callMethod(realMethod, t)
 }
 
 // invokespecial
@@ -291,13 +437,12 @@ func invokespecial(f *rtdt.Frame) {
 	}
 
 	// call method
-	nf := rtdt.NewFrame(m, t)
-	t.PushFrame(nf)
-	for i := m.ArgSlotNum(); i >= 0; i-- {
-		slot := f.OperandStack.PopSlot()
-		nf.LocalVar.SetSlot(slot, uint(i))
+	if InstDebugFlag {
+		fmt.Printf("INVOKE SPECIAL, raw %s %s %s, REAL call %s %s %s\n",
+			mr.Name(), mr.Desc(), mr.ClassName(),
+			m.Name(), m.Desc(), m.Class().ClassName())
 	}
-	//fmt.Println("New Frame's locals", nf.LocalVar)
+	callMethod(m, t)
 }
 
 func invokestatic(f *rtdt.Frame) {
@@ -317,13 +462,16 @@ func invokestatic(f *rtdt.Frame) {
 		panic(utils.IncompatibleClassChangeError)
 	}
 
-	// call method
-	nf := rtdt.NewFrame(m, t)
-	t.PushFrame(nf)
-	for i := m.ArgSlotNum() - 1; i >= 0; i-- {
-		slot := f.OperandStack.PopSlot()
-		nf.LocalVar.SetSlot(slot, uint(i))
+	if m.Name() == "registerNatives" {
+		fmt.Println()
 	}
+
+	// call method
+	if InstDebugFlag {
+		fmt.Printf("INVOKE STATIC, %s %s %s\n",
+			m.Name(), m.Desc(), m.Class().ClassName())
+	}
+	callMethod(m, t)
 }
 
 func invokeinterface(f *rtdt.Frame) {
@@ -331,7 +479,7 @@ func invokeinterface(f *rtdt.Frame) {
 	// locate the method
 	ind := f.ReadU16()
 	f.ReadU16()              // for count and 0,historical
-	cc := f.Method().Class() //current class
+	cc := f.Method().Class() // current class
 	cp := cc.ConstantPool()
 	mr := cp.GetInterfaceMethodRef(ind)
 
@@ -348,9 +496,9 @@ func invokeinterface(f *rtdt.Frame) {
 	//pop objref
 	pos := f.OperandStack.GetSize() - uint(m.ArgSlotNum()) - 1 // must be instance method
 	objref := f.OperandStack.GetSlot(uint(pos)).Ref
-	fmt.Println("pos", pos)
-	fmt.Println("obj", objref)
-	fmt.Println("slots", f.OperandStack)
+	//fmt.Println("pos", pos)
+	//fmt.Println("obj", objref)
+	//fmt.Println("slots", f.OperandStack)
 
 	if objref == nil {
 		panic(utils.NullPointerException)
@@ -366,12 +514,30 @@ func invokeinterface(f *rtdt.Frame) {
 	}
 
 	// call method
-	nf := rtdt.NewFrame(realMethod, t)
+	if InstDebugFlag {
+		fmt.Printf("INVOKE INTERFACE, raw m %s %s %s, REAL call %s %s %s\n",
+			m.Name(), m.Desc(), m.Class().ClassName(),
+			realMethod.Name(), realMethod.Desc(), realMethod.Class().ClassName())
+	}
+	callMethod(realMethod, t)
+}
+
+// TODO invokedynamic
+
+func callMethod(m *marea.Method, t *rtdt.Thread) {
+	if m.IsNative() {
+		lib.CallNative(m)
+		return
+	}
+	f := t.CurrentFrame()
+	nf := rtdt.NewFrame(m, t)
 	t.PushFrame(nf)
-	for i := realMethod.ArgSlotNum(); i >= 0; i-- {
+	i := m.ArgSlotNum()
+	if m.IsStatic() {
+		i--
+	}
+	for ; i >= 0; i-- {
 		slot := f.OperandStack.PopSlot()
 		nf.LocalVar.SetSlot(slot, uint(i))
 	}
 }
-
-// TODO invokedynamic
