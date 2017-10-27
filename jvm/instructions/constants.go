@@ -1,6 +1,10 @@
 package instructions
 
-import "jvmGo/jvm/rtdt"
+import (
+	"jvmGo/jvm/rtdt"
+	"jvmGo/jvm/marea"
+	"fmt"
+)
 
 func nop(f *rtdt.Frame) {
 	// do nothing
@@ -100,3 +104,48 @@ func sipush(f *rtdt.Frame) {
 }
 
 // TODO ldc, ldcw, lcd2_w, load constants from constant pool
+func ldc_base(f *rtdt.Frame, indx uint16) {
+	val := f.Method().Class().ConstantPool().GetConstant(indx)
+
+	switch val := val.(type) {
+	case int32:
+		f.OperandStack.PushInt(val)
+	case float32:
+		f.OperandStack.PushFloat(val)
+	case string:
+		// TODO
+		panic("string")
+	case marea.MethodType:
+		// TODO
+		panic("method type")
+	case *marea.MethodHandle:
+		// TODO
+		panic("method handle")
+	default:
+		panic(fmt.Errorf("unsupported type %T", val))
+	}
+}
+
+func ldc(f *rtdt.Frame) {
+	index := uint16(f.ReadU8())
+	ldc_base(f, index)
+}
+
+func ldc_w(f *rtdt.Frame) {
+	index := f.ReadU16()
+	ldc_base(f, index)
+}
+
+func ldc2_w(f *rtdt.Frame) {
+	index := f.ReadU16()
+	val := f.Method().Class().ConstantPool().GetConstant(index)
+
+	switch val := val.(type) {
+	case int64:
+		f.OperandStack.PushLong(val)
+	case float64:
+		f.OperandStack.PushDouble(val)
+	default:
+		panic(fmt.Errorf("unsupported type %T", val))
+	}
+}

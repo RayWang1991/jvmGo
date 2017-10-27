@@ -92,6 +92,10 @@ func (cp ConstantPool) GetInterfaceMethodRef(index uint16) *InterfaceMethodRef {
 	return cp[index].(*InterfaceMethodRef)
 }
 
+func (cp ConstantPool) GetConstant(index uint16) Constant {
+	return cp[index]
+}
+
 // wrapper for methodRef and interfaceMethodRef
 
 type MethodGetter interface {
