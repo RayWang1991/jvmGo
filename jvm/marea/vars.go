@@ -2,6 +2,8 @@ package marea
 
 import (
 	"math"
+	"bytes"
+	"fmt"
 )
 
 type Vars []Slot // fixed-length array
@@ -61,4 +63,21 @@ func (l Vars) GetRef(i uint) *Object {
 // set Slot
 func (l Vars) SetSlot(s *Slot, i uint) {
 	l[i] = *s
+}
+
+func (l Vars) String() string {
+	buf := bytes.Buffer{}
+	buf.WriteByte('[')
+	for i, v := range l {
+		if i > 0 {
+			buf.WriteByte(' ')
+		}
+		if v.Ref != nil {
+			buf.WriteString(v.Ref.String())
+		} else {
+			buf.WriteString(fmt.Sprintf("%d", v.Num))
+		}
+	}
+	buf.WriteByte(']')
+	return buf.String()
 }
