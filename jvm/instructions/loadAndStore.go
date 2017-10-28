@@ -348,7 +348,7 @@ func iastore(f *rtdt.Frame) {
 	if arrayRef == nil {
 		panic(utils.NullPointerException)
 	}
-	arrayLen := arrayRef.ArrayLengthJ()
+	arrayLen := arrayRef.ArrayLengthI()
 	if index < 0 || index+1 > arrayLen {
 		panic(utils.ArrayIndexOutOfBoundsException)
 	}
