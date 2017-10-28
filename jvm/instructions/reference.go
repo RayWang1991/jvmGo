@@ -256,10 +256,12 @@ func multianewarray(frame *rtdt.Frame) {
 		if i < dim-1 {
 			maxL *= int(length)
 		}
-		eleClsArr[dim-1-i] = elec
+		eleClsArr[i] = elec
 		eleCntArr[dim-1-i] = length
 		eleName = eleName[1:]
-		elec = elec.DefineLoader().LoadArrayClass(eleName)
+		if i < dim-1 {
+			elec = elec.DefineLoader().Load(eleName)
+		}
 	}
 
 	// bfs allocate and link all obj arrays, TODO dfs maybe
@@ -278,7 +280,7 @@ func multianewarray(frame *rtdt.Frame) {
 		cls := eleClsArr[i+1]
 		for _, container := range workList {
 			for j := int32(0); j < arrCnt; j++ {
-				a := marea.NewArrayA(cls, nextCnt)
+				a := marea.NewArray(cls, nextCnt)
 				container.ArrGetRefs()[j] = a
 				tempList = append(tempList, a)
 			}
@@ -287,6 +289,7 @@ func multianewarray(frame *rtdt.Frame) {
 		tempList = tempList[:0]
 	}
 
+	//fmt.Printf("result element is %s\n", ret.ArrGetRefs()[0].ArrGetRefs()[0].Class().ClassName())
 	frame.OperandStack.PushRef(ret)
 }
 
