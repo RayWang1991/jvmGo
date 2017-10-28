@@ -39,6 +39,7 @@ func (b *bstLoader) Delegate() marea.ClassLoader {
 }
 
 func (b *bstLoader) Load(n string) *marea.Class {
+	fmt.Printf("Load %s\n", n)
 	if cmn.IsArray(n) {
 		return b.LoadArrayClass(n)
 	} else {
@@ -63,6 +64,7 @@ func (b *bstLoader) Initiate(n string) *marea.Class {
 
 func (b *bstLoader) Define(n string) *marea.Class {
 	cf, err := b.doLoadClassFile(n, b.cp)
+	fmt.Printf("define Class %s\n", n)
 	if cf == nil {
 		panic(utils.ClassNotFoundException)
 	}
@@ -185,13 +187,14 @@ func (b *bstLoader) doLoadArrayClass(n string) *marea.Class { // support load ar
 	c.SetSuperClassName(utils.CLASSNAME_Object)
 	c.SetSuperClass(b.Initiate(utils.CLASSNAME_Object))
 	c.SetInterfaceNames([]string{
-		utils.CLASSNAME_Cloneable, utils.CLASSNAME_Serilizable,
+		utils.CLASSNAME_Cloneable, utils.CLASSNAME_Serializable,
 	})
 	c.SetInterfaces([]*marea.Class{
-		b.Initiate(utils.CLASSNAME_Cloneable), b.Initiate(utils.CLASSNAME_Serilizable),
+		b.Initiate(utils.CLASSNAME_Cloneable), b.Initiate(utils.CLASSNAME_Serializable),
 	})
 
 	elen := cmn.ElementName(n)
+	fmt.Printf("EleN is %s\n", elen)
 	if cmn.IsPrimitiveType(elen) { // the element is primitive type
 		// just create the array class
 		c.SetFlags(cmn.ACC_PUBLIC)
