@@ -259,7 +259,7 @@ func (o *Object) SetSlot(s *Slot, i uint) {
 // debug, TODO
 func (o *Object) String() string {
 	buf := bytes.Buffer{}
-	buf.WriteString(fmt.Sprintf("Type: %s addr: 0x%x", o.class.name, unsafe.Pointer(o)))
+	buf.WriteString(fmt.Sprintf("Type: %q addr: 0x%x ", o.class.name, unsafe.Pointer(o)))
 	if o.class.IsArray() {
 		elen := cmn.ElementName(o.class.name)
 		if cmn.IsPrimitiveType(elen) {
@@ -278,10 +278,20 @@ func (o *Object) String() string {
 				buf.WriteString(fmt.Sprintf("%v ", o.ArrGetFloats()))
 			case "D":
 				buf.WriteString(fmt.Sprintf("%v ", o.ArrGetDoubles()))
-			default:
-				buf.WriteString(fmt.Sprintf("%v ", o.ArrGetRefs()))
 			}
+		} else if cmn.IsArray(elen) {
+			n := o.ArrayLength()
+			elements := o.ArrGetRefs()
+			for i := 0; i < int(n); i++ {
+				if i > 0 {
+					buf.WriteByte(' ')
+				}
+				buf.WriteString(elements[i].String())
+			}
+		} else {
+			buf.WriteString(fmt.Sprintf("%v ", o.ArrGetRefs()))
 		}
+
 	}
 	return buf.String()
 }
