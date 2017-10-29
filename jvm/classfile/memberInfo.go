@@ -69,3 +69,7 @@ func (m *MethodInfo) GetCodeAttr() *AttrCode {
 	}
 	return nil
 }
+
+func (m *MethodInfo) GetAllAttr() []AttrInfo {
+	return m.attrs
+}
