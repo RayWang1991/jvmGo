@@ -256,6 +256,17 @@ func (o *Object) SetSlot(s *Slot, i uint) {
 	l[i] = *s
 }
 
+// quick way to get field
+func (o *Object) GetInsFieldSlotIdx(name string) uint {
+	idx := o.class.GetFieldDirect(name, "").vIdx
+	return idx
+}
+
+func (o *Object) GetInsFieldRef(name string) *Object {
+	i := o.GetInsFieldSlotIdx(name)
+	return o.GetRef(i)
+}
+
 // debug, TODO
 func (o *Object) String() string {
 	buf := bytes.Buffer{}
@@ -291,7 +302,12 @@ func (o *Object) String() string {
 		} else {
 			buf.WriteString(fmt.Sprintf("%v ", o.ArrGetRefs()))
 		}
-
+	} else {
+		if o.class.name == "java/lang/String" {
+			carr := o.GetInsFieldRef("value")
+			str := cmn.UTF16ToUTF8(carr.ArrGetChars())
+			buf.WriteString(fmt.Sprintf("%v ", str))
+		}
 	}
 	return buf.String()
 }
