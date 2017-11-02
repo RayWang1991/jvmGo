@@ -3,6 +3,8 @@ package marea
 import (
 	cf "jvmGo/jvm/classfile"
 	"jvmGo/jvm/utils"
+	"fmt"
+	"unsafe"
 )
 
 func NewFieldRef(cp cf.ConstantPool, i *cf.FieldRefInfo, cls *Class) *FieldRef {
@@ -24,6 +26,8 @@ func (r *FieldRef) GetField() *Field {
 		panic(utils.NoSuchFieldError)
 	}
 	if !isAccessableField(r.from, f) {
+		fmt.Println("illegal access error from ", r.from.name, unsafe.Pointer(r.from), " ", f.name, " ", unsafe.Pointer(f))
+		fmt.Println("name ", r.from.name)
 		panic(utils.IllegalAccessError)
 	}
 	r.f = f
