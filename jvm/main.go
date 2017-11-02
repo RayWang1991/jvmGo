@@ -28,6 +28,6 @@ func startJVM(cmd *Cmd) {
 	if m == nil {
 		println("not found method 	'main'")
 	} else {
-		interpret(m)
+		interpretMain(m, cmd.args)
 	}
 }
