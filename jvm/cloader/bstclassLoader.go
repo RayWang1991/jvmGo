@@ -65,6 +65,7 @@ func (b *bstLoader) Initiate(n string) *marea.Class {
 func (b *bstLoader) Define(n string) *marea.Class {
 	cf, err := b.doLoadClassFile(n, b.cp)
 	fmt.Printf("define Class %s\n", n)
+
 	if cf == nil {
 		panic(utils.ClassNotFoundException)
 	}
@@ -75,9 +76,9 @@ func (b *bstLoader) Define(n string) *marea.Class {
 	if c == nil {
 		panic(utils.ClassFormatError)
 	}
+	cache[n] = c
 	c.SetInitLoader(b)
 	c.SetDefineLoader(b)
-	cache[n] = c
 	b.doInitClass(c)
 	return c
 }
@@ -122,6 +123,7 @@ func (loader *bstLoader) doLoadClassFromFile(file *classfile.ClassFile) *marea.C
 
 var scheduleInit = map[string]bool{}
 
+// call <clint> for class
 func (loader *bstLoader) doInitClass(c *marea.Class) {
 	if c.HasInitiated() || scheduleInit[c.ClassName()] {
 		return
@@ -131,6 +133,7 @@ func (loader *bstLoader) doInitClass(c *marea.Class) {
 		fmt.Printf("\n##INIT CLASS## %s\n", c.ClassName())
 	}
 	t := GetLoaderThread()
+	oldF := t.GetFrameSize()
 	for c != nil {
 		if !c.HasInitiated() && !scheduleInit[c.ClassName()] {
 			scheduleInit[c.ClassName()] = true
@@ -162,8 +165,10 @@ func (loader *bstLoader) doInitClass(c *marea.Class) {
 		}
 	}
 
-	// loop
-	loop(t)
+	// loop if needed
+	if t.GetFrameSize() > oldF {
+		loop(t)
+	}
 }
 
 // for load array class
@@ -182,6 +187,7 @@ func (b *bstLoader) LoadArrayClass(n string) *marea.Class {
 
 func (b *bstLoader) doLoadArrayClass(n string) *marea.Class { // support load array recursively
 	c := &marea.Class{}
+	cache[n] = c
 
 	c.SetClassName(n)
 	c.SetSuperClassName(utils.CLASSNAME_Object)
@@ -211,6 +217,5 @@ func (b *bstLoader) doLoadArrayClass(n string) *marea.Class { // support load ar
 	}
 	c.SetInitLoader(b)
 	c.SetDefineLoader(b)
-	cache[n] = c
 	return c
 }

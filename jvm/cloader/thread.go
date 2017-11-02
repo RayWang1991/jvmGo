@@ -26,7 +26,10 @@ func loop(t *rtdt.Thread) {
 	}
 	var f = t.CurrentFrame()
 	for ; f != nil; f = t.CurrentFrame() {
-		//fmt.Printf("enter func %s %s\n", f.Method().Name(), f.Method().Desc())
+		//fmt.Printf("enter func %s %s defined in %s\n",
+		//	f.Method().Name(),
+		//	f.Method().Desc(),
+		//	f.Method().Class().ClassName())
 		//fmt.Print(classfile.CodeInst(f.Method().Code()).String())
 		code := f.ReadU8() // read next opcode
 		fmt.Printf("pc:%-4d code:%s\n", f.GetPC()-1, cmn.InstStr(code))
