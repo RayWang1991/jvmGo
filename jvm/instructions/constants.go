@@ -113,8 +113,8 @@ func ldc_base(f *rtdt.Frame, indx uint16) {
 	case float32:
 		f.OperandStack.PushFloat(val)
 	case string:
-		// TODO
-		panic("string")
+		strObj := marea.GetJavaString(val, f.Method().Class().DefineLoader())
+		f.OperandStack.PushRef(strObj)
 	case marea.MethodType:
 		// TODO
 		panic("method type")

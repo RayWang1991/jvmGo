@@ -44,6 +44,10 @@ func (t *Thread) CurrentFrame() *Frame {
 	return t.stack.top
 }
 
+func (t *Thread) GetFrameSize() uint32 {
+	return t.stack.currentSize
+}
+
 func (t *Thread) RollBackPCIfNeeded() {
 	f := t.CurrentFrame()
 	if nil == f {

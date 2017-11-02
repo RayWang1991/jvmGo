@@ -69,7 +69,6 @@ func NewClass(file *classfile.ClassFile) *Class {
 		}
 		fmap[fd.name] = fd // TODO, for java language specification only
 	}
-
 	c.insSlotN = uint(len(ifs))
 	vi = 0
 	for _, f := range ifs {
@@ -106,6 +105,9 @@ func (c *Class) SetStatField(f *Field, i uint16) {
 	case "F":
 		v := c.cp.GetFloat(i)
 		c.SetFloat(v, f.vIdx)
+	case "Ljava/lang/String;":
+		raw := c.cp.GetString(i)
+		c.SetRef(GetJavaString(raw, c.defLoader), f.vIdx)
 	default:
 		//  unsupported now
 	}
@@ -224,7 +226,7 @@ func (c *Class) GetMethodDirect(name, desc string) *Method {
 }
 
 func (c *Class) GetFieldDirect(name, desc string) *Field {
-	return c.fieldMap[ndStr(name, desc)]
+	return c.fieldMap[name]
 }
 
 // look up field recursively

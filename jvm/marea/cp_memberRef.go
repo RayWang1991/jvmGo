@@ -1,6 +1,8 @@
 package marea
 
-import cf "jvmGo/jvm/classfile"
+import (
+	cf "jvmGo/jvm/classfile"
+)
 
 type MemberRef struct {
 	ClassRef
