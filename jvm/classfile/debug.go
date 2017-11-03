@@ -37,6 +37,8 @@ func (cf *ClassFile) PrintDebugMessage() {
 		fmt.Print(m.String(fmt.Sprintf("#%d\n", i), cmn.ACC_TYPE_METHOD))
 		if cmn.IsNative(m.accessFlags) {
 			fmt.Println("Native Method")
+		} else if cmn.IsAbstract(m.accessFlags) {
+			fmt.Println("Abstract Method")
 		} else {
 			codeAttr := m.GetCodeAttr()
 			fmt.Print(codeAttr.AttrString())
