@@ -106,18 +106,15 @@ func (b *bstLoader) doLoadClassFile(class string, cp *classpath.ClassPath) (*cla
 		fmt.Fprint(os.Stderr, fmt.Errorf("parsing class file failed: %s", err))
 		return nil, err
 	}
-	if LoaderDebugFlag {
-		cf.PrintDebugMessage()
-	}
-	fmt.Printf("Load Class File %s from %s\n", cf.ClassName(), entry.String())
+
+	cf.PrintDebugMessage()
+	utils.DLoaderPrintf("Load Class File %s from %s\n", cf.ClassName(), entry.String())
 	return cf, nil
 }
 
 func (loader *bstLoader) doLoadClassFromFile(file *classfile.ClassFile) *marea.Class {
 	c := marea.NewClass(file)
-	if LoaderDebugFlag {
-		c.PrintDebugMessage()
-	}
+	c.PrintDebugMessage()
 	return c
 }
 
@@ -129,9 +126,7 @@ func (loader *bstLoader) doInitClass(c *marea.Class) {
 		return
 	}
 	// set up loader thread
-	if InitDebugFlag {
-		fmt.Printf("\n##INIT CLASS## %s\n", c.ClassName())
-	}
+		utils.DInitPrintf("\n##INIT CLASS## %s\n", c.ClassName())
 	t := GetLoaderThread()
 	oldF := t.GetFrameSize()
 	for c != nil {

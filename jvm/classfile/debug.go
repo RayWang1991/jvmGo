@@ -6,6 +6,7 @@ import (
 	"jvmGo/jvm/cmn"
 	"strconv"
 	"strings"
+	"jvmGo/jvm/utils"
 )
 
 func readerPos(cr *ClassReader) string {
@@ -16,32 +17,32 @@ func readerPos(cr *ClassReader) string {
 // TODO using template?
 // TODO debug string for attr info
 func (cf *ClassFile) PrintDebugMessage() {
-	fmt.Printf("magic: %X\n", cf.magic) // magic
-	fmt.Printf("version: %d.%d\n", cf.MajorVersion(), cf.MinorVersion())
-	fmt.Printf("flags: %s\n", cmn.FlagNumToString(cf.accessFlag, cmn.ACC_TYPE_CLASS))
-	fmt.Print(cf.constantPool.String())
-	fmt.Printf("class: %s\n", cf.ClassName())
-	fmt.Printf("super class: %s\n", cf.SuperClassName())
-	fmt.Printf("interfaces(%d items): %s \n", len(cf.interfaces), strings.Join(cf.InterfaceNames(), ","))
+	utils.DLoaderPrintf("magic: %X\n", cf.magic) // magic
+	utils.DLoaderPrintf("version: %d.%d\n", cf.MajorVersion(), cf.MinorVersion())
+	utils.DLoaderPrintf("flags: %s\n", cmn.FlagNumToString(cf.accessFlag, cmn.ACC_TYPE_CLASS))
+	utils.DLoaderPrintf(cf.constantPool.String())
+	utils.DLoaderPrintf("class: %s\n", cf.ClassName())
+	utils.DLoaderPrintf("super class: %s\n", cf.SuperClassName())
+	utils.DLoaderPrintf("interfaces(%d items): %s \n", len(cf.interfaces), strings.Join(cf.InterfaceNames(), ","))
 	// Fields and Methods
-	fmt.Printf("Fields static (%d items):\n", len(cf.staticFields))
+	utils.DLoaderPrintf("Fields static (%d items):\n", len(cf.staticFields))
 	for i, f := range cf.staticFields {
-		fmt.Print(f.String(fmt.Sprintf("#%d\n", i), cmn.ACC_TYPE_FIELD))
+		utils.DLoaderPrintf(f.String(fmt.Sprintf("#%d\n", i), cmn.ACC_TYPE_FIELD))
 	}
-	fmt.Printf("Fields instance (%d items):\n", len(cf.instanceFields))
+	utils.DLoaderPrintf("Fields instance (%d items):\n", len(cf.instanceFields))
 	for i, f := range cf.instanceFields {
-		fmt.Print(f.String(fmt.Sprintf("#%d\n", i), cmn.ACC_TYPE_FIELD))
+		utils.DLoaderPrintf(f.String(fmt.Sprintf("#%d\n", i), cmn.ACC_TYPE_FIELD))
 	}
-	fmt.Printf("Methods(%d items):\n", len(cf.methods))
+	utils.DLoaderPrintf("Methods(%d items):\n", len(cf.methods))
 	for i, m := range cf.methods {
-		fmt.Print(m.String(fmt.Sprintf("#%d\n", i), cmn.ACC_TYPE_METHOD))
+		utils.DLoaderPrintf(m.String(fmt.Sprintf("#%d\n", i), cmn.ACC_TYPE_METHOD))
 		if cmn.IsNative(m.accessFlags) {
-			fmt.Println("Native Method")
+			utils.DLoaderPrintf("Native Method\n")
 		} else if cmn.IsAbstract(m.accessFlags) {
-			fmt.Println("Abstract Method")
+			utils.DLoaderPrintf("Abstract Method\n")
 		} else {
 			codeAttr := m.GetCodeAttr()
-			fmt.Print(codeAttr.AttrString())
+			utils.DLoaderPrintf(codeAttr.AttrString())
 		}
 	}
 }
@@ -94,7 +95,7 @@ func debugString(cp ConstantPool, info ConstInfo) (string, string, string) {
 			"// " + info.ClassInfo(cp).ClassName(cp) + "." + info.NameTypeInfo(cp).String(cp)
 	case *NameTypeInfo:
 		return "NameAndType", debugIndex(uint(info.nameIndex)) + ":" +
-				debugIndex(uint(info.typeIndex)),
+			debugIndex(uint(info.typeIndex)),
 			"// " + info.String(cp)
 	case *MethodHandleInfo: // I don't know how to print it
 		return "MethodHandle", debugIndex(uint(info.refKind)) + ":" + debugIndex(uint(info.refIndex)), ""

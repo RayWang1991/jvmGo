@@ -1,8 +1,8 @@
 package rtdt
 
 import (
-	"fmt"
 	"jvmGo/jvm/marea"
+	"jvmGo/jvm/utils"
 )
 
 type Frame struct {
@@ -17,10 +17,8 @@ type Frame struct {
 
 // new
 func NewFrame(method *marea.Method, t *Thread) *Frame {
-	if ThreadDebugFlag {
-		fmt.Println("\nNew Frame for ", method.Name(), " ", method.Class().ClassName())
-	}
-	//fmt.Println("MaxStack:", method.MaxStackDep())
+	utils.DThreadPrintf("\nNew Frame for %s %s\n", method.Name(), method.Class().ClassName())
+	//utils.DThreadPrintln("MaxStack:", method.MaxStackDep())
 	return &Frame{
 		method:       method,
 		LocalVar:     marea.NewVars(uint(method.MaxLocalVars())),
