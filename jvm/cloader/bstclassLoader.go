@@ -6,7 +6,6 @@ import (
 	"jvmGo/jvm/classpath"
 	"jvmGo/jvm/cmn"
 	"jvmGo/jvm/marea"
-	"jvmGo/jvm/rtdt"
 	"jvmGo/jvm/utils"
 	"os"
 	"strings"
@@ -62,9 +61,9 @@ func (b *bstLoader) Initiate(n string) *marea.Class {
 	}
 }
 
-func (b *bstLoader) Define(n string) *marea.Class {
+func (b *bstLoader) _loadClassDirect(n string) *marea.Class {
 	cf, err := b.doLoadClassFile(n, b.cp)
-	fmt.Printf("define Class %s\n", n)
+	fmt.Printf("load Class %s\n", n)
 
 	if cf == nil {
 		panic(utils.ClassNotFoundException)
@@ -76,9 +75,28 @@ func (b *bstLoader) Define(n string) *marea.Class {
 	if c == nil {
 		panic(utils.ClassFormatError)
 	}
-	cache[n] = c
 	c.SetInitLoader(b)
 	c.SetDefineLoader(b)
+	cache[n] = c
+	return c
+}
+
+func (b *bstLoader) Define(n string) *marea.Class {
+	fmt.Printf("define Class %s\n", n)
+
+	c := b._loadClassDirect(n)
+	t := c
+
+	// load super class, not initiated yet
+	for t.SuperclassName() != "" {
+		s := cache[t.SuperclassName()]
+		if s == nil {
+			s = b._loadClassDirect(t.SuperclassName())
+		}
+		t.SetSuperClass(s)
+		t = s
+	}
+
 	b.doInitClass(c)
 	return c
 }
@@ -107,8 +125,8 @@ func (b *bstLoader) doLoadClassFile(class string, cp *classpath.ClassPath) (*cla
 		return nil, err
 	}
 
-	cf.PrintDebugMessage()
-	utils.DLoaderPrintf("Load Class File %s from %s\n", cf.ClassName(), entry.String())
+	//cf.PrintDebugMessage()
+	utils.DLoaderPrintf("Load Class File %s from %s done\n", cf.ClassName(), entry.String())
 	return cf, nil
 }
 
@@ -120,49 +138,28 @@ func (loader *bstLoader) doLoadClassFromFile(file *classfile.ClassFile) *marea.C
 
 var scheduleInit = map[string]bool{}
 
-// call <clint> for class
 func (loader *bstLoader) doInitClass(c *marea.Class) {
 	if c.HasInitiated() || scheduleInit[c.ClassName()] {
 		return
 	}
-	// set up loader thread
-		utils.DInitPrintf("\n##INIT CLASS## %s\n", c.ClassName())
-	t := GetLoaderThread()
-	oldF := t.GetFrameSize()
-	for c != nil {
-		if !c.HasInitiated() && !scheduleInit[c.ClassName()] {
-			scheduleInit[c.ClassName()] = true
-			m := c.GetClinit()
-			if m != nil {
-				f := rtdt.NewFrame(m, t)
-				// TODO, hack
-				/*
-					if c.ClassName() == "utils.CLASSNAME_System" {
-						// call initializeSystemClass
-						m = c.GetMethodDirect(cmn.METHOD_initializeSystemClass_NAME, cmn.METHOD_initializeSystemClass_DESC)
-						t.PushFrame(rtdt.NewFrame(m, t))
-					}
-				*/
-				t.PushFrame(f)
-				defer func(c *marea.Class) { // TODO, actually init is done earlier
-					c.SetInitiated(true)
-					delete(scheduleInit, c.ClassName())
-				}(c)
-			}
-		} else if c.HasInitiated() {
-			break
-		}
-		s := c.SuperclassName()
-		if s != "" {
-			c = loader.Initiate(c.SuperclassName())
-		} else {
-			c = nil
-		}
+
+	workList := make([]*marea.Class, 0, 16)
+	workList = append(workList, c)
+	scheduleInit[c.ClassName()] = true
+	// super class is defined but not initiated
+	for c = c.Superclass(); c != nil && !c.HasInitiated() && !scheduleInit[c.ClassName()]; c = c.Superclass() {
+		scheduleInit[c.ClassName()] = true
+		workList = append(workList, c)
 	}
 
-	// loop if needed
-	if t.GetFrameSize() > oldF {
-		loop(t)
+	for len(workList) > 0 {
+		todo := workList[len(workList)-1]
+		workList = workList[:len(workList)-1]
+		clinit := todo.GetClinit()
+		if clinit != nil {
+			call(clinit)
+		}
+		todo.SetInitiated(true)
 	}
 }
 
