@@ -11,13 +11,54 @@ import (
 	"strings"
 )
 
-// TODO
-// TODO the loader thread is just memory keeper now, add concurrent logic
+var __bstLoader *bstLoader
 
-func NewBstLoader(cp *classpath.ClassPath) marea.ClassLoader {
-	return &bstLoader{
+func BSTLoader() *bstLoader {
+	return __bstLoader
+}
+
+func NewBstLoader(cp *classpath.ClassPath) *bstLoader {
+	__bstLoader := &bstLoader{
 		id: marea.BootstrapClassLoaderId,
 		cp: cp,
+	}
+	return __bstLoader
+}
+
+func (b *bstLoader) SetUpBase() {
+	b.Load(utils.CLASSNAME_Class)
+	for _, c := range cache {
+		setClzObj(c)
+	}
+	b.Load(utils.CLASSNAME_VM)
+}
+
+// private methods
+// set class object for class
+func setClzObj(c *marea.Class) {
+	clsClass := cache[utils.CLASSNAME_Class]
+	if clsClass != nil {
+		clsObj := marea.NewObject(clsClass)
+		clsObj.SetClzClass(c)
+		c.SetClassObject(clsObj)
+		utils.DLoaderPrintf("[CLASS] set clz obj for %s\n", c.ClassName())
+	}
+}
+
+// adjust fields index basing on inheritance hierarchy
+func adjustFields(c *marea.Class) {
+	// find the highest class having been initiated or having no super class(Object)
+	if c.HasInitiated() || c.Superclass() == nil {
+		return
+	}
+	adjustFields(c.Superclass())
+	istn := c.Superclass().InsSlotNum()
+	c.SetInsSlotNum(c.InsSlotNum() + istn)
+	// the static field is not inherited in data structure, it's compiler who redirect it from lower to higher
+	for _, f := range c.FieldMap() {
+		if !f.IsStatic() {
+			f.SetVarIdx(f.VarIdx() + istn)
+		}
 	}
 }
 
@@ -132,6 +173,7 @@ func (b *bstLoader) doLoadClassFile(class string, cp *classpath.ClassPath) (*cla
 
 func (loader *bstLoader) doLoadClassFromFile(file *classfile.ClassFile) *marea.Class {
 	c := marea.NewClass(file)
+	file.PrintDebugMessage()
 	c.PrintDebugMessage()
 	return c
 }
@@ -154,11 +196,18 @@ func (loader *bstLoader) doInitClass(c *marea.Class) {
 
 	for len(workList) > 0 {
 		todo := workList[len(workList)-1]
+		setClzObj(todo) // notice that classClass may call this, class class may be nil
+		// set Clz obj before call clinit, in case of call ldc in <clinit> (java/lang/Math did)
+		adjustFields(todo) // adjust field index for class, super first
 		workList = workList[:len(workList)-1]
+
+		// call <clinit>
 		clinit := todo.GetClinit()
 		if clinit != nil {
 			call(clinit)
 		}
+
+		// pos init, set class object
 		todo.SetInitiated(true)
 	}
 }
