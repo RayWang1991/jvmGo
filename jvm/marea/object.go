@@ -10,8 +10,9 @@ import (
 
 // An Object represents a reference type (non-array type and array type is different)
 type Object struct {
-	class *Class
+	class *Class // is-a class
 	data  interface{}
+	clz   *Class // for class obj, representing class
 }
 
 func (o *Object) Class() *Class {
@@ -184,6 +185,8 @@ func (o *Object) ArrGetRefs() []*Object {
 // for non array object
 func NewObject(class *Class) *Object {
 	if class.IsArray() {
+		// TODO
+		panic("wrong API")
 	}
 	return &Object{
 		class: class,
@@ -193,9 +196,13 @@ func NewObject(class *Class) *Object {
 
 // for non-array object, data is Vars
 // all bool, byte, char, short, int can use SetInt and GetInt methods
-func (o *Object) SetInt(int int32, index uint) {
+func (o *Object) SetInt(v int32, index uint) {
 	l := o.data.(Vars)
-	l[index].Num = int // notice here we do not clear the ref field
+	if len(l) <= int(index) {
+		//debug
+		fmt.Printf("%s len%v %v, index %d\n", o, len(l), v, index)
+	}
+	l[index].Num = v // notice here we do not clear the ref field
 }
 
 func (o *Object) GetInt(i uint) int32 {
@@ -265,6 +272,15 @@ func (o *Object) GetInsFieldSlotIdx(name string) uint {
 func (o *Object) GetInsFieldRef(name string) *Object {
 	i := o.GetInsFieldSlotIdx(name)
 	return o.GetRef(i)
+}
+
+// class property, for class object use
+func (o *Object) GetClzClass() *Class {
+	return o.clz
+}
+
+func (o *Object) SetClzClass(c *Class) {
+	o.clz = c
 }
 
 // debug, TODO
