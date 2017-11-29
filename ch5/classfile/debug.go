@@ -83,7 +83,7 @@ func debugString(cp ConstantPool, info ConstInfo) (string, string, string) {
 			"// " + info.ClassInfo(cp).ClassName(cp) + "." + info.NameTypeInfo(cp).String(cp)
 	case *NameTypeInfo:
 		return "NameAndType", debugIndex(uint(info.nameIndex)) + ":" +
-				debugIndex(uint(info.typeIndex)),
+			debugIndex(uint(info.typeIndex)),
 			"// " + info.String(cp)
 	case *MethodHandleInfo: // I don't know how to print it
 		return "MethodHandle", debugIndex(uint(info.refKind)) + ":" + debugIndex(uint(info.refIndex)), ""

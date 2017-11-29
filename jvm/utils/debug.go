@@ -1,16 +1,18 @@
 package utils
 
-import "log"
+import (
+	"fmt"
+)
 
 var DebugFlag = true
 
-func Dprintf(fmt string, a ... interface{}) {
+func Dprintf(format string, a ... interface{}) {
 	if DebugFlag {
-		log.Printf(fmt, a ...)
+		fmt.Printf(format, a ...)
 	}
 }
 
-var LoaderDebugFlag = false
+var LoaderDebugFlag = true
 
 var InitDebugFlag = true
 

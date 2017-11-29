@@ -103,3 +103,4 @@ func (cp ConstantPool) GetFloat(index uint16) float32 {
 func (cp ConstantPool) GetDouble(index uint16) float64 {
 	return cp[index].(*DoubleInfo).val
 }
+
