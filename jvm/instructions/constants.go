@@ -115,13 +115,18 @@ func ldc_base(f *rtdt.Frame, indx uint16) {
 	case string:
 		strObj := marea.GetJavaString(val, f.Method().Class().DefineLoader())
 		f.OperandStack.PushRef(strObj)
-	case marea.MethodType:
+	case *marea.ClassRef:
+		c := val.Ref()
+		clzObj := c.GetClassObject()
+		f.OperandStack.PushRef(clzObj)
+	case *marea.MethodType:
 		// TODO
 		panic("method type")
 	case *marea.MethodHandle:
 		// TODO
 		panic("method handle")
 	default:
+		fmt.Println(val)
 		panic(fmt.Errorf("unsupported type %T", val))
 	}
 }
