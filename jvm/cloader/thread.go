@@ -11,10 +11,11 @@ import (
 
 func call(m *marea.Method) {
 	t := rtdt.NewThread(1024)
+	t.PushFrame(rtdt.NewFrame(m,t))
 	utils.DLoaderPrintf("[INIT] start %s cls %s\n", m.Name(), m.Class())
-	for c := t.CurrentFrame(); c != nil; c = c.GetNext() {
-		fmt.Println(c.Method().Class().ClassName())
-	}
+	//for c := t.CurrentFrame(); c != nil; c = c.GetNext() {
+	//	fmt.Println(c.Method().Class().ClassName())
+	//}
 	var f = t.CurrentFrame()
 	for ; f != nil; f = t.CurrentFrame() {
 		code := f.ReadU8() // read next opcode
