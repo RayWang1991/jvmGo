@@ -4,6 +4,8 @@ import (
 	"jvmGo/jvm/marea"
 	"jvmGo/jvm/utils"
 	"math"
+	"bytes"
+	"fmt"
 )
 
 // TODO debug option
@@ -128,4 +130,24 @@ func (o *OperandStack) SetSlot(s *marea.Slot, i uint) {
 
 func (o *OperandStack) GetSize() uint {
 	return o.size
+}
+
+
+func (l *OperandStack) String() string {
+	buf := bytes.Buffer{}
+	buf.WriteString(fmt.Sprintf("Size: %d",l.size))
+	buf.WriteByte('[')
+	for i, v := range l.slots {
+		if i > 0 {
+			buf.WriteByte(',')
+			buf.WriteByte(' ')
+		}
+		if v.Ref != nil {
+			buf.WriteString(v.Ref.String())
+		} else {
+			buf.WriteString(fmt.Sprintf("%d", v.Num))
+		}
+	}
+	buf.WriteByte(']')
+	return buf.String()
 }
