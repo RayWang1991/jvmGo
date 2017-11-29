@@ -28,8 +28,10 @@ type Class struct {
 		stcFld2Inx map[string]int    // field name to slots, static use
 	*/
 
-	insSlotN uint // instance slot num
-	Vars          // static vars, should be initiated with constant attribute
+	insSlotN uint    // instance slot num
+	staSlotN uint    // static vars slot num
+	Vars             // static vars, should be initiated with constant attribute
+	classObj *Object // class object
 
 	// TODO items
 	//innerClasses    []*FromClass
@@ -48,8 +50,8 @@ func NewClass(file *classfile.ClassFile) *Class {
 	//leave super from to loader
 	c.interfaceNames = file.InterfaceNames()
 
-	ifs := file.InstFields() // instance fields
-	sfs := file.StatFields() // static fields
+	ifs := file.InstFields() // instance field slots
+	sfs := file.StatFields() // static field slots
 
 	fmap := make(map[string]*Field, len(sfs)+len(ifs))
 	c.fieldMap = fmap
@@ -69,16 +71,17 @@ func NewClass(file *classfile.ClassFile) *Class {
 		}
 		fmap[fd.name] = fd // TODO, for java language specification only
 	}
-	c.insSlotN = uint(len(ifs))
+	c.staSlotN = vi
 	vi = 0
 	for _, f := range ifs {
 		fd := NewField(c, f)
 		vi += uint(fd.sn)
 		fmap[fd.name] = fd // TODO, for jls only, may use name and desc to unify a field
 	}
+	c.insSlotN = vi
 
 	ms := file.MethodInfo()
-	mmap := make(map[string]*Method, len(ms))
+	mmap := make(map[string]*Method, len(ms)) // method map
 	c.methodMap = mmap
 	//dup name+desc should not be valid
 	// TODO debug
@@ -107,7 +110,11 @@ func (c *Class) SetStatField(f *Field, i uint16) {
 		c.SetFloat(v, f.vIdx)
 	case "Ljava/lang/String;":
 		raw := c.cp.GetString(i)
-		c.SetRef(GetJavaString(raw, c.defLoader), f.vIdx)
+		if c.defLoader == nil {
+			fmt.Println(c.GetClassObject())
+			fmt.Println(c.ClassName())
+		}
+		c.SetRef(GetJavaString(raw, DefaultLoader), f.vIdx)
 	default:
 		//  unsupported now
 	}
@@ -216,8 +223,20 @@ func (c *Class) MethodMap() map[string]*Method {
 	return c.methodMap
 }
 
+func (c *Class) SetInsSlotNum(i uint) {
+	c.insSlotN = i
+}
+
 func (c *Class) InsSlotNum() uint {
 	return c.insSlotN
+}
+
+func (c *Class) SetStaSlotNum(i uint) {
+	c.staSlotN = i
+}
+
+func (c *Class) StaSlotNum() uint {
+	return c.staSlotN
 }
 
 // getter for method
@@ -345,6 +364,15 @@ func (c *Class) IsSuper() bool {
 	return cmn.IsSuper(c.flags)
 }
 
+// class object
+func (c *Class) GetClassObject() *Object {
+	return c.classObj
+}
+
+func (c *Class) SetClassObject(o *Object) {
+	c.classObj = o
+}
+
 // debug
 func (c *Class) PrintDebugMessage() {
 	fmt.Printf("class: %s\n", c.ClassName())
@@ -366,7 +394,7 @@ func (c *Class) PrintDebugMessage() {
 		if m.IsNative() {
 			fmt.Println("^-Native Method-^")
 		} else {
-			// TODO
+			// TODO debug
 			//fmt.Printf("%s",classfile.CodeInst(m.Code()).String())
 		}
 		i++
