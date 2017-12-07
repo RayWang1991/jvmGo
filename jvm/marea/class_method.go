@@ -61,13 +61,13 @@ func (m *Method) parseDesc() {
 	args := []string{}
 	type descState int
 	const (
-		START = iota
+		START  = iota
 		NEEDBR
 	)
 	inArg := true
 	state := START
 	res := 0
-	lst := 1                         // skip '('
+	lst := 1 // skip '('
 	for ptr, c := range m.desc[1:] { // must be ascii bytes,skip '('
 		if c == ')' {
 			inArg = false
@@ -115,6 +115,11 @@ func (m *Method) Code() []byte {
 
 func (m *Method) MaxStackDep() uint16 {
 	return m.maxStackDep
+}
+
+// for native methods
+func (m *Method) SetMaxLocalVars(n uint16) {
+	m.maxLocalVar = n
 }
 
 func (m *Method) MaxLocalVars() uint16 {
