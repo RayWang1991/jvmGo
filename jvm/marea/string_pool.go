@@ -19,10 +19,15 @@ func GetJavaString(key string, loader ClassLoader) *Object {
 		ca[i] = craw[i]
 	}
 
-	s:= NewObject(sClass)
+	s := NewObject(sClass)
 	sf := sClass.GetFieldDirect("value", "[C")
 	s.SetRef(c, sf.VarIdx())
 
 	strPool[key] = s
 	return s
+}
+
+func GetGoString(str *Object) string {
+	cArray := str.GetInsFieldRef("value")
+	return cmn.UTF16ToUTF8(cArray.ArrGetChars())
 }
