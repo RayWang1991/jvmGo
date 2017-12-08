@@ -17,10 +17,14 @@ func NewField(from *Class, info *classfile.FieldInfo) *Field {
 	f.name = info.Name()
 	f.flags = info.AccFlags()
 	f.desc = info.Description()
+	f.sn = info.SlotNum()
 	return f
 }
 
 // setter
+func (f *Field) SetVarIdx(i uint) {
+	f.vIdx = i
+}
 
 // getter
 func (f *Field) VarIdx() uint {

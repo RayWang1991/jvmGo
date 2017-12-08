@@ -8,7 +8,6 @@ import (
 
 type Cmd struct {
 	debugFlag bool
-	//debug
 	versionFlag bool
 	helpFlag    bool
 	cpOption    string

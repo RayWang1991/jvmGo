@@ -17,7 +17,8 @@ type Frame struct {
 
 // new
 func NewFrame(method *marea.Method, t *Thread) *Frame {
-	utils.DThreadPrintf("\nNew Frame for %s %s\n", method.Name(), method.Class().ClassName())
+	utils.DThreadPrintf("\nNew Frame for %s %s maxStack %d\n",
+		method.Name(), method.Class().ClassName(), method.MaxStackDep())
 	//utils.DThreadPrintln("MaxStack:", method.MaxStackDep())
 	return &Frame{
 		method:       method,
@@ -87,4 +88,21 @@ func (c *Frame) ReadI32s(n int) []int32 {
 		arr[i] = c.ReadI32()
 	}
 	return arr
+}
+
+// for hack
+func HackFrame(m *marea.Method, t *Thread, op *OperandStack, l marea.Vars) *Frame {
+	return &Frame{
+		method:       m,
+		thread:       t,
+		OperandStack: op,
+		LocalVar:     l,
+	}
+}
+func (c *Frame) SetMethod(m *marea.Method) {
+	c.method = m
+}
+
+func (c *Frame) SetThread(t *Thread) {
+	c.thread = t
 }

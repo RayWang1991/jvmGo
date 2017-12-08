@@ -126,8 +126,7 @@ func ldc_base(f *rtdt.Frame, indx uint16) {
 		// TODO
 		panic("method handle")
 	default:
-		fmt.Println(val)
-		panic(fmt.Errorf("unsupported type %T", val))
+		//panic(fmt.Errorf("unsupported type %T", val))
 	}
 }
 

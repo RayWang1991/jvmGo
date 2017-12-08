@@ -5,6 +5,7 @@ import (
 	"jvmGo/jvm/instructions"
 	"jvmGo/jvm/marea"
 	"jvmGo/jvm/rtdt"
+	"jvmGo/jvm/cmn"
 )
 
 var mainThread *rtdt.Thread
@@ -14,9 +15,8 @@ func GetMainThread() *rtdt.Thread {
 }
 
 func interpretMain(m *marea.Method, args []string) {
-	thread := rtdt.NewThread(1024)
-	mainThread = thread
-	frame := rtdt.NewFrame(m, thread)
+	thread := mainThread
+	frame := thread.CurrentFrame()
 
 	// create args array
 	loader := m.Class().DefineLoader()
@@ -28,8 +28,8 @@ func interpretMain(m *marea.Method, args []string) {
 	}
 	frame.LocalVar[0].Ref = arrArgs
 
-	thread.PushFrame(frame)
-	defer catchErr(thread)
+	//thread.PushFrame(frame)
+	//defer catchErr(thread)
 	loop(thread)
 }
 func catchErr(t *rtdt.Thread) {
@@ -56,7 +56,8 @@ func loop(t *rtdt.Thread) {
 		//fmt.Print(classfile.CodeInst(f.Method().Code()).String())
 		t.SetPC(f.GetPC()) // back up pc in case of roll back
 		code := f.ReadU8() // read next opcode/**/
-		//fmt.Printf("pc:%-4d code:%s\n", f.GetPC()-1, cmn.InstStr(code))
+		fmt.Printf("[MAIN]pc:%-4d code:%s class:%s method:%s\n",
+			f.GetPC()-1, cmn.InstStr(code), f.Method().Class().ClassName(), f.Method().Name())
 		//fmt.Printf("Vars:%s\n", t.CurrentFrame().LocalVar)
 		fn := instructions.InstFnc(code)
 		fmt.Printf("Vars:%v\n", t.CurrentFrame().LocalVar)

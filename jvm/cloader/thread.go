@@ -11,8 +11,8 @@ import (
 
 func call(m *marea.Method) {
 	t := rtdt.NewThread(1024)
-	t.PushFrame(rtdt.NewFrame(m,t))
-	utils.DLoaderPrintf("[INIT] start %s cls %s\n", m.Name(), m.Class())
+	t.PushFrame(rtdt.NewFrame(m, t))
+	utils.DLoaderPrintf("[INIT] start %s cls %s\n", m.Name(), m.Class().ClassName())
 	//for c := t.CurrentFrame(); c != nil; c = c.GetNext() {
 	//	fmt.Println(c.Method().Class().ClassName())
 	//}
@@ -20,8 +20,8 @@ func call(m *marea.Method) {
 	for ; f != nil; f = t.CurrentFrame() {
 		code := f.ReadU8() // read next opcode
 		//debug
-		fmt.Printf("[LOAD]pc:%-4d code:%s class:%s size:%d\n",
-			f.GetPC()-1, cmn.InstStr(code), f.Method().Class().ClassName(), f.OperandStack.GetSize())
+		fmt.Printf("[LOAD]pc:%-4d code:%s class:%s method:%s\n",
+			f.GetPC()-1, cmn.InstStr(code), f.Method().Class().ClassName(), f.Method().Name())
 		fn := instructions.InstFnc(code)
 		fn(f)
 		//fmt.Printf("Vars:%v\n", t.CurrentFrame().LocalVar)

@@ -107,59 +107,46 @@ func top(t *rtdt.Thread) {
 	if f == nil {
 		return
 	}
-	utils.DIstrPrintf("[re entrer] %s %s\n", f.Method().Name(), f.Method().Class().ClassName())
+	utils.DIstrPrintf("[re enter] %s %s\n", f.Method().Name(), f.Method().Class().ClassName())
 }
 
 // return family
-// debug
 func rreturn(f *rtdt.Frame) {
-	re(f)
 	t := f.Thread()
 	t.PopFrame()
-	top(t)
 }
 
 func areturn(f *rtdt.Frame) {
-	re(f)
 	ret := f.OperandStack.PopRef()
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushRef(ret)
-	top(t)
 }
 
 func ireturn(f *rtdt.Frame) {
-	re(f)
 	ret := f.OperandStack.PopInt()
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushInt(ret)
-	top(t)
 }
 
 func lreturn(f *rtdt.Frame) {
-	re(f)
 	ret := f.OperandStack.PopLong()
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushLong(ret)
-	top(t)
 }
 
 func freturn(f *rtdt.Frame) {
-	re(f)
 	ret := f.OperandStack.PopFloat()
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushFloat(ret)
-	top(t)
 }
 
 func dreturn(f *rtdt.Frame) {
-	re(f)
 	ret := f.OperandStack.PopDouble()
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushDouble(ret)
-	top(t)
 }
