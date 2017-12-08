@@ -68,6 +68,7 @@ func (m *Method) parseDesc() {
 	state := START
 	res := 0
 	lst := 1 // skip '('
+loop:
 	for ptr, c := range m.desc[1:] { // must be ascii bytes,skip '('
 		if c == ')' {
 			inArg = false
@@ -78,8 +79,8 @@ func (m *Method) parseDesc() {
 				lst = ptr
 				state = NEEDBR
 			} else {
-				d := string(c)
 				if inArg {
+					d := string(c)
 					args = append(args, d)
 					if c == 'D' || c == 'L' {
 						res += 2
@@ -87,12 +88,16 @@ func (m *Method) parseDesc() {
 						res++
 					}
 				} else {
-					m.retD = d
+					m.retD = m.desc[ptr+2:]
+					if m.retD != "" && m.retD[len(m.retD)-1] == ';' {
+						m.retD = m.retD[:len(m.retD)-1]
+					}
+					break loop
 				}
 			}
 		case NEEDBR:
 			if c == ';' {
-				d := m.desc[lst:ptr]
+				d := m.desc[lst+1:ptr+1]
 				ptr++
 				if inArg {
 					res++
@@ -108,6 +113,19 @@ func (m *Method) parseDesc() {
 	m.argSlotN = res
 }
 
+// for native methods
+func (m *Method) SetMaxLocalVars(n uint16) {
+	m.maxLocalVar = n
+}
+
+func (m *Method) SetMaxStackDep(n uint16) {
+	m.maxStackDep = n
+}
+
+func (m *Method) SetCode(byteCodes []byte) {
+	m.code = byteCodes
+}
+
 // getters
 func (m *Method) Code() []byte {
 	return m.code
@@ -115,11 +133,6 @@ func (m *Method) Code() []byte {
 
 func (m *Method) MaxStackDep() uint16 {
 	return m.maxStackDep
-}
-
-// for native methods
-func (m *Method) SetMaxLocalVars(n uint16) {
-	m.maxLocalVar = n
 }
 
 func (m *Method) MaxLocalVars() uint16 {
@@ -173,4 +186,18 @@ func (m *Method) IsNative() bool {
 
 func (m *Method) IsAbstract() bool {
 	return cmn.IsAbstract(m.flags)
+}
+
+func HackMethod(class *Class, flags uint16, name, desc string, code []byte) *Method {
+	m := &Method{
+		ClassMember: ClassMember{
+			class: class,
+			name:  name,
+			desc:  desc,
+			flags: flags,
+		},
+		code: code,
+	}
+	m.parseDesc()
+	return m
 }
