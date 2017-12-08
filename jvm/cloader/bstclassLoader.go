@@ -27,10 +27,35 @@ func NewBstLoader(cp *classpath.ClassPath) *bstLoader {
 
 func (b *bstLoader) SetUpBase() {
 	b.Load(utils.CLASSNAME_Class)
+	b.loadPrimitiveClasses()
 	for _, c := range cache {
 		setClzObj(c)
 	}
 	b.Load(utils.CLASSNAME_VM)
+}
+
+func (b *bstLoader) loadPrimitiveClasses() {
+	names := []string{
+		utils.CLASSNAME_prim_boolean,
+		utils.CLASSNAME_prim_byte,
+		utils.CLASSNAME_prim_char,
+		utils.CLASSNAME_prim_short,
+		utils.CLASSNAME_prim_int,
+		utils.CLASSNAME_prim_long,
+		utils.CLASSNAME_prim_float,
+		utils.CLASSNAME_prim_double,
+		utils.CLASSNAME_prim_void,
+	}
+	for _, name0 := range names {
+		c := &marea.Class{
+		}
+		c.SetClassName(name0)
+		c.SetDefineLoader(b)
+		c.SetInitLoader(b)
+		c.SetInitiated(true)
+		cache[name0] = c
+		setClzObj(c)
+	}
 }
 
 // private methods
@@ -88,6 +113,11 @@ func (b *bstLoader) Load(n string) *marea.Class {
 }
 
 func (b *bstLoader) Initiate(n string) *marea.Class {
+	//debug
+	//if (n == "java/util/Hashtable$Entry") {
+	//	fmt.Println()
+	//}
+	fmt.Printf("Initate %s\n", n)
 	if c := cache[n]; c != nil {
 		if c.InitLoader().ID() == b.id {
 			return c
@@ -173,8 +203,10 @@ func (b *bstLoader) doLoadClassFile(class string, cp *classpath.ClassPath) (*cla
 
 func (loader *bstLoader) doLoadClassFromFile(file *classfile.ClassFile) *marea.Class {
 	c := marea.NewClass(file)
-	file.PrintDebugMessage()
-	c.PrintDebugMessage()
+	//file.PrintDebugMessage()
+	if utils.LoaderDebugFlag && utils.DebugFlag{
+		c.PrintDebugMessage()
+	}
 	return c
 }
 
@@ -205,6 +237,8 @@ func (loader *bstLoader) doInitClass(c *marea.Class) {
 		clinit := todo.GetClinit()
 		if clinit != nil {
 			call(clinit)
+		} else {
+			utils.DLoaderPrintf("NO <clinit> for %s\n", todo.ClassName())
 		}
 
 		// pos init, set class object
