@@ -15,3 +15,5 @@ const (
 	BootstrapClassLoaderId = iota
 	UserDefinedClassLoaderId
 )
+
+var DefaultLoader ClassLoader
