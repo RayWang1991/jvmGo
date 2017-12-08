@@ -5,6 +5,7 @@ import (
 	"jvmGo/jvm/classfile"
 	"jvmGo/jvm/cmn"
 	"strings"
+	"jvmGo/jvm/utils"
 )
 
 type Class struct {
@@ -75,6 +76,7 @@ func NewClass(file *classfile.ClassFile) *Class {
 	vi = 0
 	for _, f := range ifs {
 		fd := NewField(c, f)
+		fd.vIdx = vi
 		vi += uint(fd.sn)
 		fmap[fd.name] = fd // TODO, for jls only, may use name and desc to unify a field
 	}
@@ -287,6 +289,7 @@ func (c *Class) LookUpMethodInClass(key string) *Method {
 
 // look up method in interfaces
 func (c *Class) LookUpMethodInInterface(key string) *Method {
+	utils.Dprintf("LookUpMethod Interface %s %s\n", key, c.ClassName())
 	for _, in := range c.interfaces {
 		if m := in.methodMap[key]; m != nil && !(m.IsAbstract() && m.IsPrivate() && m.IsStatic()) {
 			return m
@@ -395,8 +398,13 @@ func (c *Class) PrintDebugMessage() {
 			fmt.Println("^-Native Method-^")
 		} else {
 			// TODO debug
-			//fmt.Printf("%s",classfile.CodeInst(m.Code()).String())
+			fmt.Printf("%s", classfile.CodeInst(m.Code()).String())
 		}
 		i++
 	}
+}
+
+// todo
+func HackClass(name string) *Class {
+	return &Class{name: name}
 }
