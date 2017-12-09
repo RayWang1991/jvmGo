@@ -7,6 +7,7 @@ import (
 	"jvmGo/jvm/utils"
 	"jvmGo/jvm/cmn"
 	"fmt"
+	"jvmGo/ch5/instructions"
 )
 
 func getfield(frame *rtdt.Frame) {
@@ -71,7 +72,6 @@ func getstatic(frame *rtdt.Frame) {
 	default:
 		// [,L...;
 		v := class.GetRef(i)
-		//debug
 		utils.DIstrPrintf("[GET STATIC.REF] %s %s %s %s\n", field.Name(), field.Desc(), class.ClassName(), v)
 		stack.PushRef(v)
 	}
@@ -91,7 +91,6 @@ func putfield(frame *rtdt.Frame) {
 	i := field.VarIdx()
 
 	utils.DIstrPrintf("PUT FIELD %s %s %s index%d\n", field.Name(), field.Desc(), field.Class().ClassName(), i)
-	// debug
 
 	switch field.Desc() {
 	case "B", "C", "I", "S", "Z":
@@ -152,7 +151,6 @@ func putstatic(frame *rtdt.Frame) {
 	default:
 		// [,L...;
 		v := stack.PopRef()
-		//debug
 		utils.DIstrPrintf("[PUT FIELD STATIC.REF] %s %s %s %s\n",
 			field.Name(), field.Desc(), class.ClassName(), v)
 		class.SetRef(v, i)
@@ -346,6 +344,7 @@ func getFieldRefU16(f *rtdt.Frame) *marea.Field {
 
 // invoke family
 func invokevirtual(f *rtdt.Frame) {
+	utils.Dprintf("[INVOKE VIRTUAL]\n")
 	t := f.Thread()
 	// locate the method
 	ind := f.ReadU16()
@@ -388,7 +387,7 @@ func invokevirtual(f *rtdt.Frame) {
 	}
 
 	// call method
-	utils.DIstrPrintf("[INVOKE VIRTUAL], raw %s %s %s, REAL call %s %s %s\n",
+	utils.DIstrPrintf("raw %s %s %s, REAL call %s %s %s\n",
 		m.Name(), m.Desc(), m.Class().ClassName(),
 		realMethod.Name(), realMethod.Desc(), realMethod.Class().ClassName())
 	callMethod(realMethod, t)
@@ -461,10 +460,6 @@ func invokestatic(f *rtdt.Frame) {
 		panic(utils.IncompatibleClassChangeError)
 	}
 
-	if m.Name() == "registerNatives" {
-		utils.DIstrPrintf("\n") // debug??
-	}
-
 	// call method
 	utils.DIstrPrintf("[INVOKE STATIC], %s %s %s\n",
 		m.Name(), m.Desc(), m.Class().ClassName())
@@ -472,6 +467,7 @@ func invokestatic(f *rtdt.Frame) {
 }
 
 func invokeinterface(f *rtdt.Frame) {
+	utils.Dprintf("[INVOKE INTERFACE]\n")
 	t := f.Thread()
 	// locate the method
 	ind := f.ReadU16()
@@ -481,10 +477,8 @@ func invokeinterface(f *rtdt.Frame) {
 	mr := cp.GetInterfaceMethodRef(ind)
 
 	m := mr.GetMethod()
-
-	if m.IsAbstract() {
-		panic(utils.AbstractMethodError)
-	}
+	//debug
+	utils.DIstrPrintf("METHOD NAME %s class %s\n", m.Name(), m.Class().ClassName())
 
 	if m.IsStatic() {
 		panic(utils.IncompatibleClassChangeError)
@@ -493,16 +487,23 @@ func invokeinterface(f *rtdt.Frame) {
 	//pop objref
 	pos := uint(m.ArgSlotNum()) // must be instance method
 	objref := f.OperandStack.GetSlot(uint(pos)).Ref
-	//utils.DIstrPrintln("pos", pos)
-	//utils.DIstrPrintln("obj", objref)
-	//utils.DIstrPrintln("slots", f.OperandStack)
+	utils.DIstrPrintf("pos %d\n", pos)
+	utils.DIstrPrintf("obj %s\n", objref)
+	utils.DIstrPrintf("slots %s\n", f.OperandStack)
 
 	if objref == nil {
 		panic(utils.NullPointerException)
 	}
+	// debug
+	utils.Dprintf("CLASS %s\n", objref.Class().ClassName())
 
 	realMethod := marea.LookUpMethodVirtual(objref.Class(), cc, m.Name(), m.Desc())
 	if realMethod.IsAbstract() {
+		panic(utils.AbstractMethodError)
+	}
+
+	if realMethod.IsAbstract() {
+		fmt.Printf("%s %s\n", realMethod.Class().ClassName(), realMethod.Name())
 		panic(utils.AbstractMethodError)
 	}
 
@@ -511,7 +512,7 @@ func invokeinterface(f *rtdt.Frame) {
 	}
 
 	// call method
-	utils.DIstrPrintf("[INVOKE INTERFACE], raw m %s %s %s, REAL call %s %s %s\n",
+	utils.DIstrPrintf(" raw m %s %s %s, REAL call %s %s %s\n",
 		m.Name(), m.Desc(), m.Class().ClassName(),
 		realMethod.Name(), realMethod.Desc(), realMethod.Class().ClassName())
 	callMethod(realMethod, t)
@@ -523,10 +524,31 @@ func callMethod(m *marea.Method, t *rtdt.Thread) {
 	//debug
 	utils.DIstrPrintf("[CALL real] %s %s\n", m.Name(), m.Class().ClassName())
 	if m.IsNative() {
+		m.SetMaxLocalVars(uint16(m.ArgSlotNum() + 1))
+		m.SetMaxStackDep(16) //TODO, variable
+		// inject return code
+		switch m.RetD()[0] {
+		case 'V':
+			m.SetCode([]byte{instructions.OPCODE_rreturn})
+		case 'D':
+			m.SetCode([]byte{instructions.OPCODE_dreturn})
+		case 'F':
+			m.SetCode([]byte{instructions.OPCODE_freturn})
+		case 'J':
+			m.SetCode([]byte{instructions.OPCODE_lreturn})
+		case 'L', '[':
+			m.SetCode([]byte{instructions.OPCODE_areturn})
+		default:
+			m.SetCode([]byte{instructions.OPCODE_ireturn})
+		}
+		setUpCallingFrame(t, m)
 		lib.CallNative(m, t)
 		return
 	}
+	setUpCallingFrame(t, m)
+}
 
+func setUpCallingFrame(t *rtdt.Thread, m *marea.Method) {
 	f := t.CurrentFrame()
 	nf := rtdt.NewFrame(m, t)
 	t.PushFrame(nf)
