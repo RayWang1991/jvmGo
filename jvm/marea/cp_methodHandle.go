@@ -17,14 +17,15 @@ const (
 
 type MethodHandle struct {
 	kind REF_Kind
-	ref  *MethodRef // TODO, check if there is one, avoiding dumplication
+	ref  *MethodRef // TODO, jvms 5.4.3.5
 }
 
+// TODO, jvms 5.4.3.5
 func NewMethodHandle(cp cf.ConstantPool, info *cf.MethodHandleInfo, cls *Class) *MethodHandle {
 	mh := &MethodHandle{}
 	mh.kind = REF_Kind(info.RefKind())
-	refCp := cp[info.RefIndex()].(*cf.MethodRefInfo)
-	ref := NewMethodRef(cp, refCp, cls)
-	mh.ref = ref
+	//refCp := cp[info.RefIndex()].(*cf.MethodRefInfo)
+	//ref := NewMethodRef(cp, refCp, cls)
+	//mh.ref = ref
 	return mh
 }
