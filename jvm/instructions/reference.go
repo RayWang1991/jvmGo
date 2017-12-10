@@ -298,12 +298,13 @@ func arraylength(frame *rtdt.Frame) {
 
 func instanceof(frame *rtdt.Frame) {
 	obj := frame.OperandStack.PopRef()
+	T := getClassRefU16(frame) // T, test class
+
 	if obj == nil {
 		frame.OperandStack.PushInt(1)
 		return
 	}
 
-	T := getClassRefU16(frame) // T, test class
 	S := obj.Class()           // S, instance class
 	v := marea.IsAssignable(S, T)
 	if v {
@@ -315,11 +316,12 @@ func instanceof(frame *rtdt.Frame) {
 
 func checkcast(frame *rtdt.Frame) {
 	obj := frame.OperandStack.Top().Ref
+	// must consume u16
+	T := getClassRefU16(frame)
 	if obj == nil {
 		return
 	}
 
-	T := getClassRefU16(frame)
 	v := marea.IsAssignable(obj.Class(), T)
 	if !v {
 		panic(utils.ClassCastException)
