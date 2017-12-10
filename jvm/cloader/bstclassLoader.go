@@ -114,9 +114,6 @@ func (b *bstLoader) Load(n string) *marea.Class {
 
 func (b *bstLoader) Initiate(n string) *marea.Class {
 	//debug
-	//if (n == "java/util/Hashtable$Entry") {
-	//	fmt.Println()
-	//}
 	fmt.Printf("Initate %s\n", n)
 	if c := cache[n]; c != nil {
 		if c.InitLoader().ID() == b.id {
@@ -163,13 +160,27 @@ func (b *bstLoader) Define(n string) *marea.Class {
 		s := cache[t.SuperclassName()]
 		if s == nil {
 			s = b._loadClassDirect(t.SuperclassName())
+			b.setUpInterfaces(s)
 		}
 		t.SetSuperClass(s)
 		t = s
 	}
 
+	b.setUpInterfaces(c)
+
 	b.doInitClass(c)
 	return c
+}
+
+func (b *bstLoader) setUpInterfaces(c *marea.Class) {
+	if len(c.InterfaceNames()) > 0 {
+		intfs := make([]*marea.Class, len(c.InterfaceNames()))
+		for _, itfName := range c.InterfaceNames() {
+			itf := b.Load(itfName)
+			intfs = append(intfs, itf)
+		}
+		c.SetInterfaces(intfs)
+	}
 }
 
 func (b *bstLoader) Verify(c *marea.Class) {
@@ -204,7 +215,7 @@ func (b *bstLoader) doLoadClassFile(class string, cp *classpath.ClassPath) (*cla
 func (loader *bstLoader) doLoadClassFromFile(file *classfile.ClassFile) *marea.Class {
 	c := marea.NewClass(file)
 	//file.PrintDebugMessage()
-	if utils.LoaderDebugFlag && utils.DebugFlag{
+	if utils.LoaderDebugFlag && utils.DebugFlag {
 		c.PrintDebugMessage()
 	}
 	return c
@@ -226,6 +237,7 @@ func (loader *bstLoader) doInitClass(c *marea.Class) {
 		workList = append(workList, c)
 	}
 
+	// init super classes
 	for len(workList) > 0 {
 		todo := workList[len(workList)-1]
 		setClzObj(todo) // notice that classClass may call this, class class may be nil
@@ -240,7 +252,6 @@ func (loader *bstLoader) doInitClass(c *marea.Class) {
 		} else {
 			utils.DLoaderPrintf("NO <clinit> for %s\n", todo.ClassName())
 		}
-
 		// pos init, set class object
 		todo.SetInitiated(true)
 	}
