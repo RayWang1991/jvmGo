@@ -12,6 +12,7 @@ import (
 
 func getfield(frame *rtdt.Frame) {
 	// get *Field
+
 	field := getFieldRefU16(frame)
 	if field.IsStatic() {
 		panic(utils.IncompatibleClassChangeError)
@@ -301,7 +302,7 @@ func instanceof(frame *rtdt.Frame) {
 	T := getClassRefU16(frame) // T, test class
 
 	if obj == nil {
-		frame.OperandStack.PushInt(1)
+		frame.OperandStack.PushInt(0)
 		return
 	}
 
@@ -523,7 +524,6 @@ func invokeinterface(f *rtdt.Frame) {
 // TODO invokedynamic
 
 func callMethod(m *marea.Method, t *rtdt.Thread) {
-	//debug
 	utils.DIstrPrintf("[CALL real] %s %s\n", m.Name(), m.Class().ClassName())
 	if m.IsNative() {
 		m.SetMaxLocalVars(uint16(m.ArgSlotNum() + 1))
