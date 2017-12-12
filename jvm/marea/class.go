@@ -174,6 +174,10 @@ func (c *Class) ClassName() string {
 	return c.name
 }
 
+func (c *Class) DotedName() string {
+	return cmn.ToDoted(c.name)
+}
+
 func (c *Class) SuperclassName() string {
 	return c.superClassName
 }

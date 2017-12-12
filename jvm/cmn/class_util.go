@@ -44,3 +44,11 @@ func SimClassName(name string) string {
 	}
 	return name[:i] + name[i+1:len(name)-1]
 }
+
+func ToDoted(str string) string {
+	return strings.Replace(str, "/", ".", -1)
+}
+
+func ToSlash(str string) string {
+	return strings.Replace(str, ".", "/", -1)
+}
