@@ -1,7 +1,6 @@
 package marea
 
 import (
-	"fmt"
 	"jvmGo/jvm/classfile"
 	"jvmGo/jvm/cmn"
 )
@@ -25,9 +24,6 @@ type AttrExceptionEntry struct {
 }
 
 func NewMethod(from *Class, info *classfile.MethodInfo) *Method {
-	if info.Name() == "write" {
-		fmt.Println()
-	}
 	m := &Method{}
 	m.class = from
 	m.name = info.Name()
@@ -82,7 +78,7 @@ loop:
 				if inArg {
 					d := string(c)
 					args = append(args, d)
-					if c == 'D' || c == 'L' {
+					if c == 'D' || c == 'J' {
 						res += 2
 					} else {
 						res++
