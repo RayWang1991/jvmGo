@@ -64,18 +64,33 @@ func (m *Method) parseDesc() {
 	state := START
 	res := 0
 	lst := 1 // skip '('
+
+	n := len(m.desc)
 loop:
-	for ptr, c := range m.desc[1:] { // must be ascii bytes,skip '('
+	for ptr := 1; ptr < n; ptr++ {
+		c := m.desc[ptr]
 		if c == ')' {
 			inArg = false
 		}
 		switch state {
 		case START:
-			if c == 'L' || c == '[' {
-				lst = ptr
-				state = NEEDBR
-			} else {
-				if inArg {
+			if inArg {
+				if c == 'L' { // ref
+					lst = ptr
+					state = NEEDBR
+				} else if c == '[' { // array
+					lst = ptr - 1
+					ptr++
+					for c = m.desc[ptr]; c == '['; ptr++ {
+					}
+					if c != 'L' { // base
+						d := m.desc[lst:ptr+1]
+						args = append(args, d)
+						res++
+					} else {
+						state = NEEDBR
+					}
+				} else { // base
 					d := string(c)
 					args = append(args, d)
 					if c == 'D' || c == 'J' {
@@ -83,23 +98,24 @@ loop:
 					} else {
 						res++
 					}
-				} else {
-					m.retD = m.desc[ptr+2:]
-					if m.retD != "" && m.retD[len(m.retD)-1] == ';' {
-						m.retD = m.retD[:len(m.retD)-1]
-					}
-					break loop
 				}
+			} else {
+				m.retD = m.desc[ptr+1:]
+				if m.retD != "" && m.retD[len(m.retD)-1] == ';' {
+					m.retD = m.retD[:len(m.retD)-1]
+				}
+				break loop
 			}
 		case NEEDBR:
 			if c == ';' {
-				d := m.desc[lst+1:ptr+1]
-				ptr++
+				d := m.desc[lst:ptr] // delete;
+				//ptr++
 				if inArg {
 					res++
 					args = append(args, d)
 				} else {
 					m.retD = d
+					break loop
 				}
 				state = START
 			}
