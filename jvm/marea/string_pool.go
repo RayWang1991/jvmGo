@@ -1,6 +1,8 @@
 package marea
 
-import "jvmGo/jvm/cmn"
+import (
+	"jvmGo/jvm/cmn"
+)
 
 var strPool = make(map[string]*Object)
 
@@ -30,4 +32,14 @@ func GetJavaString(key string, loader ClassLoader) *Object {
 func GetGoString(str *Object) string {
 	cArray := str.GetInsFieldRef("value")
 	return cmn.UTF16ToUTF8(cArray.ArrGetChars())
+}
+
+func GetInternString(javaString *Object) *Object {
+	goStr := GetGoString(javaString)
+	if str, ok := strPool[goStr]; ok {
+		return str
+	} else {
+		strPool[goStr] = javaString
+		return javaString
+	}
 }
