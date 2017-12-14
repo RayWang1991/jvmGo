@@ -327,3 +327,7 @@ func (o *Object) String() string {
 	}
 	return buf.String()
 }
+
+func (o *Object) Data() interface{} {
+	return o.data
+}
