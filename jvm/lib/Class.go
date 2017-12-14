@@ -84,8 +84,10 @@ func getDeclaredFields0(f *rtdt.Frame) {
 	//
 	loader := f.Method().Class().DefineLoader()
 	fieldClass := loader.Load(utils.CLASSNAME_Field)
+	fieldArrClass := loader.Load("[" + utils.CLASSNAME_Field)
 	fieldClzObj := fieldClass.GetClassObject()
-	fieldArray := marea.NewArrayA(fieldClass, int32(len(pickedFields)))
+	//todo bug
+	fieldArray := marea.NewArrayA(fieldArrClass, int32(len(pickedFields)))
 	f.OperandStack.PushRef(fieldArray)
 
 	//Field(
