@@ -215,10 +215,10 @@ var code2FuncMap = map[uint8]func(*rtdt.Frame){
 	cmn.OPCODE_anewarray:   anewarray,
 	cmn.OPCODE_arraylength: arraylength,
 	//cmn.OPCODE_athrow:          athrow,
-	cmn.OPCODE_checkcast:  checkcast,
-	cmn.OPCODE_instanceof: instanceof,
-	//cmn.OPCODE_monitorenter:    monitorenter,
-	//cmn.OPCODE_monitorexit:     monitorexit,
+	cmn.OPCODE_checkcast:    checkcast,
+	cmn.OPCODE_instanceof:   instanceof,
+	cmn.OPCODE_monitorenter: monitorenter,
+	cmn.OPCODE_monitorexit:  monitorexit,
 
 	// Extended
 	//cmn.OPCODE_wide:           wide,

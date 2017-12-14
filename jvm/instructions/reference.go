@@ -306,7 +306,7 @@ func instanceof(frame *rtdt.Frame) {
 		return
 	}
 
-	S := obj.Class()           // S, instance class
+	S := obj.Class() // S, instance class
 	v := marea.IsAssignable(S, T)
 	if v {
 		frame.OperandStack.PushInt(1)
@@ -318,6 +318,7 @@ func instanceof(frame *rtdt.Frame) {
 func checkcast(frame *rtdt.Frame) {
 	obj := frame.OperandStack.Top().Ref
 	// must consume u16
+
 	T := getClassRefU16(frame)
 	if obj == nil {
 		return
@@ -325,6 +326,8 @@ func checkcast(frame *rtdt.Frame) {
 
 	v := marea.IsAssignable(obj.Class(), T)
 	if !v {
+		fmt.Printf("objclz %s T %s obj%s\n",
+			obj.Class().ClassName(), T.ClassName(), obj.Data().([]*marea.Object))
 		panic(utils.ClassCastException)
 	}
 }
@@ -335,6 +338,7 @@ func getClassRefU16(f *rtdt.Frame) *marea.Class {
 	c := m.Class()
 	cp := c.ConstantPool()
 	ref := cp.GetClassRef(idx)
+	fmt.Printf("ref%s\n", ref.ClassName())
 	return ref.Ref()
 }
 
@@ -364,7 +368,8 @@ func invokevirtual(f *rtdt.Frame) {
 		panic(utils.AbstractMethodError)
 	}
 
-	utils.DIstrPrintf("method name:%s desc:%s args:%d ret:%s class:%s\n",
+	//debug
+	fmt.Printf("method name:%s desc:%s args:%d ret:%s class:%s\n",
 		m.Name(), m.Desc(), m.ArgSlotNum(), m.RetD(), m.Class().ClassName())
 	//pop objref
 	pos := uint(m.ArgSlotNum())
@@ -435,7 +440,8 @@ func invokespecial(f *rtdt.Frame) {
 		panic(utils.NullPointerException)
 	}
 	if m.IsProtected() && marea.IsDescandent(cc, m.Class()) &&
-		objref.Class().PackageName() != cc.PackageName() && !marea.IsDescandent(objref.Class(), cc) {
+		m.Class().PackageName() != cc.PackageName() && !marea.IsDescandent(objref.Class(), cc) {
+		//fmt.Printf("objref %s cc %s, callingMethod %s", objref.Class().ClassName(), cc.ClassName(), m.Class().ClassName())
 		panic(utils.IllegalAccessError)
 	}
 
@@ -526,6 +532,7 @@ func invokeinterface(f *rtdt.Frame) {
 func callMethod(m *marea.Method, t *rtdt.Thread) {
 	utils.DIstrPrintf("[CALL real] %s %s\n", m.Name(), m.Class().ClassName())
 	if m.IsNative() {
+		fmt.Printf("[NATIVE] %s %s\n", m.Name(), m.Desc())
 		m.SetMaxLocalVars(uint16(m.ArgSlotNum() + 1))
 		m.SetMaxStackDep(16) //TODO, variable
 		// inject return code
@@ -562,4 +569,14 @@ func setUpCallingFrame(t *rtdt.Thread, m *marea.Method) {
 		slot := f.OperandStack.PopSlot()
 		nf.LocalVar.SetSlot(slot, uint(i))
 	}
+}
+
+// TODO monitorenter
+func monitorenter(f *rtdt.Frame) {
+	f.OperandStack.PopNonnilRef()
+}
+
+// TODO monitorexit
+func monitorexit(f *rtdt.Frame) {
+	f.OperandStack.PopNonnilRef()
 }
