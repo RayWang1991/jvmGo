@@ -19,7 +19,12 @@ const (
 	CLASSNAME_Unsafe           = "sun/misc/Unsafe"
 	CLASSNAME_Reflection       = "sun/reflect/Reflection"
 	CLASSNAME_AccessController = "java/security/AccessController"
+	CLASSNAME_Thread           = "java/lang/Thread"
+	CLASSNAME_ThreadGroup      = "java/lang/ThreadGroup"
+	CLASSNAME_Field            = "java/lang/reflect/Field"
+	CLASSNAME_String           = "java/lang/String"
 
 	METHODNAME_InitializeSystemClass = "initializeSystemClass"
 	METHODNAME_Initialize            = "initialize"
+	METHODNAME_Init                  = "<init>"
 )
