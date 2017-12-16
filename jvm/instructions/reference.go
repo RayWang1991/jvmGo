@@ -24,6 +24,24 @@ func getfield(frame *rtdt.Frame) {
 	utils.DIstrPrintf("GET FIELD %s %s %s\n", field.Name(), field.Desc(), field.Class().ClassName())
 
 	i := field.VarIdx()
+	//debug
+	if frame.Method().Name() == "getType" {
+		fmt.Printf("GET FIELD %s %s %s\n", field.Name(), field.Desc(), field.Class().ClassName())
+		fmt.Printf("field %s i %d\n", field.Name(), i)
+		fmt.Printf("SLots %s\n", obj.Data())
+		for i := uint(0); i < 6; i ++ {
+			ref := obj.GetRef(i)
+			if ref == nil {
+				continue
+			}
+			fmt.Printf("local#%d %s\n", i, ref.Class().ClassName())
+			if ref.Class().ClassName() == "java/lang/String" {
+				fmt.Println(marea.GetGoString(ref))
+			} else if ref.Class().ClassName() == "java/lang/Class" {
+				fmt.Println(ref.GetClzClass().ClassName())
+			}
+		}
+	}
 	switch field.Desc() {
 	case "B", "C", "I", "S", "Z":
 		v := obj.GetInt(i)
@@ -360,17 +378,13 @@ func invokevirtual(f *rtdt.Frame) {
 	mr := cp.GetMethodRef(ind)
 	m := mr.GetMethod()
 
+	//debug
+	fmt.Printf("method name:%s desc:%s args:%d ret:%s class:%s\n",
+		m.Name(), m.Desc(), m.ArgSlotNum(), m.RetD(), m.Class().ClassName())
 	if m.IsStatic() {
 		panic(utils.IncompatibleClassChangeError)
 	}
 
-	if m.IsAbstract() {
-		panic(utils.AbstractMethodError)
-	}
-
-	//debug
-	fmt.Printf("method name:%s desc:%s args:%d ret:%s class:%s\n",
-		m.Name(), m.Desc(), m.ArgSlotNum(), m.RetD(), m.Class().ClassName())
 	//pop objref
 	pos := uint(m.ArgSlotNum())
 	objref := f.OperandStack.GetSlot(uint(pos)).Ref
@@ -390,6 +404,10 @@ func invokevirtual(f *rtdt.Frame) {
 	utils.Dprintf("[REAL] name:%s desc:%s call:%s from:%s\n",
 		m.Name(), m.Desc(), objref.Class().ClassName(), cc.ClassName())
 	realMethod := marea.LookUpMethodVirtual(objref.Class(), cc, m.Name(), m.Desc())
+	if realMethod.IsAbstract() {
+		panic(utils.AbstractMethodError)
+	}
+
 	if realMethod.IsAbstract() {
 		panic(utils.AbstractMethodError)
 	}
@@ -432,6 +450,9 @@ func invokespecial(f *rtdt.Frame) {
 		panic(utils.AbstractMethodError)
 	}
 
+	//debug
+	fmt.Printf("method name:%s desc:%s args:%d ret:%s class:%s\n",
+		m.Name(), m.Desc(), m.ArgSlotNum(), m.RetD(), m.Class().ClassName())
 	//utils.DIstrPrintf("real called method %s %s %s\n", m.Name(), m.Desc(), m.Class().ClassName())
 	pos := m.ArgSlotNum()
 	objref := f.OperandStack.GetSlot(uint(pos)).Ref
@@ -568,6 +589,20 @@ func setUpCallingFrame(t *rtdt.Thread, m *marea.Method) {
 	for ; i >= 0; i-- {
 		slot := f.OperandStack.PopSlot()
 		nf.LocalVar.SetSlot(slot, uint(i))
+	}
+	//debug
+	if m.Name() == utils.METHODNAME_Init && m.Class().ClassName() == "java/util/concurrent/atomic/AtomicReferenceFieldUpdater$AtomicReferenceFieldUpdaterImpl" {
+		fmt.Printf("[INIT] Locals %s\n", nf.LocalVar)
+		local := nf.LocalVar
+		for i := uint(0); i < 5; i ++ {
+			ref := local.GetRef(i)
+			fmt.Printf("local#%d %s\n", i, ref.Class().ClassName())
+			if ref.Class().ClassName() == "java/lang/String" {
+				fmt.Println(marea.GetGoString(ref))
+			} else if ref.Class().ClassName() == "java/lang/Class" {
+				fmt.Println(ref.GetClzClass().ClassName())
+			}
+		}
 	}
 }
 
