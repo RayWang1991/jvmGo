@@ -113,7 +113,6 @@ func (b *bstLoader) Load(n string) *marea.Class {
 }
 
 func (b *bstLoader) Initiate(n string) *marea.Class {
-	//debug
 	fmt.Printf("Initate %s\n", n)
 	if c := cache[n]; c != nil {
 		if c.InitLoader().ID() == b.id {
@@ -131,7 +130,7 @@ func (b *bstLoader) Initiate(n string) *marea.Class {
 
 func (b *bstLoader) _loadClassDirect(n string) *marea.Class {
 	cf, err := b.doLoadClassFile(n, b.cp)
-	fmt.Printf("load Class %s\n", n)
+	fmt.Printf("load Class direct %s\n", n)
 
 	if cf == nil {
 		panic(utils.ClassNotFoundException)
@@ -174,11 +173,17 @@ func (b *bstLoader) Define(n string) *marea.Class {
 
 func (b *bstLoader) setUpInterfaces(c *marea.Class) {
 	if len(c.InterfaceNames()) > 0 {
-		intfs := make([]*marea.Class, len(c.InterfaceNames()))
+		intfs := make([]*marea.Class, 0, len(c.InterfaceNames()))
 		for _, itfName := range c.InterfaceNames() {
 			itf := b.Load(itfName)
 			intfs = append(intfs, itf)
 		}
+		//debug
+		fmt.Printf("[SETUPINTERFACES]for %s", c.ClassName())
+		for _, intf := range intfs {
+			fmt.Printf(" %s", intf.ClassName())
+		}
+		fmt.Println()
 		c.SetInterfaces(intfs)
 	}
 }
@@ -272,10 +277,12 @@ func (b *bstLoader) LoadArrayClass(n string) *marea.Class {
 }
 
 func (b *bstLoader) doLoadArrayClass(n string) *marea.Class { // support load array recursively
+	fmt.Printf("LOAD %s\n", n)
 	c := &marea.Class{}
 	cache[n] = c
 
 	c.SetClassName(n)
+	setClzObj(c)
 	c.SetSuperClassName(utils.CLASSNAME_Object)
 	c.SetSuperClass(b.Initiate(utils.CLASSNAME_Object))
 	c.SetInterfaceNames([]string{
