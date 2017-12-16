@@ -1,10 +1,11 @@
 package marea
 
 type ClassMember struct {
-	class *Class // pointer to from
-	flags uint16
-	name  string
-	desc  string
+	class          *Class // pointer to from
+	flags          uint16
+	name           string
+	desc           string
+	annotationData []byte
 }
 
 // getters
@@ -22,4 +23,8 @@ func (c *ClassMember) Name() string {
 
 func (c *ClassMember) Desc() string {
 	return c.desc
+}
+
+func (c *ClassMember) AnnotationData() []byte {
+	return c.annotationData
 }

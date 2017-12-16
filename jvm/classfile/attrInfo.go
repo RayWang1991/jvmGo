@@ -21,10 +21,10 @@ const (
 	ATTRNAME_LOCALVARIAVLETABLE                  = "LocalVariableTable"
 	ATTRNAME_BOOTSTRAPMETHODS                    = "BootstrapMethods"
 	ATTRNAME_METHODPARAMETERS                    = "MethodParameters"
-	ATTRNAME_STACKMAPTABLE                       = "StackMapTable"                        // unsupported
-	ATTRNAME_LOVALVARIAVLETYPETABLE              = "LocalVariableTypeTable"               // unsupported
-	ATTRNAME_SOURCEDEBUGEXTENTION                = "SourceDebugExtension"                 // unsupported
-	ATTRNAME_RUNTIMEVISIBLEANNOTATIONS           = "RuntimeVisibleAnnotations"            // unsupported
+	ATTRNAME_STACKMAPTABLE                       = "StackMapTable"          // unsupported
+	ATTRNAME_LOVALVARIAVLETYPETABLE              = "LocalVariableTypeTable" // unsupported
+	ATTRNAME_SOURCEDEBUGEXTENTION                = "SourceDebugExtension"   // unsupported
+	ATTRNAME_RUNTIMEVISIBLEANNOTATIONS           = "RuntimeVisibleAnnotations"
 	ATTRNAME_RUNTIMEINVISIBLEANNOTATIONS         = "RuntimeInvisibleAnnotations"          // unsupported
 	ATTRNAME_RUNTIMEVISIBLEPARAMTERANNOTATIONS   = "RuntimeVisibleParameterAnnotations"   // unsupported
 	ATTRNAME_RUNTIMEINVISIBLEPARAMTERANNOTATIONS = "RuntimeInvisibleParameterAnnotations" // unsupported
@@ -64,6 +64,8 @@ func NewAttributeInfo(reader *ClassReader, cp ConstantPool) AttrInfo {
 		return &AttrBootstrapMethods{cp: cp}
 	case ATTRNAME_METHODPARAMETERS:
 		return &AttrMethodParameters{cp: cp}
+	case ATTRNAME_RUNTIMEVISIBLEANNOTATIONS:
+		return &AttrRuntimeVisibleParameterAnnotationsAttributeData{}
 	default:
 		return &AttrUnsupported{}
 	}
