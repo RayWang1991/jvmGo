@@ -74,7 +74,7 @@ func getDeclaredFields0(f *rtdt.Frame) {
 	this := f.LocalVar.GetRef(0)
 	publicOnly := f.LocalVar.GetInt(1) > 0
 	//
-	fieldMap := this.Class().FieldMap()
+	fieldMap := this.GetClzClass().FieldMap()
 	pickedFields := make([]*marea.Field, 0, len(fieldMap))
 	for _, f := range fieldMap {
 		if !publicOnly || publicOnly && f.IsPublic() {
@@ -101,19 +101,24 @@ func getDeclaredFields0(f *rtdt.Frame) {
 
 	fieldConstructor := fieldClass.Method(utils.METHODNAME_Init,
 		"(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/Class;IILjava/lang/String;[B)V")
-	for i, f := range pickedFields {
+	//debug, print all names
+	fmt.Printf("[FIELD NAMES] class %s len%d", this.GetClzClass().ClassName(), len(pickedFields))
+	for i, field := range pickedFields {
 		fieldObj := marea.NewObject(fieldClass)
 		fieldArray.ArrGetRefs()[i] = fieldObj
 
 		ops := rtdt.NewOperandStack(8)
-		ops.PushRef(fieldObj)                              // this
-		ops.PushRef(fieldClzObj)                           // declaring class
-		ops.PushRef(marea.GetJavaString(f.Name(), loader)) // java name
-		ops.PushRef(f.Class().GetClassObject())            // type class
-		ops.PushInt(int32(f.Flags()))                      // modifiers
-		ops.PushInt(int32(f.VarIdx()))                     // slotid
-		ops.PushRef(marea.GetJavaString(f.Desc(), loader)) // singature
-		ops.PushRef(nil)                                   // annotations
+		ops.PushRef(fieldObj)                                  // this
+		ops.PushRef(fieldClzObj)                               // declaring class
+		ops.PushRef(marea.GetJavaString(field.Name(), loader)) // java name
+		//debug
+		typeName := cmn.ToClassName(field.Desc())
+		fmt.Printf("[Type] %s\n", typeName)
+		ops.PushRef(loader.Load(typeName).GetClassObject())    // type class
+		ops.PushInt(int32(field.Flags()))                      // modifiers
+		ops.PushInt(int32(field.VarIdx()))                     // slotid
+		ops.PushRef(marea.GetJavaString(field.Desc(), loader)) // singature
+		ops.PushRef(nil)                                       // annotations
 
 		df := dummyFrame(ops, thread)
 		thread.PushFrame(df)
