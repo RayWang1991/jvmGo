@@ -3,6 +3,7 @@ package instructions
 import (
 	"jvmGo/jvm/rtdt"
 	"jvmGo/jvm/utils"
+	"fmt"
 )
 
 func ggoto(f *rtdt.Frame) {
@@ -76,14 +77,15 @@ func lookupswitch(f *rtdt.Frame) {
 	}
 	key := f.OperandStack.PopInt()
 	// binary search
-	low, high := pairs[0][0], pairs[n-1][0]
-	var mid int32
+	var mid, t, low, high int32
+	low, high = 0, n-1
 	for low <= high {
 		mid = low + (high-low)/2
-		if key == mid {
+		t = pairs[mid][0]
+		if key == t {
 			// hit
 			break
-		} else if mid < key {
+		} else if t < key {
 			low = mid + 1
 		} else {
 			high = mid - 1
@@ -118,6 +120,12 @@ func rreturn(f *rtdt.Frame) {
 
 func areturn(f *rtdt.Frame) {
 	ret := f.OperandStack.PopRef()
+	//debug
+	if f.Method().Name() == "getType" || f.Method().Name() == "getCallerClass" {
+		fmt.Printf("[ref] %v %s representing %s", ret.Class().ClassName(), ret.GetClzClass().ClassName())
+		//} else if (f.Method().Name() == "copyField") {
+		//	fmt.Printf("[FIELD ARET] %v %s representing %s", ret, ret.Class().ClassName(), ret.GetClzClass().ClassName())
+	}
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushRef(ret)
