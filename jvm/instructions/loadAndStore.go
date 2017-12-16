@@ -5,6 +5,7 @@ import (
 	"jvmGo/jvm/marea"
 	"jvmGo/jvm/rtdt"
 	"jvmGo/jvm/utils"
+	"fmt"
 )
 
 // Loads
@@ -104,6 +105,10 @@ func aload(f *rtdt.Frame) {
 	i := f.ReadU8()
 	v := f.LocalVar.GetRef(uint(i))
 	f.OperandStack.PushRef(v)
+	//debug
+	if f.Method().Class().ClassName() == "java/util/concurrent/atomic/AtomicReferenceFieldUpdater$AtomicReferenceFieldUpdaterImpl" {
+		fmt.Printf("i %d Local %s\n", i, f.LocalVar)
+	}
 }
 
 func aload_0(f *rtdt.Frame) {
@@ -415,9 +420,6 @@ func dastore(f *rtdt.Frame) {
 
 func aastore(f *rtdt.Frame) {
 	val := f.OperandStack.PopRef()
-	if val == nil {
-		panic(utils.NullPointerException)
-	}
 	index := f.OperandStack.PopInt()
 	arrayRef := f.OperandStack.PopRef()
 	if arrayRef == nil {
@@ -427,11 +429,14 @@ func aastore(f *rtdt.Frame) {
 	if index < 0 || index+1 > arrayLen {
 		panic(utils.ArrayIndexOutOfBoundsException)
 	}
-	arrC := arrayRef.Class()
-	eleN := cmn.ElementName(arrC.ClassName())
-	eleC := arrC.DefineLoader().Load(eleN) // must not be primitive type
-	if !marea.IsAssignable(val.Class(), eleC) {
-		panic(utils.ArrayStoreException)
+	if val != nil {
+		//assignment check
+		arrC := arrayRef.Class()
+		eleN := cmn.ElementName(arrC.ClassName())
+		eleC := arrC.DefineLoader().Load(eleN) // must not be primitive type
+		if !marea.IsAssignable(val.Class(), eleC) {
+			panic(utils.ArrayStoreException)
+		}
 	}
 	arrayRef.ArrGetRefs()[index] = val
 }
