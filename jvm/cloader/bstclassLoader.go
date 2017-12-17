@@ -31,7 +31,8 @@ func (b *bstLoader) SetUpBase() {
 	for _, c := range cache {
 		setClzObj(c)
 	}
-	b.Load(utils.CLASSNAME_VM)
+	vm := b.Load(utils.CLASSNAME_VM)
+	b.Initiate(vm)
 }
 
 func (b *bstLoader) loadPrimitiveClasses() {
@@ -73,10 +74,16 @@ func setClzObj(c *marea.Class) {
 // adjust fields index basing on inheritance hierarchy
 func adjustFields(c *marea.Class) {
 	// find the highest class having been initiated or having no super class(Object)
-	if c.HasInitiated() || c.Superclass() == nil {
+	if c.HasAdjustedSlots() {
 		return
 	}
-	adjustFields(c.Superclass())
+	defer c.SetAdjustedSlots(true)
+	if c.Superclass() == nil {
+		return
+	}
+	if !c.Superclass().HasAdjustedSlots() {
+		adjustFields(c.Superclass())
+	}
 	istn := c.Superclass().InsSlotNum()
 	c.SetInsSlotNum(c.InsSlotNum() + istn)
 	// the static field is not inherited in data structure, it's compiler who redirect it from lower to higher
@@ -159,15 +166,18 @@ func (b *bstLoader) Define(n string) *marea.Class {
 		s := cache[t.SuperclassName()]
 		if s == nil {
 			s = b._loadClassDirect(t.SuperclassName())
+			setClzObj(s)
 			b.setUpInterfaces(s)
 		}
 		t.SetSuperClass(s)
 		t = s
 	}
 
+	setClzObj(c)
+	adjustFields(c)
 	b.setUpInterfaces(c)
 
-	b.doInitClass(c)
+	//b.doInitClass(c)
 	return c
 }
 
@@ -227,15 +237,15 @@ func (loader *bstLoader) doLoadClassFromFile(file *classfile.ClassFile) *marea.C
 }
 
 func (loader *bstLoader) Initiate(c *marea.Class) {
-
+	if c.HasInitiated() || scheduleInit[c.ClassName()] {
+		return
+	}
+	loader.doInitClass(c)
 }
 
 var scheduleInit = map[string]bool{}
 
 func (loader *bstLoader) doInitClass(c *marea.Class) {
-	if c.HasInitiated() || scheduleInit[c.ClassName()] {
-		return
-	}
 
 	workList := make([]*marea.Class, 0, 16)
 	workList = append(workList, c)
@@ -249,9 +259,10 @@ func (loader *bstLoader) doInitClass(c *marea.Class) {
 	// init super classes
 	for len(workList) > 0 {
 		todo := workList[len(workList)-1]
-		setClzObj(todo) // notice that classClass may call this, class class may be nil
+		// setClzObj(todo) // notice that classClass may call this, class class may be nil
 		// set Clz obj before call clinit, in case of call ldc in <clinit> (java/lang/Math did)
-		adjustFields(todo) // adjust field index for class, super first
+		// set Clz obj move to class define
+		//adjustFields(todo) // adjust field index for class, super first
 		workList = workList[:len(workList)-1]
 
 		// call <clinit>
