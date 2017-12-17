@@ -55,12 +55,6 @@ func ToSlash(str string) string {
 }
 
 func ToClassName(desc string) string {
-	if desc[0] == 'L' {
-		return desc[1:len(desc)-1]
-	}
-	if desc[0] == '[' {
-		return "[" + ToClassName(desc[1:])
-	}
 	if len(desc) == 1 {
 		switch desc[0] {
 		case 'Z':
@@ -79,8 +73,17 @@ func ToClassName(desc string) string {
 			return utils.CLASSNAME_prim_int
 		case 'J':
 			return utils.CLASSNAME_prim_long
+		default:
+			panic("unsupported desc" + desc)
 		}
 	}
+	var i = 0
+	for desc[i] == '[' {
+		i++
+	}
+	if desc[i] == 'L' {
+		return desc[:i] + desc[i+1:len(desc)-1]
+	}
+	return desc
 	// must be
-	panic("unsupported desc" + desc)
 }
