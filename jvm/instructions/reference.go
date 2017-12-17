@@ -14,6 +14,7 @@ func getfield(frame *rtdt.Frame) {
 	// get *Field
 
 	field := getFieldRefU16(frame)
+	frame.Method().Class().DefineLoader().Initiate(field.Class())
 	if field.IsStatic() {
 		panic(utils.IncompatibleClassChangeError)
 	}
@@ -65,6 +66,7 @@ func getfield(frame *rtdt.Frame) {
 func getstatic(frame *rtdt.Frame) {
 	// get *Field
 	field := getFieldRefU16(frame)
+	frame.Method().Class().DefineLoader().Initiate(field.Class())
 	if !field.IsStatic() {
 		panic(utils.IncompatibleClassChangeError)
 	}
@@ -109,6 +111,8 @@ func putfield(frame *rtdt.Frame) {
 	stack := frame.OperandStack
 	i := field.VarIdx()
 
+	//debug
+	fmt.Printf("PUT FIELD %s %s %s index %d\n", field.Name(), field.Desc(), field.Class().ClassName(), i)
 	utils.DIstrPrintf("PUT FIELD %s %s %s index%d\n", field.Name(), field.Desc(), field.Class().ClassName(), i)
 
 	switch field.Desc() {
@@ -178,6 +182,7 @@ func putstatic(frame *rtdt.Frame) {
 
 func new(frame *rtdt.Frame) {
 	class := getClassRefU16(frame)
+	frame.Method().Class().DefineLoader().Initiate(class)
 	utils.DIstrPrintf("[NEW]Get class %s\n", class.ClassName())
 	if class.IsAbstract() || class.IsInterface() || class.IsArray() {
 		panic(utils.InstantiationError)
@@ -207,28 +212,28 @@ func newarray(frame *rtdt.Frame) {
 	loader := frame.Method().Class().InitLoader() // TODO, may be use other loader
 	switch atype {
 	case T_BOOLEAN:
-		c := loader.LoadArrayClass("[Z")
+		c := loader.Load("[Z")
 		obj = marea.NewArrayB(c, length) // use byte array
 	case T_BYTE:
-		c := loader.LoadArrayClass("[B")
+		c := loader.Load("[B")
 		obj = marea.NewArrayB(c, length)
 	case T_CHAR:
-		c := loader.LoadArrayClass("[C")
+		c := loader.Load("[C")
 		obj = marea.NewArrayC(c, length)
 	case T_FLOAT:
-		c := loader.LoadArrayClass("[F")
+		c := loader.Load("[F")
 		obj = marea.NewArrayF(c, length)
 	case T_DOUBLE:
-		c := loader.LoadArrayClass("[D")
+		c := loader.Load("[D")
 		obj = marea.NewArrayD(c, length)
 	case T_SHORT:
-		c := loader.LoadArrayClass("[S")
+		c := loader.Load("[S")
 		obj = marea.NewArrayS(c, length)
 	case T_INT:
-		c := loader.LoadArrayClass("[I")
+		c := loader.Load("[I")
 		obj = marea.NewArrayI(c, length)
 	case T_LONG:
-		c := loader.LoadArrayClass("[J")
+		c := loader.Load("[J")
 		obj = marea.NewArrayJ(c, length)
 	}
 	utils.DIstrPrintf("New Primative array %s \n", obj.Class().ClassName())
@@ -243,7 +248,7 @@ func anewarray(frame *rtdt.Frame) {
 	}
 	elec := getClassRefU16(frame)
 	arrName := "[" + elec.ClassName()
-	arrC := elec.DefineLoader().LoadArrayClass(arrName)
+	arrC := elec.DefineLoader().Load(arrName)
 	obj := marea.NewArrayA(arrC, length)
 	frame.OperandStack.PushRef(obj)
 	utils.DIstrPrintf("Put ref %s\n", arrC.ClassName())
@@ -393,6 +398,9 @@ func invokevirtual(f *rtdt.Frame) {
 	utils.DIstrPrintf("slots %v\n", f.OperandStack)
 
 	if objref == nil {
+		//debug
+		fmt.Printf("Local %s Stack %s\n", f.LocalVar, f.OperandStack)
+
 		panic(utils.NullPointerException)
 	}
 	if m.IsProtected() && marea.IsDescandent(cc, m.Class()) &&
@@ -480,7 +488,13 @@ func invokestatic(f *rtdt.Frame) {
 	cc := f.Method().Class() //current class
 	cp := cc.ConstantPool()
 	mr := cp.GetMethodRef(ind)
-	m := mr.Ref().LookUpMethodDirectly(mr.Name(), mr.Desc())
+	mClz := mr.Ref()
+	f.Method().Class().DefineLoader().Initiate(mClz)
+	m := mClz.LookUpMethodDirectly(mr.Name(), mr.Desc())
+
+	//debug
+	fmt.Printf("method name:%s desc:%s args:%d ret:%s class:%s\n",
+		m.Name(), m.Desc(), m.ArgSlotNum(), m.RetD(), m.Class().ClassName())
 
 	if m == nil {
 		panic(utils.NoSuchMethodError)
