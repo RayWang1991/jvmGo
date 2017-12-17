@@ -14,6 +14,7 @@ func init() {
 	register(utils.CLASSNAME_Class, "getName0", "()Ljava/lang/String;", getName0)
 	register(utils.CLASSNAME_Class, "forName0", "(Ljava/lang/String;ZLjava/lang/ClassLoader;Ljava/lang/Class;)Ljava/lang/Class;", forName0)
 	register(utils.CLASSNAME_Class, "getDeclaredFields0", "(Z)[Ljava/lang/reflect/Field;", getDeclaredFields0)
+	register(utils.CLASSNAME_Class, "isPrimitive", "()Z", isPrimitive)
 }
 
 // private static native boolean desiredAssertionStatus0(Class<?> clazz);
@@ -61,6 +62,7 @@ func forName0(f *rtdt.Frame) {
 
 	loader := f.Method().Class().DefineLoader()
 	class := loader.Load(goName)
+	loader.Initiate(class)
 	clObj := class.GetClassObject()
 	f.OperandStack.PushRef(clObj)
 }
@@ -123,6 +125,22 @@ func getDeclaredFields0(f *rtdt.Frame) {
 		df := dummyFrame(ops, thread)
 		thread.PushFrame(df)
 		callMethod(fieldConstructor, df)
+	}
+}
+
+// public native boolean isPrimitive();
+// ()Z
+func isPrimitive(f *rtdt.Frame) {
+	thisClz := f.LocalVar.GetRef(0)
+	if thisClz == nil {
+		panic(utils.NullPointerException)
+	}
+	name := thisClz.GetClzClass().ClassName()
+	isP := cmn.IsPrimitiveType(name)
+	if isP {
+		f.OperandStack.PushInt(1)
+	} else {
+		f.OperandStack.PushInt(0)
 	}
 }
 
