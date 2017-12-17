@@ -29,14 +29,13 @@ func startJVM(cmd *Cmd) {
 	marea.DefaultLoader = bstLoader
 	bstLoader.SetUpBase()
 	// load class
-	c := bstLoader.Initiate(cmd.class)
+	c := bstLoader.Load(cmd.class)
 	m := c.GetMain()
 	if m == nil {
 		println("not found method 	'main'")
 	} else {
 		mainThread = rtdt.NewThread(1024)
-		mainThread.PushFrame(rtdt.NewFrame(m,mainThread))
+		mainThread.PushFrame(rtdt.NewFrame(m, mainThread))
 		interpretMain(m, cmd.args)
 	}
 }
-

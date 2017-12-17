@@ -106,13 +106,13 @@ func (b *bstLoader) Delegate() marea.ClassLoader {
 func (b *bstLoader) Load(n string) *marea.Class {
 	fmt.Printf("Load %s\n", n)
 	if cmn.IsArray(n) {
-		return b.LoadArrayClass(n)
+		return b.loadArrayClass(n)
 	} else {
-		return b.Initiate(n)
+		return b.loadNormalClass(n)
 	}
 }
 
-func (b *bstLoader) Initiate(n string) *marea.Class {
+func (b *bstLoader) loadNormalClass(n string) *marea.Class {
 	fmt.Printf("Initate %s\n", n)
 	if c := cache[n]; c != nil {
 		if c.InitLoader().ID() == b.id {
@@ -226,6 +226,10 @@ func (loader *bstLoader) doLoadClassFromFile(file *classfile.ClassFile) *marea.C
 	return c
 }
 
+func (loader *bstLoader) Initiate(c *marea.Class) {
+
+}
+
 var scheduleInit = map[string]bool{}
 
 func (loader *bstLoader) doInitClass(c *marea.Class) {
@@ -263,7 +267,7 @@ func (loader *bstLoader) doInitClass(c *marea.Class) {
 }
 
 // for load array class
-func (b *bstLoader) LoadArrayClass(n string) *marea.Class {
+func (b *bstLoader) loadArrayClass(n string) *marea.Class {
 	if c := cache[n]; c != nil {
 		if c.InitLoader().ID() == b.id {
 			return c
@@ -284,12 +288,12 @@ func (b *bstLoader) doLoadArrayClass(n string) *marea.Class { // support load ar
 	c.SetClassName(n)
 	setClzObj(c)
 	c.SetSuperClassName(utils.CLASSNAME_Object)
-	c.SetSuperClass(b.Initiate(utils.CLASSNAME_Object))
+	c.SetSuperClass(b.loadNormalClass(utils.CLASSNAME_Object))
 	c.SetInterfaceNames([]string{
 		utils.CLASSNAME_Cloneable, utils.CLASSNAME_Serializable,
 	})
 	c.SetInterfaces([]*marea.Class{
-		b.Initiate(utils.CLASSNAME_Cloneable), b.Initiate(utils.CLASSNAME_Serializable),
+		b.loadNormalClass(utils.CLASSNAME_Cloneable), b.loadNormalClass(utils.CLASSNAME_Serializable),
 	})
 
 	elen := cmn.ElementName(n)
@@ -298,13 +302,13 @@ func (b *bstLoader) doLoadArrayClass(n string) *marea.Class { // support load ar
 		// just create the array class
 		c.SetFlags(cmn.ACC_PUBLIC)
 	} else if cmn.IsArray(elen) { // the element is still array type
-		elec := b.LoadArrayClass(elen)
+		elec := b.loadArrayClass(elen)
 		c.SetFlags(elec.GetFlags())
 	} else { // for non array Objects
 		// should load the element type first
 		var elec *marea.Class
 		if elec = cache[elen]; elec == nil {
-			elec = b.Initiate(elen) // TODO, for b to init element ?
+			elec = b.loadNormalClass(elen) // TODO, for b to init element ?
 		}
 		c.SetFlags(elec.GetFlags())
 	}
@@ -312,3 +316,5 @@ func (b *bstLoader) doLoadArrayClass(n string) *marea.Class { // support load ar
 	c.SetDefineLoader(b)
 	return c
 }
+
+//TODO seperate init from loading, jvsm 5.5
