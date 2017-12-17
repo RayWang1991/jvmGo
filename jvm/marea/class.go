@@ -17,6 +17,7 @@ type Class struct {
 	interfaceNames []string // string as K
 	interfaces     []*Class
 	hasInited      bool
+	adjustedSlots  bool
 
 	initLoader ClassLoader
 	defLoader  ClassLoader
@@ -256,11 +257,18 @@ func (c *Class) GetFieldDirect(name, desc string) *Field {
 
 // look up field recursively
 func (c *Class) LookUpField(name string) *Field {
+	if c == nil {
+		panic("sdaf")
+	}
 	if f := c.fieldMap[name]; f != nil {
 		return f
 	}
 	if len(c.interfaces) > 0 {
 		for _, infc := range c.interfaces {
+			//debug
+			fmt.Printf("[INTERFACES CLASS] %s\n", c.name)
+			fmt.Printf("[INTERFACES NAMES] %v\n", c.interfaceNames)
+			fmt.Printf("[INTERFACES] %v\n", c.interfaces)
 			if f := infc.LookUpField(name); f != nil {
 				return f
 			}
@@ -342,6 +350,15 @@ func (c *Class) HasInitiated() bool {
 
 func (c *Class) SetInitiated(b bool) {
 	c.hasInited = b
+}
+
+// adjust slots
+func (c *Class) HasAdjustedSlots() bool {
+	return c.adjustedSlots
+}
+
+func (c *Class) SetAdjustedSlots(a bool) {
+	c.adjustedSlots = a
 }
 
 // access methods
