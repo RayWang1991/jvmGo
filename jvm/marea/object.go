@@ -19,7 +19,7 @@ func (o *Object) Class() *Class {
 	return o.class
 }
 
-//
+//todo, for primitive types, the class name is different, see Primitive type in cmn package
 func NewArray(class *Class, length int32) *Object {
 	switch class.name[1] { // first is '['
 	case 'B', 'Z':
@@ -119,6 +119,7 @@ func (o *Object) ArrayLength() int32 {
 }
 
 func (o *Object) ArrayLengthA() int32 {
+	//fmt.Printf("OBJ %s\n", o.class.name)
 	return int32(len(o.data.([]*Object)))
 }
 
@@ -265,7 +266,17 @@ func (o *Object) SetSlot(s *Slot, i uint) {
 
 // quick way to get field
 func (o *Object) GetInsFieldSlotIdx(name string) uint {
-	idx := o.class.GetFieldDirect(name, "").vIdx
+	//debug
+	c := o.class
+	f := c.GetFieldDirect(name, "")
+	if f == nil {
+		fmt.Printf("Class:%s\n", c.name)
+		for k := range c.fieldMap {
+			fmt.Printf("Field:%s\n", k)
+		}
+	}
+	idx := f.vIdx
+	//idx := o.class.GetFieldDirect(name, "").vIdx
 	return idx
 }
 
@@ -322,7 +333,7 @@ func (o *Object) String() string {
 		if o.class.name == "java/lang/String" {
 			carr := o.GetInsFieldRef("value")
 			str := cmn.UTF16ToUTF8(carr.ArrGetChars())
-			buf.WriteString(fmt.Sprintf("%v ", str))
+			buf.WriteString(fmt.Sprintf("%q ", str))
 		}
 	}
 	return buf.String()
@@ -330,4 +341,52 @@ func (o *Object) String() string {
 
 func (o *Object) Data() interface{} {
 	return o.data
+}
+
+func (o *Object) Copy() *Object {
+	co := &Object{
+		class: o.class,
+		clz:   nil, // clz object is unique, should not call copy
+	}
+	switch data := o.data.(type) {
+	case []Slot: // for normal obj
+		cdata := make([]Slot, len(data))
+		copy(cdata, data)
+		co.data = cdata
+	case []*Object:
+		cdata := make([]*Object, len(data))
+		copy(cdata, data)
+		co.data = cdata
+	case []int8:
+		cdata := make([]int8, len(data))
+		copy(cdata, data)
+		co.data = cdata
+	case []int16:
+		cdata := make([]int16, len(data))
+		copy(cdata, data)
+		co.data = cdata
+	case []uint16:
+		cdata := make([]uint16, len(data))
+		copy(cdata, data)
+		co.data = cdata
+	case []int32:
+		cdata := make([]int32, len(data))
+		copy(cdata, data)
+		co.data = cdata
+	case []int64:
+		cdata := make([]int64, len(data))
+		copy(cdata, data)
+		co.data = cdata
+	case []float32:
+		cdata := make([]float32, len(data))
+		copy(cdata, data)
+		co.data = cdata
+	case []float64:
+		cdata := make([]float64, len(data))
+		copy(cdata, data)
+		co.data = cdata
+	default:
+		panic(fmt.Errorf("can not be %T",data))
+	}
+	return co
 }
