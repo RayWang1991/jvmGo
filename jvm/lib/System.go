@@ -12,6 +12,9 @@ import (
 func init() {
 	register(utils.CLASSNAME_System, "initProperties", "(Ljava/util/Properties;)Ljava/util/Properties;", initProperties)
 	register(utils.CLASSNAME_System, "arraycopy", "(Ljava/lang/Object;ILjava/lang/Object;II)V", arraycopy)
+	register(utils.CLASSNAME_System, "setIn0", "(Ljava/io/InputStream;)V", setIn0)
+	register(utils.CLASSNAME_System, "setOut0", "(Ljava/io/PrintStream;)V", setOut0)
+	register(utils.CLASSNAME_System, "setErr0", "(Ljava/io/PrintStream;)V", setErr0)
 }
 
 // private static native Properties initProperties(Properties props);
@@ -123,4 +126,34 @@ func arraycopy(frame *rtdt.Frame) {
 	default:
 		panic("can not be!")
 	}
+}
+
+// private static native void setIn0(InputStream in);
+// (Ljava/io/InputStream;)V
+func setIn0(f *rtdt.Frame) {
+	in := f.LocalVar.GetRef(0)
+	loader := f.Method().Class().DefineLoader()
+	sysC := loader.Load(utils.CLASSNAME_System)
+	inField := sysC.StatField("in")
+	sysC.SetRef(in, inField.VarIdx())
+}
+
+// private static native void setOut0(PrintStream out);
+// (Ljava/io/PrintStream;)V
+func setOut0(f *rtdt.Frame) {
+	out := f.LocalVar.GetRef(0)
+	loader := f.Method().Class().DefineLoader()
+	sysC := loader.Load(utils.CLASSNAME_System)
+	outField := sysC.StatField("out")
+	sysC.SetRef(out, outField.VarIdx())
+}
+
+// private static native void setErr0(PrintStream err);
+// (Ljava/io/PrintStream;)V
+func setErr0(f *rtdt.Frame) {
+	err := f.LocalVar.GetRef(0)
+	loader := f.Method().Class().DefineLoader()
+	sysC := loader.Load(utils.CLASSNAME_System)
+	errField := sysC.StatField("err")
+	sysC.SetRef(err, errField.VarIdx())
 }
