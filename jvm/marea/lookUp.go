@@ -18,8 +18,12 @@ func LookUpMethodVirtual(c, from *Class, name, desc string) *Method {
 		panic(utils.NoSuchMethodError)
 	}
 
+	/*
 	if !isAccessableMethod(from, m) {
+		//debug
+		fmt.Printf("IllegalAccess from %s method %s mclz %s %t\n", from.name, m.name, m.class.name, m.IsPublic())
 		panic(utils.IllegalAccessError)
 	}
+	*/
 	return m
 }
