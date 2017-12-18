@@ -54,6 +54,17 @@ func ToSlash(str string) string {
 	return strings.Replace(str, ".", "/", -1)
 }
 
+var PrimitiveNames = map[string]string{
+	"Z": utils.CLASSNAME_prim_boolean,
+	"B": utils.CLASSNAME_prim_byte,
+	"C": utils.CLASSNAME_prim_char,
+	"S": utils.CLASSNAME_prim_short,
+	"F": utils.CLASSNAME_prim_float,
+	"D": utils.CLASSNAME_prim_double,
+	"I": utils.CLASSNAME_prim_int,
+	"J": utils.CLASSNAME_prim_long,
+}
+
 func ToClassName(desc string) string {
 	if len(desc) == 1 {
 		switch desc[0] {
