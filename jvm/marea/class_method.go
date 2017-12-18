@@ -213,3 +213,24 @@ func HackMethod(class *Class, flags uint16, name, desc string, code []byte) *Met
 	m.parseDesc()
 	return m
 }
+
+func (m *Method) ParameterTypes() []*Class {
+	loader := m.Class().DefineLoader()
+	pts := make([]*Class, 0, len(m.argDs)) // not slot num
+	var clz *Class
+	for _, arg := range m.argDs {
+		clz = loader.Load(cmn.ToClassName(arg))
+		pts = append(pts, clz)
+	}
+	return pts
+}
+
+func (m *Method) ExceptionTypes() []*Class {
+	loader := m.Class().DefineLoader()
+	ets := make([]*Class, 0, len(m.exceptions))
+	for _, ecp := range m.exceptions {
+		clz := loader.Load(cmn.ToClassName(ecp.catchType))
+		ets = append(ets, clz)
+	}
+	return ets
+}
