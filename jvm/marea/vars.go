@@ -29,14 +29,13 @@ func (l Vars) GetFloat(i uint) float32 {
 	return math.Float32frombits(uint32(l[i].Num))
 }
 
-// the index i must be the lower index, big-endian
 func (l Vars) SetLong(long int64, i uint) {
-	l[i].Num = int32(long >> 32)
-	l[i+1].Num = int32(long)
+	l[i+1].Num = int32(long >> 32) // high, i+1
+	l[i].Num = int32(long)         // low, i
 }
 
 func (l Vars) GetLong(i uint) int64 {
-	return int64(l[i].Num)<<32 | int64(uint32(l[i+1].Num))
+	return int64(l[i+1].Num)<<32 | int64(uint32(l[i].Num))
 }
 
 func (l Vars) SetDouble(d float64, i uint) {
@@ -57,6 +56,9 @@ func (l Vars) SetRef(ref *Object, i uint) {
 }
 
 func (l Vars) GetRef(i uint) *Object {
+	if int(i) >= len(l) {
+		fmt.Printf("len %d i %d", len(l), i)
+	}
 	return l[i].Ref
 }
 
