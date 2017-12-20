@@ -26,40 +26,29 @@ func getfield(frame *rtdt.Frame) {
 
 	i := field.VarIdx()
 	//debug
-	if frame.Method().Name() == "getType" {
-		fmt.Printf("GET FIELD %s %s %s\n", field.Name(), field.Desc(), field.Class().ClassName())
-		fmt.Printf("field %s i %d\n", field.Name(), i)
-		fmt.Printf("SLots %s\n", obj.Data())
-		for i := uint(0); i < 6; i ++ {
-			ref := obj.GetRef(i)
-			if ref == nil {
-				continue
-			}
-			fmt.Printf("local#%d %s\n", i, ref.Class().ClassName())
-			if ref.Class().ClassName() == "java/lang/String" {
-				fmt.Println(marea.GetGoString(ref))
-			} else if ref.Class().ClassName() == "java/lang/Class" {
-				fmt.Println(ref.GetClzClass().ClassName())
-			}
-		}
-	}
+	//fmt.Printf("GET FIELD %s %s %s ", field.Name(), field.Desc(), field.Class().ClassName())
 	switch field.Desc() {
 	case "B", "C", "I", "S", "Z":
 		v := obj.GetInt(i)
 		stack.PushInt(v)
+		//fmt.Printf("I %d\n", v)
 	case "D":
 		v := obj.GetDouble(i)
 		stack.PushDouble(v)
+		//fmt.Printf("D %f\n", v)
 	case "J":
 		v := obj.GetLong(i)
 		stack.PushLong(v)
+		//fmt.Printf("J %d\n", v)
 	case "F":
 		v := obj.GetFloat(i)
 		stack.PushFloat(v)
+		//fmt.Printf("F %f\n", v)
 	default:
 		// [,L...;
 		v := obj.GetRef(i)
 		stack.PushRef(v)
+		//fmt.Printf("[L %s\n", v)
 	}
 }
 
@@ -112,7 +101,7 @@ func putfield(frame *rtdt.Frame) {
 	i := field.VarIdx()
 
 	//debug
-	fmt.Printf("PUT FIELD %s %s %s index %d\n", field.Name(), field.Desc(), field.Class().ClassName(), i)
+	//fmt.Printf("PUT FIELD %s %s %s index %d ", field.Name(), field.Desc(), field.Class().ClassName(), i)
 	utils.DIstrPrintf("PUT FIELD %s %s %s index%d\n", field.Name(), field.Desc(), field.Class().ClassName(), i)
 
 	switch field.Desc() {
@@ -120,23 +109,28 @@ func putfield(frame *rtdt.Frame) {
 		v := stack.PopInt()
 		obj := stack.PopNonnilRef()
 		obj.SetInt(v, i)
+		//fmt.Printf("I %d\n", v)
 	case "D":
 		v := stack.PopDouble()
 		obj := stack.PopNonnilRef()
 		obj.SetDouble(v, i)
+		//fmt.Printf("D %f\n", v)
 	case "J":
 		v := stack.PopLong()
 		obj := stack.PopNonnilRef()
 		obj.SetLong(v, i)
+		//fmt.Printf("J %d\n", v)
 	case "F":
 		v := stack.PopFloat()
 		obj := stack.PopNonnilRef()
 		obj.SetFloat(v, i)
+		//fmt.Printf("F %f\n", v)
 	default:
 		// [,L...;
 		v := stack.PopRef()
 		obj := stack.PopNonnilRef()
 		obj.SetRef(v, i)
+		//fmt.Printf("[L %s\n", v)
 	}
 }
 
@@ -317,6 +311,8 @@ func arraylength(frame *rtdt.Frame) {
 	if arref == nil {
 		panic(utils.NullPointerException)
 	}
+	//debug
+	fmt.Printf("arr %s len %d\n", arref, arref.ArrayLength())
 	frame.OperandStack.PushInt(arref.ArrayLength())
 }
 
@@ -384,8 +380,15 @@ func invokevirtual(f *rtdt.Frame) {
 	m := mr.GetMethod()
 
 	//debug
-	fmt.Printf("method name:%s desc:%s args:%d ret:%s class:%s\n",
-		m.Name(), m.Desc(), m.ArgSlotNum(), m.RetD(), m.Class().ClassName())
+	fmt.Printf("method name:%s desc:%s args:%d ret:%s class:%s current %s\n",
+		m.Name(), m.Desc(), m.ArgSlotNum(), m.RetD(), m.Class().ClassName(), cc.ClassName())
+	if cc.ClassName() == "java/lang/reflect/Constructor" {
+		var t = cc.Superclass()
+		for t != nil {
+			fmt.Printf("%s\n", t.ClassName())
+			t = t.Superclass()
+		}
+	}
 	if m.IsStatic() {
 		panic(utils.IncompatibleClassChangeError)
 	}
@@ -403,20 +406,30 @@ func invokevirtual(f *rtdt.Frame) {
 
 		panic(utils.NullPointerException)
 	}
-	if m.IsProtected() && marea.IsDescandent(cc, m.Class()) &&
-		objref.Class().PackageName() != cc.PackageName() && !marea.IsDescandent(objref.Class(), cc) {
-		panic(utils.IllegalAccessError)
+
+	if m.IsStatic() {
+		panic(utils.IncompatibleClassChangeError)
 	}
+	//if m.IsProtected() && marea.IsDescandent(cc, m.Class()) &&
+	//	objref.Class().PackageName() != cc.PackageName() && !marea.IsDescandent(objref.Class(), cc) {
+	//	panic(utils.IllegalAccessError)
+	//}
 
 	//debug
 	utils.Dprintf("[REAL] name:%s desc:%s call:%s from:%s\n",
 		m.Name(), m.Desc(), objref.Class().ClassName(), cc.ClassName())
 	realMethod := marea.LookUpMethodVirtual(objref.Class(), cc, m.Name(), m.Desc())
-	if realMethod.IsAbstract() {
-		panic(utils.AbstractMethodError)
+
+	if realMethod.IsProtected() && marea.IsDescandent(cc, realMethod.Class()) &&
+		objref.Class().PackageName() != cc.PackageName() && !marea.IsDescandent(objref.Class(), cc) {
+		//todo cloneable for array class obj, use native clone in Object class
+		if !cmn.IsArray(objref.Class().ClassName()) || realMethod.Name() != "clone" {
+			fmt.Printf("OBJ ref is %s %s\n", objref.Class().ClassName(), objref.GetClzClass().ClassName())
+			panic(utils.IllegalAccessError)
+		}
 	}
 
-	if realMethod.IsAbstract() {
+	if nil == realMethod || realMethod.IsAbstract() {
 		panic(utils.AbstractMethodError)
 	}
 
@@ -605,18 +618,24 @@ func setUpCallingFrame(t *rtdt.Thread, m *marea.Method) {
 		nf.LocalVar.SetSlot(slot, uint(i))
 	}
 	//debug
-	if m.Name() == utils.METHODNAME_Init && m.Class().ClassName() == "java/util/concurrent/atomic/AtomicReferenceFieldUpdater$AtomicReferenceFieldUpdaterImpl" {
-		fmt.Printf("[INIT] Locals %s\n", nf.LocalVar)
-		local := nf.LocalVar
-		for i := uint(0); i < 5; i ++ {
-			ref := local.GetRef(i)
-			fmt.Printf("local#%d %s\n", i, ref.Class().ClassName())
-			if ref.Class().ClassName() == "java/lang/String" {
-				fmt.Println(marea.GetGoString(ref))
-			} else if ref.Class().ClassName() == "java/lang/Class" {
-				fmt.Println(ref.GetClzClass().ClassName())
-			}
+	f = nf
+	fmt.Printf("stack %s\n locals %s\n", f.OperandStack, f.LocalVar)
+
+	if f.Method().Name() == "verifyMemberAccess" || f.Method().Name() == "lookup2" || f.Method().Name() == "equals" ||
+		f.Method().Name() == "fillInStackTrace" || f.Method().Name() == "mapLibraryName" ||
+		f.Method().Name() == "<init>" && f.Method().Class().ClassName() == "java/lang/Exception" {
+		//debug
+		for c := f; c != nil; c = c.GetNext() {
+			fmt.Printf("CALLS %s.%s()\n", c.Method().Class().ClassName(), c.Method().Name())
 		}
+	}
+	if m.Name() == "equals" {
+		fmt.Printf("[equals] Locals %s\n", nf.LocalVar)
+	}
+
+	//todo hack
+	if f.Method().Name() == "loadLibrary" && f.Method().Class().ClassName() == "java/lang/System" {
+		f.Method().SetCode([]byte{cmn.OPCODE_rreturn})
 	}
 }
 
