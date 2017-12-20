@@ -121,11 +121,7 @@ func rreturn(f *rtdt.Frame) {
 func areturn(f *rtdt.Frame) {
 	ret := f.OperandStack.PopRef()
 	//debug
-	if f.Method().Name() == "getType" || f.Method().Name() == "getCallerClass" {
-		fmt.Printf("[ref] %v %s representing %s", ret.Class().ClassName(), ret.GetClzClass().ClassName())
-		//} else if (f.Method().Name() == "copyField") {
-		//	fmt.Printf("[FIELD ARET] %v %s representing %s", ret, ret.Class().ClassName(), ret.GetClzClass().ClassName())
-	}
+	fmt.Printf("%10s\n", ret)
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushRef(ret)
@@ -133,6 +129,8 @@ func areturn(f *rtdt.Frame) {
 
 func ireturn(f *rtdt.Frame) {
 	ret := f.OperandStack.PopInt()
+	//debug
+	fmt.Printf("%10d\n", ret)
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushInt(ret)
@@ -140,6 +138,8 @@ func ireturn(f *rtdt.Frame) {
 
 func lreturn(f *rtdt.Frame) {
 	ret := f.OperandStack.PopLong()
+	//debug
+	fmt.Printf("%10d\n", ret)
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushLong(ret)
@@ -147,6 +147,8 @@ func lreturn(f *rtdt.Frame) {
 
 func freturn(f *rtdt.Frame) {
 	ret := f.OperandStack.PopFloat()
+	//debug
+	fmt.Printf("%10f\n", ret)
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushFloat(ret)
@@ -154,6 +156,8 @@ func freturn(f *rtdt.Frame) {
 
 func dreturn(f *rtdt.Frame) {
 	ret := f.OperandStack.PopDouble()
+	//debug
+	fmt.Printf("%10f\n", ret)
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushDouble(ret)
