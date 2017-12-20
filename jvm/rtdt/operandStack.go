@@ -58,7 +58,7 @@ func (o *OperandStack) PushLong(l int64) {
 	high := int32(l >> 32)
 	low := int32(l)
 	o.slots[o.size].Num = low
-	o.slots[o.size+1].Num = high // high is on top
+	o.slots[o.size+1].Num = high // high is on later
 	o.size += 2
 }
 
@@ -67,7 +67,7 @@ func (o *OperandStack) PopLong() int64 {
 	s1.Ref = nil
 	s2.Ref = nil
 	o.size -= 2
-	return int64(s1.Num)<<32 | int64(uint32(s2.Num))
+	return int64(s1.Num)<<32 | int64(uint32(s2.Num)) // high is on later
 }
 
 func (o *OperandStack) PushFloat(f float32) {
@@ -87,7 +87,7 @@ func (o *OperandStack) PushDouble(f float64) {
 	high := int32(n >> 32)
 	low := int32(n)
 	o.slots[o.size].Num = low
-	o.slots[o.size+1].Num = high // high is on top
+	o.slots[o.size+1].Num = high // high is on later
 	o.size += 2
 }
 
@@ -135,7 +135,7 @@ func (o *OperandStack) GetSize() uint {
 
 func (l *OperandStack) String() string {
 	buf := bytes.Buffer{}
-	buf.WriteString(fmt.Sprintf("Size: %d",l.size))
+	buf.WriteString(fmt.Sprintf("Size: %d", l.size))
 	buf.WriteByte('[')
 	for i, v := range l.slots {
 		if i > 0 {
