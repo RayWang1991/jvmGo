@@ -39,8 +39,8 @@ func isub(f *rtdt.Frame) {
 }
 
 func lsub(f *rtdt.Frame) {
-	v1 := f.OperandStack.PopLong()
 	v2 := f.OperandStack.PopLong()
+	v1 := f.OperandStack.PopLong()
 	f.OperandStack.PushLong(v1 - v2)
 }
 
