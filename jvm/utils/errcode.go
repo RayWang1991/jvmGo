@@ -20,4 +20,6 @@ const (
 	NegativeArraySizeException     = "java.lang.NegativeArraySizeException"
 	ArrayIndexOutOfBoundsException = "java.lang.ArrayIndexOutOfBoundsException"
 	ArrayStoreException            = "java.lang.ArrayStoreException"
+	CloneNotSupportedException     = "java.lang.CloneNotSupportedException"
+	IllegalArgumentException       = "java.lang.IllegalArgumentException"
 )
