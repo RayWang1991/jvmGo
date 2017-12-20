@@ -6,6 +6,7 @@ import (
 	"jvmGo/jvm/utils"
 	"jvmGo/jvm/marea"
 	"fmt"
+	"encoding/binary"
 )
 
 func init() {
@@ -16,6 +17,9 @@ func init() {
 	register(utils.CLASSNAME_Unsafe, "compareAndSwapObject", "(Ljava/lang/Object;JLjava/lang/Object;Ljava/lang/Object;)Z", compareAndSwapObject)
 	register(utils.CLASSNAME_Unsafe, "compareAndSwapInt", "(Ljava/lang/Object;JII)Z", compareAndSwapInt)
 	register(utils.CLASSNAME_Unsafe, "getIntVolatile", "(Ljava/lang/Object;J)I", getIntVolatile)
+	register(utils.CLASSNAME_Unsafe, "allocateMemory", "(J)J", allocateMemory)
+	register(utils.CLASSNAME_Unsafe, "putLong", "(JJ)V", putLong)
+	register(utils.CLASSNAME_Unsafe, "getByte", "(J)B", getByte)
 }
 
 // public native int arrayBaseOffset(Class<?> type);
@@ -135,4 +139,79 @@ func getIntVolatile(f *rtdt.Frame) {
 	default:
 		panic(fmt.Errorf("getIntVolatile, wrong type %T!", fields))
 	}
+}
+
+// todo
+const _offset = int64(10086)
+
+var _address = _offset
+var mem = make([]byte, 2048) // mem is a continuos mem chunk, start size is 2048
+
+func _memIdx(addr int64) int64 {
+	return addr - _offset
+}
+
+func _addr(idx int64) int64 {
+	return idx + _offset
+}
+
+// todo test !
+// public native long allocateMemory (long var1);
+// (J)J
+func allocateMemory(f *rtdt.Frame) {
+	size := f.LocalVar.GetLong(1)
+	addr := _address
+	_address += size
+
+	// check if there is enough mem
+	cursize := _memIdx(_address) + 1
+	if cursize > int64(len(mem)) {
+
+		newLen := int64(2 * len(mem))
+		if cursize > newLen {
+			newLen = cursize * 2
+		}
+		// reallocate and copy
+		t := mem
+		mem = make([]byte, newLen)
+		copy(mem, t)
+	}
+
+	f.OperandStack.PushLong(addr)
+}
+
+// public native void putLong(long var1, long var3);
+// (JJ)V
+func putLong(f *rtdt.Frame) {
+	addr := f.LocalVar.GetLong(1)
+	value := f.LocalVar.GetLong(3)
+	idx := _memIdx(addr)
+	fmt.Printf("slot1 %d slot2 %d addr is %d idx is %d\n", f.LocalVar.GetInt(1), f.LocalVar.GetInt(2), addr, idx)
+	bytes := mem[idx:]
+
+	if len(bytes) < 8 {
+		panic(utils.IllegalArgumentException) //TODO
+	}
+	binary.BigEndian.PutUint64(bytes, uint64(value))
+}
+
+// public native byte getByte(long var1);
+// (J)B
+func getByte(f *rtdt.Frame) {
+	addr := f.LocalVar.GetLong(1)
+	idx := _memIdx(addr)
+	bytes := mem[idx:]
+
+	if len(bytes) < 1 {
+		panic(utils.IllegalArgumentException) //TODO
+	}
+
+	b := int32(bytes[0])
+	f.OperandStack.PushInt(b)
+}
+
+// public native void freeMemory(long var1);
+// (J)V
+func freeMemory(f *rtdt.Frame){
+	//todo
 }
