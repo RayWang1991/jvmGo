@@ -253,7 +253,14 @@ func getDeclaredConstructores0(f *rtdt.Frame) {
 		ops.PushInt(int32(0))            // todo slotid
 		ops.PushRef(nil)                 // todo signature unsupported
 		ops.PushRef(nil)                 // todo anotations
-		ops.PushRef(nil)                 // todo parameterAnnotations
+		desc := cons.Desc()
+		bs := []byte(desc)
+		descBA := marea.NewArrayB(loader.Load("[B"), int32(len(bs)))
+		is := descBA.ArrGetBytes()
+		for j, b := range bs {
+			is[j] = int8(b)
+		}
+		ops.PushRef(descBA) // todo parameterAnnotations, record desc here
 
 		df := dummyFrame(ops, thread)
 		thread.PushFrame(df)
