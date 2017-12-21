@@ -63,11 +63,11 @@ func (o *OperandStack) PushLong(l int64) {
 }
 
 func (o *OperandStack) PopLong() int64 {
-	s1, s2 := &o.slots[o.size-1], &o.slots[o.size-2]
-	s1.Ref = nil
-	s2.Ref = nil
+	low, high := &o.slots[o.size-2], &o.slots[o.size-1]
+	low.Ref = nil
+	high.Ref = nil
 	o.size -= 2
-	return int64(s1.Num)<<32 | int64(uint32(s2.Num)) // high is on later
+	return int64(high.Num)<<32 | int64(uint32(low.Num)) // high is on later
 }
 
 func (o *OperandStack) PushFloat(f float32) {
@@ -86,17 +86,17 @@ func (o *OperandStack) PushDouble(f float64) {
 	n := math.Float64bits(f)
 	high := int32(n >> 32)
 	low := int32(n)
-	o.slots[o.size].Num = low
-	o.slots[o.size+1].Num = high // high is on later
+	o.slots[o.size].Num = low    // low i
+	o.slots[o.size+1].Num = high // high i + 1
 	o.size += 2
 }
 
 func (o *OperandStack) PopDouble() float64 {
-	s1, s2 := &o.slots[o.size-1], &o.slots[o.size-2]
-	s1.Ref = nil
-	s2.Ref = nil
+	low, high := &o.slots[o.size-2], &o.slots[o.size-1]
+	low.Ref = nil
+	high.Ref = nil
 	o.size -= 2
-	return math.Float64frombits(uint64(s1.Num)<<32 | uint64(uint32(s2.Num)))
+	return math.Float64frombits(uint64(high.Num)<<32 | uint64(uint32(low.Num)))
 }
 
 // return the top slots.Slot, do not pop
@@ -131,7 +131,6 @@ func (o *OperandStack) SetSlot(s *marea.Slot, i uint) {
 func (o *OperandStack) GetSize() uint {
 	return o.size
 }
-
 
 func (l *OperandStack) String() string {
 	buf := bytes.Buffer{}

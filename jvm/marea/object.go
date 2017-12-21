@@ -155,6 +155,14 @@ func (o *Object) ArrGetBytes() []int8 {
 	return o.data.([]int8)
 }
 
+// []int8 to byte[]
+func (o *Object) ArrGetGoBytes() []byte {
+	jBytes := o.data.([]int8)
+	ptr := unsafe.Pointer(&jBytes)
+	goBytes := *(*[]byte)(ptr)
+	return goBytes
+}
+
 func (o *Object) ArrGetChars() []uint16 {
 	return o.data.([]uint16)
 }
@@ -199,10 +207,6 @@ func NewObject(class *Class) *Object {
 // all bool, byte, char, short, int can use SetInt and GetInt methods
 func (o *Object) SetInt(v int32, index uint) {
 	l := o.data.(Vars)
-	if len(l) <= int(index) {
-		//debug
-		fmt.Printf("%s len%v %v, index %d\n", o, len(l), v, index)
-	}
 	l[index].Num = v // notice here we do not clear the ref field
 }
 
@@ -224,26 +228,26 @@ func (o *Object) GetFloat(i uint) float32 {
 // the index i must be the lower index, big-endian
 func (o *Object) SetLong(long int64, i uint) {
 	l := o.data.(Vars)
-	l[i].Num = int32(long >> 32)
-	l[i+1].Num = int32(long)
+	l[i+1].Num = int32(long >> 32) // high, i + 1
+	l[i].Num = int32(long)         // low, i
 }
 
 func (o *Object) GetLong(i uint) int64 {
 	l := o.data.(Vars)
-	return int64(l[i].Num)<<32 | int64(uint32(l[i+1].Num))
+	return int64(l[i+1].Num)<<32 | int64(uint32(l[i].Num))
 }
 
 func (o *Object) SetDouble(d float64, i uint) {
 	l := o.data.(Vars)
 	long := math.Float64bits(d)
-	l[i].Num = int32(long >> 32)
-	l[i+1].Num = int32(long)
+	l[i+1].Num = int32(long >> 32) // high, i + 1
+	l[i].Num = int32(long)         // low, i
 }
 
 func (o *Object) GetDouble(i uint) float64 {
 	l := o.data.(Vars)
-	high := uint64(l[i].Num) << 32
-	low := uint64(uint32(l[i+1].Num))
+	high := uint64(l[i+1].Num) << 32
+	low := uint64(uint32(l[i].Num))
 	return math.Float64frombits(high | low)
 }
 
@@ -334,6 +338,9 @@ func (o *Object) String() string {
 			carr := o.GetInsFieldRef("value")
 			str := cmn.UTF16ToUTF8(carr.ArrGetChars())
 			buf.WriteString(fmt.Sprintf("%q ", str))
+		} else if o.class.name == "java/lang/Class" {
+			clz := o.GetClzClass()
+			buf.WriteString(fmt.Sprintf("%q ", clz.name))
 		}
 	}
 	return buf.String()
@@ -349,8 +356,8 @@ func (o *Object) Copy() *Object {
 		clz:   nil, // clz object is unique, should not call copy
 	}
 	switch data := o.data.(type) {
-	case []Slot: // for normal obj
-		cdata := make([]Slot, len(data))
+	case Vars: // for normal obj
+		cdata := make(Vars, len(data))
 		copy(cdata, data)
 		co.data = cdata
 	case []*Object:
@@ -386,7 +393,7 @@ func (o *Object) Copy() *Object {
 		copy(cdata, data)
 		co.data = cdata
 	default:
-		panic(fmt.Errorf("can not be %T",data))
+		panic(fmt.Errorf("can not be %T", data))
 	}
 	return co
 }
