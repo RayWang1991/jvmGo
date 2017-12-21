@@ -3,7 +3,6 @@ package instructions
 import (
 	"jvmGo/jvm/rtdt"
 	"jvmGo/jvm/utils"
-	"fmt"
 )
 
 func ggoto(f *rtdt.Frame) {
@@ -121,7 +120,7 @@ func rreturn(f *rtdt.Frame) {
 func areturn(f *rtdt.Frame) {
 	ret := f.OperandStack.PopRef()
 	//debug
-	fmt.Printf("%10s\n", ret)
+	utils.DIstrPrintf("%10s\n", ret)
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushRef(ret)
@@ -130,7 +129,7 @@ func areturn(f *rtdt.Frame) {
 func ireturn(f *rtdt.Frame) {
 	ret := f.OperandStack.PopInt()
 	//debug
-	fmt.Printf("%10d\n", ret)
+	utils.DIstrPrintf("%10d\n", ret)
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushInt(ret)
@@ -139,7 +138,7 @@ func ireturn(f *rtdt.Frame) {
 func lreturn(f *rtdt.Frame) {
 	ret := f.OperandStack.PopLong()
 	//debug
-	fmt.Printf("%10d\n", ret)
+	utils.DIstrPrintf("%10d\n", ret)
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushLong(ret)
@@ -148,7 +147,7 @@ func lreturn(f *rtdt.Frame) {
 func freturn(f *rtdt.Frame) {
 	ret := f.OperandStack.PopFloat()
 	//debug
-	fmt.Printf("%10f\n", ret)
+	utils.DIstrPrintf("%10f\n", ret)
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushFloat(ret)
@@ -157,7 +156,7 @@ func freturn(f *rtdt.Frame) {
 func dreturn(f *rtdt.Frame) {
 	ret := f.OperandStack.PopDouble()
 	//debug
-	fmt.Printf("%10f\n", ret)
+	utils.DIstrPrintf("%10f\n", ret)
 	t := f.Thread()
 	t.PopFrame()
 	t.CurrentFrame().OperandStack.PushDouble(ret)

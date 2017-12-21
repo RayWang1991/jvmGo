@@ -6,6 +6,7 @@ import (
 	"jvmGo/jvm/marea"
 	"jvmGo/jvm/rtdt"
 	"jvmGo/jvm/cmn"
+	"jvmGo/jvm/utils"
 )
 
 var mainThread *rtdt.Thread
@@ -56,12 +57,12 @@ func loop(t *rtdt.Thread) {
 		//fmt.Print(classfile.CodeInst(f.Method().Code()).String())
 		t.SetPC(f.GetPC()) // back up pc in case of roll back
 		code := f.ReadU8() // read next opcode/**/
-		fmt.Printf("[MAIN]pc:%-4d code:%s class:%s method:%s\n",
+		utils.DMainPrintf("[MAIN]pc:%-4d code:%s class:%s method:%s\n",
 			f.GetPC()-1, cmn.InstStr(code), f.Method().Class().ClassName(), f.Method().Name())
 		//fmt.Printf("Vars:%s\n", t.CurrentFrame().LocalVar)
 		fn := instructions.InstFnc(code)
-		fmt.Printf("Vars:%v\n", t.CurrentFrame().LocalVar)
-		fmt.Printf("OperandStack:%v\n", t.CurrentFrame().OperandStack)
+		//fmt.Printf("Vars:%v\n", t.CurrentFrame().LocalVar)
+		//fmt.Printf("OperandStack:%v\n", t.CurrentFrame().OperandStack)
 		fn(f)
 	}
 }

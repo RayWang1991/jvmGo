@@ -22,33 +22,33 @@ func getfield(frame *rtdt.Frame) {
 	stack := frame.OperandStack
 	obj := stack.PopNonnilRef()
 
-	utils.DIstrPrintf("GET FIELD %s %s %s\n", field.Name(), field.Desc(), field.Class().ClassName())
+	//utils.DIstrPrintf("GET FIELD %s %s %s\n", field.Name(), field.Desc(), field.Class().ClassName())
 
 	i := field.VarIdx()
 	//debug
-	//fmt.Printf("GET FIELD %s %s %s ", field.Name(), field.Desc(), field.Class().ClassName())
+	utils.DIstrPrintf("GET FIELD %s %s %s ", field.Name(), field.Desc(), field.Class().ClassName())
 	switch field.Desc() {
 	case "B", "C", "I", "S", "Z":
 		v := obj.GetInt(i)
 		stack.PushInt(v)
-		//fmt.Printf("I %d\n", v)
+		utils.DIstrPrintf("I %d\n", v)
 	case "D":
 		v := obj.GetDouble(i)
 		stack.PushDouble(v)
-		//fmt.Printf("D %f\n", v)
+		utils.DIstrPrintf("D %f\n", v)
 	case "J":
 		v := obj.GetLong(i)
 		stack.PushLong(v)
-		//fmt.Printf("J %d\n", v)
+		utils.DIstrPrintf("J %d\n", v)
 	case "F":
 		v := obj.GetFloat(i)
 		stack.PushFloat(v)
-		//fmt.Printf("F %f\n", v)
+		utils.DIstrPrintf("F %f\n", v)
 	default:
 		// [,L...;
 		v := obj.GetRef(i)
 		stack.PushRef(v)
-		//fmt.Printf("[L %s\n", v)
+		utils.DIstrPrintf("[L %s\n", v)
 	}
 }
 
@@ -101,7 +101,6 @@ func putfield(frame *rtdt.Frame) {
 	i := field.VarIdx()
 
 	//debug
-	//fmt.Printf("PUT FIELD %s %s %s index %d ", field.Name(), field.Desc(), field.Class().ClassName(), i)
 	utils.DIstrPrintf("PUT FIELD %s %s %s index%d\n", field.Name(), field.Desc(), field.Class().ClassName(), i)
 
 	switch field.Desc() {
@@ -109,28 +108,28 @@ func putfield(frame *rtdt.Frame) {
 		v := stack.PopInt()
 		obj := stack.PopNonnilRef()
 		obj.SetInt(v, i)
-		//fmt.Printf("I %d\n", v)
+		utils.DIstrPrintf("I %d\n", v)
 	case "D":
 		v := stack.PopDouble()
 		obj := stack.PopNonnilRef()
 		obj.SetDouble(v, i)
-		//fmt.Printf("D %f\n", v)
+		utils.DIstrPrintf("D %f\n", v)
 	case "J":
 		v := stack.PopLong()
 		obj := stack.PopNonnilRef()
 		obj.SetLong(v, i)
-		//fmt.Printf("J %d\n", v)
+		utils.DIstrPrintf("J %d\n", v)
 	case "F":
 		v := stack.PopFloat()
 		obj := stack.PopNonnilRef()
 		obj.SetFloat(v, i)
-		//fmt.Printf("F %f\n", v)
+		utils.DIstrPrintf("F %f\n", v)
 	default:
 		// [,L...;
 		v := stack.PopRef()
 		obj := stack.PopNonnilRef()
 		obj.SetRef(v, i)
-		//fmt.Printf("[L %s\n", v)
+		utils.DIstrPrintf("[L %s\n", v)
 	}
 }
 
@@ -311,8 +310,6 @@ func arraylength(frame *rtdt.Frame) {
 	if arref == nil {
 		panic(utils.NullPointerException)
 	}
-	//debug
-	fmt.Printf("arr %s len %d\n", arref, arref.ArrayLength())
 	frame.OperandStack.PushInt(arref.ArrayLength())
 }
 
@@ -357,7 +354,6 @@ func getClassRefU16(f *rtdt.Frame) *marea.Class {
 	c := m.Class()
 	cp := c.ConstantPool()
 	ref := cp.GetClassRef(idx)
-	fmt.Printf("ref%s\n", ref.ClassName())
 	return ref.Ref()
 }
 
@@ -370,7 +366,7 @@ func getFieldRefU16(f *rtdt.Frame) *marea.Field {
 
 // invoke family
 func invokevirtual(f *rtdt.Frame) {
-	utils.Dprintf("[INVOKE VIRTUAL]\n")
+	utils.DIstrPrintf("[INVOKE VIRTUAL]\n")
 	t := f.Thread()
 	// locate the method
 	ind := f.ReadU16()
@@ -380,15 +376,8 @@ func invokevirtual(f *rtdt.Frame) {
 	m := mr.GetMethod()
 
 	//debug
-	fmt.Printf("method name:%s desc:%s args:%d ret:%s class:%s current %s\n",
+	utils.DIstrPrintf("method name:%s desc:%s args:%d ret:%s class:%s current %s\n",
 		m.Name(), m.Desc(), m.ArgSlotNum(), m.RetD(), m.Class().ClassName(), cc.ClassName())
-	if cc.ClassName() == "java/lang/reflect/Constructor" {
-		var t = cc.Superclass()
-		for t != nil {
-			fmt.Printf("%s\n", t.ClassName())
-			t = t.Superclass()
-		}
-	}
 	if m.IsStatic() {
 		panic(utils.IncompatibleClassChangeError)
 	}
@@ -416,7 +405,7 @@ func invokevirtual(f *rtdt.Frame) {
 	//}
 
 	//debug
-	utils.Dprintf("[REAL] name:%s desc:%s call:%s from:%s\n",
+	utils.DIstrPrintf("[REAL] name:%s desc:%s call:%s from:%s\n",
 		m.Name(), m.Desc(), objref.Class().ClassName(), cc.ClassName())
 	realMethod := marea.LookUpMethodVirtual(objref.Class(), cc, m.Name(), m.Desc())
 
@@ -472,7 +461,7 @@ func invokespecial(f *rtdt.Frame) {
 	}
 
 	//debug
-	fmt.Printf("method name:%s desc:%s args:%d ret:%s class:%s\n",
+	utils.DIstrPrintf("method name:%s desc:%s args:%d ret:%s class:%s\n",
 		m.Name(), m.Desc(), m.ArgSlotNum(), m.RetD(), m.Class().ClassName())
 	//utils.DIstrPrintf("real called method %s %s %s\n", m.Name(), m.Desc(), m.Class().ClassName())
 	pos := m.ArgSlotNum()
@@ -506,7 +495,7 @@ func invokestatic(f *rtdt.Frame) {
 	m := mClz.LookUpMethodDirectly(mr.Name(), mr.Desc())
 
 	//debug
-	fmt.Printf("method name:%s desc:%s args:%d ret:%s class:%s\n",
+	utils.DIstrPrintf("method name:%s desc:%s args:%d ret:%s class:%s\n",
 		m.Name(), m.Desc(), m.ArgSlotNum(), m.RetD(), m.Class().ClassName())
 
 	if m == nil {
@@ -524,7 +513,7 @@ func invokestatic(f *rtdt.Frame) {
 }
 
 func invokeinterface(f *rtdt.Frame) {
-	utils.Dprintf("[INVOKE INTERFACE]\n")
+	utils.DIstrPrintf("[INVOKE INTERFACE]\n")
 	t := f.Thread()
 	// locate the method
 	ind := f.ReadU16()
@@ -552,7 +541,7 @@ func invokeinterface(f *rtdt.Frame) {
 		panic(utils.NullPointerException)
 	}
 	// debug
-	utils.Dprintf("CLASS %s\n", objref.Class().ClassName())
+	utils.DIstrPrintf("CLASS %s\n", objref.Class().ClassName())
 
 	realMethod := marea.LookUpMethodVirtual(objref.Class(), cc, m.Name(), m.Desc())
 	if realMethod.IsAbstract() {
@@ -580,7 +569,7 @@ func invokeinterface(f *rtdt.Frame) {
 func callMethod(m *marea.Method, t *rtdt.Thread) {
 	utils.DIstrPrintf("[CALL real] %s %s\n", m.Name(), m.Class().ClassName())
 	if m.IsNative() {
-		fmt.Printf("[NATIVE] %s %s\n", m.Name(), m.Desc())
+		utils.DIstrPrintf("[NATIVE] %s %s\n", m.Name(), m.Desc())
 		m.SetMaxLocalVars(uint16(m.ArgSlotNum() + 1))
 		m.SetMaxStackDep(16) //TODO, variable
 		// inject return code
@@ -619,18 +608,17 @@ func setUpCallingFrame(t *rtdt.Thread, m *marea.Method) {
 	}
 	//debug
 	f = nf
-	fmt.Printf("stack %s\n locals %s\n", f.OperandStack, f.LocalVar)
+	utils.DIstrPrintf("stack %s\n locals %s\n", f.OperandStack, f.LocalVar)
 
-	if f.Method().Name() == "verifyMemberAccess" || f.Method().Name() == "lookup2" || f.Method().Name() == "equals" ||
-		f.Method().Name() == "fillInStackTrace" || f.Method().Name() == "mapLibraryName" ||
-		f.Method().Name() == "<init>" && f.Method().Class().ClassName() == "java/lang/Exception" {
-		//debug
-		for c := f; c != nil; c = c.GetNext() {
-			fmt.Printf("CALLS %s.%s()\n", c.Method().Class().ClassName(), c.Method().Name())
+	if utils.DebugFlag && utils.IstrDebugFlag {
+		if f.Method().Name() == "verifyMemberAccess" || f.Method().Name() == "lookup2" || f.Method().Name() == "equals" ||
+			f.Method().Name() == "fillInStackTrace" || f.Method().Name() == "mapLibraryName" ||
+			f.Method().Name() == "<init>" && f.Method().Class().ClassName() == "java/lang/Exception" {
+			//debug
+			for c := f; c != nil; c = c.GetNext() {
+				fmt.Printf("CALLS %s.%s()\n", c.Method().Class().ClassName(), c.Method().Name())
+			}
 		}
-	}
-	if m.Name() == "equals" {
-		fmt.Printf("[equals] Locals %s\n", nf.LocalVar)
 	}
 
 	//todo hack

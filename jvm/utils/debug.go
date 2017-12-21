@@ -12,9 +12,7 @@ func Dprintf(format string, a ... interface{}) {
 	}
 }
 
-var LoaderDebugFlag = true
-
-var InitDebugFlag = true
+var LoaderDebugFlag = false
 
 func DLoaderPrintf(fmt string, a ... interface{}) {
 	if LoaderDebugFlag {
@@ -22,13 +20,7 @@ func DLoaderPrintf(fmt string, a ... interface{}) {
 	}
 }
 
-func DInitPrintf(fmt string, a ... interface{}) {
-	if InitDebugFlag {
-		Dprintf(fmt, a ...)
-	}
-}
-
-var IstrDebugFlag = true
+var IstrDebugFlag = false
 
 func DIstrPrintf(fmt string, a ... interface{}) {
 	if IstrDebugFlag {
@@ -36,10 +28,26 @@ func DIstrPrintf(fmt string, a ... interface{}) {
 	}
 }
 
-var ThreadDebugFlag = true
+var NativeDebugFlag = true
+
+func DNativePrintf(fmt string, a ... interface{}) {
+	if NativeDebugFlag {
+		Dprintf(fmt, a ...)
+	}
+}
+
+var ThreadDebugFlag = false
 
 func DThreadPrintf(fmt string, a ... interface{}) {
 	if ThreadDebugFlag {
+		Dprintf(fmt, a ...)
+	}
+}
+
+var MainDebugFlag = false
+
+func DMainPrintf(fmt string, a ... interface{}) {
+	if MainDebugFlag {
 		Dprintf(fmt, a ...)
 	}
 }

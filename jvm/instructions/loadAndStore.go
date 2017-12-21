@@ -5,7 +5,6 @@ import (
 	"jvmGo/jvm/marea"
 	"jvmGo/jvm/rtdt"
 	"jvmGo/jvm/utils"
-	"fmt"
 )
 
 // Loads
@@ -105,10 +104,6 @@ func aload(f *rtdt.Frame) {
 	i := f.ReadU8()
 	v := f.LocalVar.GetRef(uint(i))
 	f.OperandStack.PushRef(v)
-	//debug
-	if f.Method().Class().ClassName() == "java/util/concurrent/atomic/AtomicReferenceFieldUpdater$AtomicReferenceFieldUpdaterImpl" {
-		fmt.Printf("i %d Local %s\n", i, f.LocalVar)
-	}
 }
 
 func aload_0(f *rtdt.Frame) {
