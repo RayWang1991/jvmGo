@@ -35,7 +35,9 @@ func (l Vars) SetLong(long int64, i uint) {
 }
 
 func (l Vars) GetLong(i uint) int64 {
-	return int64(l[i+1].Num)<<32 | int64(uint32(l[i].Num))
+	low := uint32(l[i].Num)
+	high := uint32(l[i+1].Num)
+	return int64(high)<<32 | int64(low)
 }
 
 func (l Vars) SetDouble(d float64, i uint) {
