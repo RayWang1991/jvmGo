@@ -5,7 +5,6 @@ import (
 	"jvmGo/jvm/utils"
 	"jvmGo/jvm/marea"
 	"jvmGo/jvm/cmn"
-	"fmt"
 )
 
 func init() {
@@ -20,6 +19,10 @@ func init() {
 	register(utils.CLASSNAME_Class, "isInterface", "()Z", isInterface)
 	register(utils.CLASSNAME_Class, "getModifiers", "()I", getModifiers)
 	register(utils.CLASSNAME_Class, "getSuperclass", "()Ljava/lang/Class;", getSuperclass)
+	register(utils.CLASSNAME_Class, "isArray", "()Z", isArray)
+	register(utils.CLASSNAME_Class, "getComponentType", "()Ljava/lang/Class;", getComponentType)
+	register(utils.CLASSNAME_Class, "getEnclosingMethod0", "()[Ljava/lang/Object;", getEnclosingMethod0)
+	register(utils.CLASSNAME_Class, "getDeclaringClass0", "()Ljava/lang/Class;", getDeclaringClass0)
 }
 
 // private static native boolean desiredAssertionStatus0(Class<?> clazz);
@@ -48,7 +51,8 @@ func getName0(f *rtdt.Frame) {
 	name := ref.GetClzClass().DotedName()
 	loader := f.Method().Class().DefineLoader()
 	str := marea.GetJavaString(name, loader)
-	fmt.Printf("name %s\n", name)
+	//debug
+	utils.DIstrPrintf("name %s\n", name)
 	f.OperandStack.PushRef(str)
 }
 
@@ -57,10 +61,6 @@ func getName0(f *rtdt.Frame) {
 func forName0(f *rtdt.Frame) {
 	jName := f.LocalVar.GetRef(0)
 	goName := cmn.ToSlash(marea.GetGoString(jName))
-	//debug
-	fmt.Printf("stack %s\n", f.OperandStack)
-	fmt.Printf("local var %s\n", f.LocalVar)
-	fmt.Printf("name %s class %s\n", goName, jName.Class().ClassName())
 
 	// TODO, initialize and loader is not used
 	//initialize := f.LocalVar.GetInt(1)
@@ -109,7 +109,7 @@ func getDeclaredFields0(f *rtdt.Frame) {
 	fieldConstructor := fieldClass.Method(utils.METHODNAME_Init,
 		"(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/Class;IILjava/lang/String;[B)V")
 	//debug, print all names
-	fmt.Printf("[FIELD NAMES] class %s len%d", this.GetClzClass().ClassName(), len(pickedFields))
+	utils.DIstrPrintf("[FIELD NAMES] class %s len%d", this.GetClzClass().ClassName(), len(pickedFields))
 	for i, field := range pickedFields {
 		fieldObj := marea.NewObject(fieldClass)
 		fieldArray.ArrGetRefs()[i] = fieldObj
@@ -118,9 +118,9 @@ func getDeclaredFields0(f *rtdt.Frame) {
 		ops.PushRef(fieldObj)                                  // this
 		ops.PushRef(fieldClzObj)                               // declaring class
 		ops.PushRef(marea.GetJavaString(field.Name(), loader)) // java name
-		//debug
 		typeName := cmn.ToClassName(field.Desc())
-		fmt.Printf("[Type] %s\n", typeName)
+		//debug
+		utils.DIstrPrintf("[Type] %s\n", typeName)
 		ops.PushRef(loader.Load(typeName).GetClassObject())    // type class
 		ops.PushInt(int32(field.Flags()))                      // modifiers
 		ops.PushInt(int32(field.VarIdx()))                     // slotid
@@ -295,3 +295,45 @@ func getSuperclass(f *rtdt.Frame) {
 //private native Method[]      getDeclaredMethods0(boolean publicOnly);
 
 //private native Class<?>[]   getDeclaredClasses0();
+
+// public native boolean isArray();
+// ()Z
+func isArray(f *rtdt.Frame) {
+	this := f.LocalVar.GetRef(0)
+	cls := this.GetClzClass()
+	var res int32
+	if cmn.IsArray(cls.ClassName()) {
+		res = 1
+	} else {
+		res = 0
+	}
+	f.OperandStack.PushInt(res)
+}
+
+//public native Class<?> getComponentType();
+// ()Ljava/lang/Class;
+func getComponentType(f *rtdt.Frame) {
+	this := f.LocalVar.GetRef(0)
+	cls := this.GetClzClass()
+	// must be array type
+	eleNRaw := cmn.ElementName(cls.ClassName())
+	eleN := cmn.ToClassName(eleNRaw)
+	eleC := f.Method().Class().DefineLoader().Load(eleN)
+	eleCObj := eleC.GetClassObject()
+	f.OperandStack.PushRef(eleCObj)
+}
+
+//private native Object[] getEnclosingMethod0();
+// ()[Ljava/lang/Object;
+func getEnclosingMethod0(f *rtdt.Frame) {
+	//todo
+	f.OperandStack.PushRef(nil)
+}
+
+
+// private native Class<?> getDeclaringClass0();
+// ()Ljava/lang/Class;
+func getDeclaringClass0(f *rtdt.Frame){
+	//todo
+	f.OperandStack.PushRef(nil)
+}
