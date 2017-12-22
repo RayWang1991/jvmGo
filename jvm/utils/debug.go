@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-var DebugFlag = true
+var DebugFlag = false
 
 func Dprintf(format string, a ... interface{}) {
 	if DebugFlag {
@@ -44,10 +44,18 @@ func DThreadPrintf(fmt string, a ... interface{}) {
 	}
 }
 
-var MainDebugFlag = false
+var MainDebugFlag = true
 
 func DMainPrintf(fmt string, a ... interface{}) {
 	if MainDebugFlag {
 		Dprintf(fmt, a ...)
+	}
+}
+
+var CallTraceFlag = false
+
+func DCallTracePrintf(format string, a ... interface{}) {
+	if CallTraceFlag {
+		fmt.Printf(format, a...)
 	}
 }
