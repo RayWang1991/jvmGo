@@ -1,4 +1,4 @@
-package io
+package lib
 
 import (
 	"jvmGo/jvm/rtdt"
@@ -6,11 +6,11 @@ import (
 	"os"
 	"jvmGo/jvm/marea"
 	"fmt"
-	"jvmgo-book/v1/code/go/src/jvmgo/ch11/native"
+	"jvmGo/jvm/utils"
 )
 
-func init(){
-	native.Register()
+func init() {
+	register(utils.CLASSNAME_FileOutputStream, "writeBytes", "([BIIZ)V", writeBytes)
 }
 
 /**
