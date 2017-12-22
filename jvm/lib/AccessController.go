@@ -8,6 +8,7 @@ import (
 func init() {
 	register(utils.CLASSNAME_AccessController, "doPrivileged", "(Ljava/security/PrivilegedAction;)Ljava/lang/Object;", doPrivileged)
 	register(utils.CLASSNAME_AccessController, "doPrivileged", "(Ljava/security/PrivilegedExceptionAction;)Ljava/lang/Object;", doPrivileged)
+	register(utils.CLASSNAME_AccessController, "doPrivileged", "(Ljava/security/PrivilegedAction;Ljava/security/AccessControlContext;)Ljava/lang/Object;", doPrivileged)
 	register(utils.CLASSNAME_AccessController, "getStackAccessControlContext", "()Ljava/security/AccessControlContext;", getStackAccessControlContext)
 }
 

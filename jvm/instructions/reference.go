@@ -610,15 +610,12 @@ func setUpCallingFrame(t *rtdt.Thread, m *marea.Method) {
 	f = nf
 	utils.DIstrPrintf("stack %s\n locals %s\n", f.OperandStack, f.LocalVar)
 
-	if utils.DebugFlag && utils.IstrDebugFlag {
-		if f.Method().Name() == "verifyMemberAccess" || f.Method().Name() == "lookup2" || f.Method().Name() == "equals" ||
-			f.Method().Name() == "fillInStackTrace" || f.Method().Name() == "mapLibraryName" ||
-			f.Method().Name() == "<init>" && f.Method().Class().ClassName() == "java/lang/Exception" {
-			//debug
-			for c := f; c != nil; c = c.GetNext() {
-				fmt.Printf("CALLS %s.%s()\n", c.Method().Class().ClassName(), c.Method().Name())
-			}
-		}
+	if utils.CallTraceFlag {
+		fmt.Printf("%s.%s()\n", m.Class().ClassName(), m.Name())
+	}
+
+	if f.Method().Name() == "fillInStackTrace" {
+		t.PrintStack()
 	}
 
 	//todo hack

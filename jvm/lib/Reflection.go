@@ -16,10 +16,10 @@ func getCallerClass(f *rtdt.Frame) {
 
 	nf := f.GetNext().GetNext()
 	ref := nf.Method().Class().GetClassObject()
-	//debug
-	fmt.Printf("CallerClass %s\n", ref.GetClzClass().ClassName())
-	for _, f := range ref.GetClzClass().FieldMap() {
-		fmt.Printf("FIELD %s %s\n", f.Name(), f.Desc())
+	if utils.DebugFlag && utils.IstrDebugFlag {
+		for _, f := range ref.GetClzClass().FieldMap() {
+			fmt.Printf("FIELD %s %s\n", f.Name(), f.Desc())
+		}
 	}
 	f.OperandStack.PushRef(ref)
 }
