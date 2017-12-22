@@ -16,7 +16,10 @@ func init() {
 	register(utils.CLASSNAME_Unsafe, "objectFieldOffset", "(Ljava/lang/reflect/Field;)J", objectFieldOffset)
 	register(utils.CLASSNAME_Unsafe, "compareAndSwapObject", "(Ljava/lang/Object;JLjava/lang/Object;Ljava/lang/Object;)Z", compareAndSwapObject)
 	register(utils.CLASSNAME_Unsafe, "compareAndSwapInt", "(Ljava/lang/Object;JII)Z", compareAndSwapInt)
+	register(utils.CLASSNAME_Unsafe, "compareAndSwapLong", "(Ljava/lang/Object;JJJ)Z", compareAndSwapLong)
 	register(utils.CLASSNAME_Unsafe, "getIntVolatile", "(Ljava/lang/Object;J)I", getIntVolatile)
+	register(utils.CLASSNAME_Unsafe, "getObjectVolatile", "(Ljava/lang/Object;J)Ljava/lang/Object;", getObjectVolatile)
+	register(utils.CLASSNAME_Unsafe, "putObjectVolatile", "(Ljava/lang/Object;JLjava/lang/Object;)V", putObjectVolatile)
 	register(utils.CLASSNAME_Unsafe, "allocateMemory", "(J)J", allocateMemory)
 	register(utils.CLASSNAME_Unsafe, "putLong", "(JJ)V", putLong)
 	register(utils.CLASSNAME_Unsafe, "getByte", "(J)B", getByte)
@@ -61,7 +64,8 @@ func objectFieldOffset(f *rtdt.Frame) {
 // (Ljava/lang/Object;JLjava/lang/Object;Ljava/lang/Object;)Z
 func compareAndSwapObject(f *rtdt.Frame) {
 	vars := f.LocalVar
-	fmt.Println(vars)
+	//debug
+	utils.DIstrPrintf("compareAndSwapObj local %s\n", vars)
 	obj := vars.GetRef(1)
 	offset := vars.GetLong(2)
 	expected := vars.GetRef(4)
@@ -117,20 +121,45 @@ func compareAndSwapInt(f *rtdt.Frame) {
 	}
 }
 
+// public final native boolean compareAndSwapInt(object ar1, long var2 ,long var4, long var6);
+// (Ljava/lang/Object;JJJ)Z
+func compareAndSwapLong(f *rtdt.Frame) {
+	vars := f.LocalVar
+	obj := vars.GetRef(1)
+	offset := vars.GetLong(2)
+	off := uint(uint32(offset))
+	expected := vars.GetLong(4)
+	newVar := vars.GetLong(6)
+
+	switch data := obj.Data().(type) {
+	case marea.Vars:
+		if data.GetLong(off) == expected {
+			data.SetLong(newVar, off)
+			f.OperandStack.PushInt(1)
+		} else {
+			f.OperandStack.PushInt(0)
+		}
+	case []int64:
+		if data[off] == expected {
+			data[off] = newVar
+			f.OperandStack.PushInt(1)
+		} else {
+			f.OperandStack.PushInt(0)
+		}
+	default:
+		panic(fmt.Errorf("compareAndSwapLong, wrong type %T!", data))
+	}
+}
+
 // public native init getIntVolatile(Object obj, long l);
 // (Ljava/lang/Object;J)I
 func getIntVolatile(f *rtdt.Frame) {
 	obj := f.LocalVar.GetRef(1)
 	offset := f.LocalVar.GetLong(2)
 	off := uint(int32(offset))
-	//debug
 	fields := obj.Data()
-	fmt.Printf("LONG %d INT %d\n", offset, off)
-	fmt.Printf("OBJ %s\n", obj.Class().ClassName())
 	switch fields := fields.(type) {
 	case marea.Vars:
-		//debug
-		fmt.Printf("num %d\n", len(fields))
 		n := fields[off].Num
 		f.OperandStack.PushInt(n)
 	case []int32:
@@ -141,7 +170,27 @@ func getIntVolatile(f *rtdt.Frame) {
 	}
 }
 
-// todo
+// public native Object getObjectVolatile(Object var1, long var2);
+// (Ljava/lang/Object;J)Ljava/lang/Object;
+
+func getObjectVolatile(f *rtdt.Frame) {
+	obj := f.LocalVar.GetRef(1)
+	offset := f.LocalVar.GetLong(2)
+	off := uint(int32(offset))
+	fields := obj.Data()
+	switch fields := fields.(type) {
+	case marea.Vars:
+		n := fields[off].Ref
+		f.OperandStack.PushRef(n)
+	case []*marea.Object:
+		n := fields[off]
+		f.OperandStack.PushRef(n)
+	default:
+		panic(fmt.Errorf("getObjVolatile, wrong type %T!", fields))
+	}
+}
+
+// todo, memory alloc
 const _offset = int64(10086)
 
 var _address = _offset
@@ -186,7 +235,7 @@ func putLong(f *rtdt.Frame) {
 	addr := f.LocalVar.GetLong(1)
 	value := f.LocalVar.GetLong(3)
 	idx := _memIdx(addr)
-	fmt.Printf("slot1 %d slot2 %d addr is %d idx is %d\n", f.LocalVar.GetInt(1), f.LocalVar.GetInt(2), addr, idx)
+	utils.DIstrPrintf("slot1 %d slot2 %d addr is %d idx is %d\n", f.LocalVar.GetInt(1), f.LocalVar.GetInt(2), addr, idx)
 	bytes := mem[idx:]
 
 	if len(bytes) < 8 {
@@ -212,6 +261,24 @@ func getByte(f *rtdt.Frame) {
 
 // public native void freeMemory(long var1);
 // (J)V
-func freeMemory(f *rtdt.Frame){
-	//todo
+func freeMemory(f *rtdt.Frame) {
+	//todo, memory free
+}
+
+// public native void putObjectVolatile(Object var1, long var2, Object var4);
+// (Ljava/lang/Object;JLjava/lang/Object;)V
+func putObjectVolatile(f *rtdt.Frame) {
+	obj := f.LocalVar.GetRef(1)
+	offset := f.LocalVar.GetLong(2)
+	off := uint(int32(offset))
+	toPutObj := f.LocalVar.GetRef(4)
+	fields := obj.Data()
+	switch fields := fields.(type) {
+	case marea.Vars:
+		fields[off].Ref = toPutObj
+	case []*marea.Object:
+		fields[off] = toPutObj
+	default:
+		panic(fmt.Errorf("putObjVolatile, wrong type %T!", fields))
+	}
 }
