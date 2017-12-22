@@ -7,6 +7,7 @@ import (
 	"os"
 	"jvmGo/jvm/marea"
 	"jvmGo/jvm/cmn"
+	"time"
 )
 
 func init() {
@@ -15,6 +16,8 @@ func init() {
 	register(utils.CLASSNAME_System, "setIn0", "(Ljava/io/InputStream;)V", setIn0)
 	register(utils.CLASSNAME_System, "setOut0", "(Ljava/io/PrintStream;)V", setOut0)
 	register(utils.CLASSNAME_System, "setErr0", "(Ljava/io/PrintStream;)V", setErr0)
+	register(utils.CLASSNAME_System, "currentTimeMillis", "()J", currentTimeMillis)
+	register(utils.CLASSNAME_System, "nanoTime", "()J", nanoTime)
 }
 
 // private static native Properties initProperties(Properties props);
@@ -45,7 +48,7 @@ func initProperties(frame *rtdt.Frame) {
 
 func _sysProperties() map[string]string {
 	return map[string]string{
-		"java.version":        "0.0.1",
+		"java.version":        "1.8.0",
 		"java.vendor":         "govm",
 		"java.class.version":  "52.0",
 		"os.name":             runtime.GOOS,
@@ -157,3 +160,27 @@ func setErr0(f *rtdt.Frame) {
 	errField := sysC.StatField("err")
 	sysC.SetRef(err, errField.VarIdx())
 }
+
+// public static native String mapLibraryName(String libname);
+// (Ljava/lang/String;)Ljava/lang/String;
+func mapLibraryName(f *rtdt.Frame) {
+	//libName := f.LocalVar.GetRef(0)
+	//todo
+}
+
+//public static native long currentTimeMillis();
+//()J
+func currentTimeMillis(f *rtdt.Frame) {
+	t := time.Now().UnixNano() / int64(time.Microsecond)
+	f.OperandStack.PushLong(t)
+}
+
+//public static native long nanoTime();
+//()J
+func nanoTime(f *rtdt.Frame) {
+	//t := int64(time.Now().Nanosecond())
+	t := time.Now().UnixNano()
+	f.OperandStack.PushLong(t)
+}
+
+
