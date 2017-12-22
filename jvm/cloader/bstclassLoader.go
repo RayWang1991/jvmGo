@@ -111,7 +111,7 @@ func (b *bstLoader) Delegate() marea.ClassLoader {
 }
 
 func (b *bstLoader) Load(n string) *marea.Class {
-	fmt.Printf("Load %s\n", n)
+	//utils.DLoaderPrintf("Load %s\n", n)
 	if cmn.IsArray(n) {
 		return b.loadArrayClass(n)
 	} else {
@@ -120,7 +120,7 @@ func (b *bstLoader) Load(n string) *marea.Class {
 }
 
 func (b *bstLoader) loadNormalClass(n string) *marea.Class {
-	fmt.Printf("Initate %s\n", n)
+	//utils.DLoaderPrintf("Initate %s\n", n)
 	if c := cache[n]; c != nil {
 		if c.InitLoader().ID() == b.id {
 			return c
@@ -137,7 +137,7 @@ func (b *bstLoader) loadNormalClass(n string) *marea.Class {
 
 func (b *bstLoader) _loadClassDirect(n string) *marea.Class {
 	cf, err := b.doLoadClassFile(n, b.cp)
-	fmt.Printf("load Class direct %s\n", n)
+	utils.DLoaderPrintf("load Class direct %s\n", n)
 
 	if cf == nil {
 		panic(utils.ClassNotFoundException)
@@ -156,7 +156,7 @@ func (b *bstLoader) _loadClassDirect(n string) *marea.Class {
 }
 
 func (b *bstLoader) Define(n string) *marea.Class {
-	fmt.Printf("define Class %s\n", n)
+	utils.DLoaderPrintf("define Class %s\n", n)
 
 	c := b._loadClassDirect(n)
 	t := c
@@ -188,12 +188,9 @@ func (b *bstLoader) setUpInterfaces(c *marea.Class) {
 			itf := b.Load(itfName)
 			intfs = append(intfs, itf)
 		}
-		//debug
-		fmt.Printf("[SETUPINTERFACES]for %s", c.ClassName())
 		for _, intf := range intfs {
-			fmt.Printf(" %s", intf.ClassName())
+			utils.DLoaderPrintf(" %s", intf.ClassName())
 		}
-		fmt.Println()
 		c.SetInterfaces(intfs)
 	}
 }
@@ -292,7 +289,7 @@ func (b *bstLoader) loadArrayClass(n string) *marea.Class {
 }
 
 func (b *bstLoader) doLoadArrayClass(n string) *marea.Class { // support load array recursively
-	fmt.Printf("LOAD %s\n", n)
+	utils.DLoaderPrintf("LOAD %s\n", n)
 	c := &marea.Class{}
 	cache[n] = c
 
@@ -308,20 +305,20 @@ func (b *bstLoader) doLoadArrayClass(n string) *marea.Class { // support load ar
 	})
 
 	elen := cmn.ElementName(n)
-	fmt.Printf("EleN is %s\n", elen)
+	utils.DLoaderPrintf("EleN is %s\n", elen)
 	if cmn.IsPrimitiveType(elen) { // the element is primitive type
 		// just create the array class
 		c.SetFlags(cmn.ACC_PUBLIC)
 	} else if cmn.IsArray(elen) { // the element is still array type
 		elec := b.loadArrayClass(elen)
-		c.SetFlags(elec.GetFlags())
+		c.SetFlags(elec.GetFlags() & (^uint16(cmn.ACC_INTERFACE)) & (^uint16(cmn.ACC_ABSTRACT))) //todo
 	} else { // for non array Objects
 		// should load the element type first
 		var elec *marea.Class
 		if elec = cache[elen]; elec == nil {
 			elec = b.loadNormalClass(elen) // TODO, for b to init element ?
 		}
-		c.SetFlags(elec.GetFlags())
+		c.SetFlags(elec.GetFlags() & (^uint16(cmn.ACC_INTERFACE)) & (^uint16(cmn.ACC_ABSTRACT))) //todo
 	}
 	c.SetInitLoader(b)
 	c.SetDefineLoader(b)

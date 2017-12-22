@@ -7,7 +7,7 @@ import (
 var strPool = make(map[string]*Object)
 
 func GetJavaString(key string, loader ClassLoader) *Object {
-	if v := strPool[key]; v != nil {
+	if v, ok := strPool[key]; ok {
 		return v
 	}
 	sClass := loader.Load("java/lang/String")

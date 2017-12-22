@@ -113,10 +113,6 @@ func (c *Class) SetStatField(f *Field, i uint16) {
 		c.SetFloat(v, f.vIdx)
 	case "Ljava/lang/String;":
 		raw := c.cp.GetString(i)
-		if c.defLoader == nil {
-			fmt.Println(c.GetClassObject())
-			fmt.Println(c.ClassName())
-		}
 		c.SetRef(GetJavaString(raw, DefaultLoader), f.vIdx)
 	default:
 		//  unsupported now
@@ -265,10 +261,6 @@ func (c *Class) LookUpField(name string) *Field {
 	}
 	if len(c.interfaces) > 0 {
 		for _, infc := range c.interfaces {
-			//debug
-			fmt.Printf("[INTERFACES CLASS] %s\n", c.name)
-			fmt.Printf("[INTERFACES NAMES] %v\n", c.interfaceNames)
-			fmt.Printf("[INTERFACES] %v\n", c.interfaces)
 			if f := infc.LookUpField(name); f != nil {
 				return f
 			}
@@ -301,7 +293,7 @@ func (c *Class) LookUpMethodInClass(key string) *Method {
 
 // look up method in interfaces
 func (c *Class) LookUpMethodInInterface(key string) *Method {
-	utils.Dprintf("LookUpMethod Interface %s %s\n", key, c.ClassName())
+	utils.DIstrPrintf("LookUpMethod Interface %s %s\n", key, c.ClassName())
 	for _, in := range c.interfaces {
 		if m := in.methodMap[key]; m != nil && !(m.IsAbstract() && m.IsPrivate() && m.IsStatic()) {
 			return m

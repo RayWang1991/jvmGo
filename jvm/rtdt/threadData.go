@@ -2,6 +2,7 @@ package rtdt
 
 import (
 	"jvmGo/jvm/utils"
+	"fmt"
 )
 
 // Thread represents a thread
@@ -83,3 +84,10 @@ func (s *Stack) pop() *Frame {
 }
 
 // run loop
+func (t *Thread) PrintStack() {
+	f := t.CurrentFrame()
+	fmt.Printf("CALL STACK:\n")
+	for c := f; c != nil; c = c.GetNext() {
+		fmt.Printf("%s.%s()\n", c.Method().Class().ClassName(), c.Method().Name())
+	}
+}

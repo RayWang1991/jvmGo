@@ -10,7 +10,7 @@ func ndStr(name, desc string) string {
 }
 
 func LookUpMethodVirtual(c, from *Class, name, desc string) *Method {
-	utils.Dprintf("[LOOK UP VIRTUAL] clz %s, from %s, name %s\n", c.name, from.name, name)
+	utils.DIstrPrintf("[LOOK UP VIRTUAL] clz %s, from %s, name %s\n", c.name, from.name, name)
 	m := c.LookUpMethod(name, desc)
 	if m == nil {
 		//debug

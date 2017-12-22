@@ -3,7 +3,6 @@ package lib
 import (
 	"jvmGo/jvm/utils"
 	"jvmGo/jvm/rtdt"
-	"fmt"
 	"jvmGo/jvm/cmn"
 	"jvmGo/jvm/marea"
 )
@@ -18,7 +17,7 @@ func newInstance0(frame *rtdt.Frame) {
 	constructor := frame.LocalVar.GetRef(0) // constructor
 	consClz := constructor.Class()
 	//debug
-	fmt.Printf("const %s\n", consClz.ClassName())
+	utils.DIstrPrintf("const %s\n", consClz.ClassName())
 	clzSlotId := consClz.InstField("clazz").VarIdx()
 	descId := consClz.InstField("parameterAnnotations").VarIdx()
 	vars := frame.LocalVar.GetRef(1) // Object[]
@@ -41,7 +40,9 @@ func newInstance0(frame *rtdt.Frame) {
 	}
 	desc := string(bs)
 	m := class.GetMethodDirect("<init>", desc)
-	fmt.Printf("CONSTM %s %s\n", m.Desc(),class.ClassName())
+
+	//debug
+	utils.DIstrPrintf("CONSTM %s %s\n", m.Desc(), class.ClassName())
 	//panic("TODO")
 
 	if len(varArray) != len(m.ArgDs()) {
