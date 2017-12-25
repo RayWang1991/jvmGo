@@ -33,6 +33,7 @@ const (
 	CLASSNAME_UnixFileSystem                = "java/io/UnixFileSystem"
 	CLASSNAME_URLClassPath                  = "sun/misc/URLClassPath"
 	CLASSNAME_ClassLoader                   = "java/lang/ClassLoader"
+	CLASSNAME_Locale                        = "java/util/Locale"
 
 	METHODNAME_InitializeSystemClass = "initializeSystemClass"
 	METHODNAME_Initialize            = "initialize"
