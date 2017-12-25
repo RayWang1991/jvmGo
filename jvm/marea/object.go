@@ -346,6 +346,37 @@ func (o *Object) String() string {
 	return buf.String()
 }
 
+func (o *Object) ListAllFields() string {
+	buf := bytes.Buffer{}
+	buf.WriteString("Fields: \n")
+	for _, f := range o.Class().FieldMap() {
+		idx := f.VarIdx()
+		buf.WriteString(fmt.Sprintf("  %s %s idx %d ", f.Name(), f.Desc(), idx))
+		desc := f.Desc()
+		switch desc {
+		case "Z":
+			v := o.GetInt(idx) > 0
+			buf.WriteString(fmt.Sprintf("%t\n", v))
+		case "B", "C", "S", "I":
+			v := o.GetInt(idx)
+			buf.WriteString(fmt.Sprintf("%d\n", v))
+		case "J":
+			v := o.GetLong(idx)
+			buf.WriteString(fmt.Sprintf("%d\n", v))
+		case "F":
+			v := o.GetFloat(idx)
+			buf.WriteString(fmt.Sprintf("%f\n", v))
+		case "D":
+			v := o.GetDouble(idx)
+			buf.WriteString(fmt.Sprintf("%f\n", v))
+		default:
+			v := o.GetRef(idx)
+			buf.WriteString(fmt.Sprintf("%s\n", v)) // call v.String()
+		}
+	}
+	return buf.String()
+}
+
 func (o *Object) Data() interface{} {
 	return o.data
 }
