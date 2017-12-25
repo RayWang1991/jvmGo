@@ -29,13 +29,14 @@ func interpretMain(m *marea.Method, args []string) {
 	}
 	frame.LocalVar[0].Ref = arrArgs
 
-	//thread.PushFrame(frame)
+	//fmt.Printf("MAIN START")
 	//defer catchErr(thread)
 	loop(thread)
 }
 func catchErr(t *rtdt.Thread) {
 	if r := recover(); r != nil {
 		if t.CurrentFrame() != nil {
+			t.PrintStack()
 			fmt.Printf("Vars:%s\n", t.CurrentFrame().LocalVar)
 			fmt.Printf("OperandStack:%v\n", t.CurrentFrame().OperandStack)
 		} else {
