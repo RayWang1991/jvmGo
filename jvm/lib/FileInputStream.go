@@ -10,6 +10,7 @@ import (
 )
 
 func init() {
+	register(utils.CLASSNAME_FileInputStream, "open0", "(Ljava/lang/String;)V", open0)
 	register(utils.CLASSNAME_FileInputStream, "readBytes", "([BII)I", readBytes)
 }
 
@@ -29,6 +30,9 @@ func readBytes(f *rtdt.Frame) {
 	off := vars.GetInt(2)    // offset
 	length := vars.GetInt(3) // len
 	//append := vars.GetInt(4) != 0 // append, todo
+
+	//debug
+	fmt.Printf("this:\n %s\n%s", this, this.ListAllFields())
 
 	var r io.ReadCloser
 	var isFile = false
@@ -77,4 +81,14 @@ func readBytes(f *rtdt.Frame) {
 		panic(fmt.Errorf("read %s %s", r, err))
 	}
 	f.OperandStack.PushInt(int32(n))
+}
+
+// private native void open0(String name) throws FileNotFoundException;
+// (Ljava/lang/String;)V
+func open0(f *rtdt.Frame) {
+	//todo
+	this := f.LocalVar.GetRef(0)
+	jname := f.LocalVar.GetRef(1)
+	name := marea.GetGoString(jname)
+	fmt.Printf("this %s name %s\n", this, name)
 }
