@@ -44,22 +44,41 @@ func initProperties(frame *rtdt.Frame) {
 		thread.PushFrame(df)
 		callMethod(setPropMethod, df)
 	}
+
+	//todo set locale
+	// Locale.setDefault(Locale.CHINESE);
+	localeClz := loader.Load(utils.CLASSNAME_Locale)
+	loader.Initiate(localeClz)
+	cnLocaleField := localeClz.StatField("CHINESE")
+	cnLocale := localeClz.GetRef(cnLocaleField.VarIdx())
+
+	setDefaultM := localeClz.GetMethodDirect("setDefault", "(Ljava/util/Locale;)V")
+	op := rtdt.NewOperandStack(1)
+	op.PushRef(cnLocale)
+	df := dummyFrame(op, thread)
+	thread.PushFrame(df)
+	callMethod(setDefaultM, df)
+
 }
 
 func _sysProperties() map[string]string {
 	return map[string]string{
-		"java.version":        "1.8.0",
-		"java.vendor":         "govm",
-		"java.class.version":  "52.0",
-		"os.name":             runtime.GOOS,
-		"os.arch":             runtime.GOARCH,
-		"file.separator":      string(os.PathListSeparator),
-		"path.separator":      string(os.PathSeparator),
-		"line.separator":      "\n",
-		"user.dir":            ".",
-		"file.encoding":       "UTF-8",
-		"sun.stdout.encoding": "UTF-8",
-		"sun.stderr.encoding": "UTF-8",
+		"java.version":         "1.8.0",
+		"java.vendor":          "gojvm",
+		"java.class.version":   "52.0",
+		"os.name":              runtime.GOOS,
+		"os.arch":              runtime.GOARCH,
+		"file.separator":       string(os.PathListSeparator),
+		"path.separator":       string(os.PathSeparator),
+		"line.separator":       "\n",
+		"user.dir":             ".",
+		"file.encoding":        "UTF-8",
+		"sun.stdout.encoding":  "UTF-8",
+		"sun.stderr.encoding":  "UTF-8",
+		"user.language":        "en",
+		"user.country":         "CN",
+		"user.language.format": "cn",
+		"user.country.format":  "CN",
 	}
 }
 
@@ -182,5 +201,3 @@ func nanoTime(f *rtdt.Frame) {
 	t := time.Now().UnixNano()
 	f.OperandStack.PushLong(t)
 }
-
-
