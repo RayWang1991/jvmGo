@@ -1,9 +1,13 @@
-public abstract class TestMethod {
-  public abstract void foo(int a);
+public class TestMethod extends B{
+  public static void main(String[] args) {
+    B b = new B();
+    int a = 10;
+    a = b.foo(a);
+  }
 }
 
-class B extends TestMethod {
-  public void test(){
-    this.foo(1);
+class B  {
+  public int foo(int a) {
+    return a * 2;
   }
 }
