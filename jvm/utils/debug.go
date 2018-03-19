@@ -12,7 +12,7 @@ func Dprintf(format string, a ... interface{}) {
 	}
 }
 
-var LoaderDebugFlag = false
+var LoaderDebugFlag = true
 
 func DLoaderPrintf(fmt string, a ... interface{}) {
 	if LoaderDebugFlag {

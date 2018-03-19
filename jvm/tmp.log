@@ -1,0 +1,7 @@
+class path: /Users/raywang/GoglandProjects/src/jvmGo/ClassFileTest class: TestEcho args: [Hello, world! 123 456]
+MAIN START
+Hello,
+world!
+123
+456
+Num of chars: 18
