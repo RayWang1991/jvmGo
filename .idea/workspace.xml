@@ -3,101 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="809838e9-78a8-4dfa-81d7-c0628d1ebaa3" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/ClassFileTest/Son.class" afterPath="$PROJECT_DIR$/ClassFileTest/Son.class" />
-      <change beforePath="$PROJECT_DIR$/ClassFileTest/TestEcho.class" afterPath="$PROJECT_DIR$/ClassFileTest/TestEcho.class" />
-      <change beforePath="$PROJECT_DIR$/ClassFileTest/TestMethod.class" afterPath="$PROJECT_DIR$/ClassFileTest/TestMethod.class" />
-      <change beforePath="$PROJECT_DIR$/ch1/cmd.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch1/main.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch2/classpath/classPath.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch2/classpath/composite.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch2/classpath/dir.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch2/classpath/entry.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch2/classpath/wildcard.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch2/classpath/zip.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch2/cmd.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch2/main.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/accFlags.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attrInfo.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attr_bootstrpMethods.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attr_code.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attr_constantValue.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attr_enclosingMethod.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attr_exceptions.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attr_innerClasses.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attr_lineNumberTable.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attr_localVarTable.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attr_methodParameters.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attr_unsupported.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/attr_widgets.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/classFile.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/classReader.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/constantPool.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/constantPool_subs.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/constantPool_utils.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/debug.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classfile/memberInfo.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classpath/classPath.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classpath/composite.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classpath/dir.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classpath/entry.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classpath/wildcard.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/classpath/zip.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/cmd.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch3/main.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/accFlags.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attrInfo.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attr_bootstrpMethods.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attr_code.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attr_constantValue.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attr_enclosingMethod.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attr_exceptions.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attr_innerClasses.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attr_lineNumberTable.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attr_localVarTable.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attr_methodParameters.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attr_unsupported.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/attr_widgets.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/classFile.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/classReader.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/constantPool.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/constantPool_subs.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/constantPool_utils.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/debug.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classfile/memberInfo.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classpath/classPath.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classpath/composite.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classpath/dir.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classpath/entry.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classpath/wildcard.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/classpath/zip.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/cmd.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/errcode/errors.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/inptr.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/branch.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/comparisons.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/constants.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/control.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/conversion.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/debug.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/instructions.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/loadAndStore.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/math.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/methodInvocationAndReturen.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/stack.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/instructions/synchronization.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/main.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/rtdata/debug.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/rtdata/frame.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/rtdata/localVars.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/rtdata/object.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/rtdata/operandStack.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/rtdata/rtdata_test.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/rtdata/slot.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/rtdata/threadData.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ch5/testOutline.org" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/jvm/tmp.log" afterPath="$PROJECT_DIR$/jvm/tmp.log" />
-      <change beforePath="$PROJECT_DIR$/jvm/tmp1.log" afterPath="$PROJECT_DIR$/jvm/tmp1.log" />
-      <change beforePath="$PROJECT_DIR$/jvm/utils/debug.go" afterPath="$PROJECT_DIR$/jvm/utils/debug.go" />
+      <change beforePath="$PROJECT_DIR$/jvm/instructions/reference.go" afterPath="$PROJECT_DIR$/jvm/instructions/reference.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -122,16 +28,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="cmd.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jvm/cmd.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="28" column="11" lean-forward="false" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="inptr.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jvm/inptr.go">
           <provider selected="true" editor-type-id="text-editor">
@@ -155,8 +51,8 @@
       <file leaf-file-name="frame.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jvm/rtdt/frame.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="18" column="42" lean-forward="false" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
+            <state relative-caret-position="780">
+              <caret line="55" column="12" lean-forward="false" selection-start-line="55" selection-start-column="12" selection-end-line="55" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -192,21 +88,33 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="instructions.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="instructions.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jvm/instructions/instructions.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
-              <caret line="235" column="1" lean-forward="false" selection-start-line="235" selection-start-column="1" selection-end-line="235" selection-end-column="1" />
+            <state relative-caret-position="390">
+              <caret line="212" column="29" lean-forward="false" selection-start-line="212" selection-start-column="29" selection-end-line="212" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="threadData.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jvm/rtdt/threadData.go">
+      <file leaf-file-name="reference.go" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/jvm/instructions/reference.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1245">
-              <caret line="86" column="17" lean-forward="false" selection-start-line="86" selection-start-column="17" selection-end-line="86" selection-end-column="17" />
+            <state relative-caret-position="770">
+              <caret line="608" column="9" lean-forward="false" selection-start-line="608" selection-start-column="9" selection-end-line="608" selection-end-column="9" />
+              <folding>
+                <element signature="e#22#129#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="constantpool.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jvm/marea/constantpool.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="297">
+              <caret line="78" column="23" lean-forward="false" selection-start-line="78" selection-start-column="23" selection-end-line="78" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -332,7 +240,6 @@
         <option value="$PROJECT_DIR$/jvm/cloader/bstclassLoader.go" />
         <option value="$PROJECT_DIR$/jvm/rtdt/threadData.go" />
         <option value="$PROJECT_DIR$/jvm/marea/lookUp.go" />
-        <option value="$PROJECT_DIR$/jvm/instructions/reference.go" />
         <option value="$PROJECT_DIR$/jvm/marea/object.go" />
         <option value="$PROJECT_DIR$/jvm/utils/hardCode.go" />
         <option value="$PROJECT_DIR$/jvm/lib/System.go" />
@@ -340,6 +247,7 @@
         <option value="$PROJECT_DIR$/jvm/tmp.log" />
         <option value="$PROJECT_DIR$/jvm/utils/debug.go" />
         <option value="$PROJECT_DIR$/jvm/inptr.go" />
+        <option value="$PROJECT_DIR$/jvm/instructions/reference.go" />
       </list>
     </option>
   </component>
@@ -349,11 +257,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="x" value="-332" />
     <option name="y" value="-1057" />
     <option name="width" value="1920" />
-    <option name="height" value="1057" />
+    <option name="height" value="1012" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -549,7 +457,7 @@
     <option name="ACTIVE_ACTIONS" value=",Show Private Members" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-322" y="-1057" width="1920" height="1057" extended-state="6" />
+    <frame x="-332" y="-1057" width="1920" height="1012" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18489583" sideWeight="0.48960498" order="0" side_tool="false" content_ui="combo" />
@@ -591,13 +499,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jvm/lib/Reflection.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="10" column="28" lean-forward="false" selection-start-line="10" selection-start-column="28" selection-end-line="10" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jvm/cmn/class_util.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -735,13 +636,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1125">
           <caret line="77" column="4" lean-forward="false" selection-start-line="77" selection-start-column="4" selection-end-line="77" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jvm/instructions/reference.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9060">
-          <caret line="612" column="0" lean-forward="false" selection-start-line="612" selection-start-column="0" selection-end-line="612" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -916,14 +810,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jvm/rtdt/frame.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="18" column="42" lean-forward="false" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jvm/marea/vars.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
@@ -956,11 +842,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/jvm/rtdt/frame.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="55" column="12" lean-forward="false" selection-start-line="55" selection-start-column="12" selection-end-line="55" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jvm/marea/constantpool.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="78" column="23" lean-forward="false" selection-start-line="78" selection-start-column="23" selection-end-line="78" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/jvm/instructions/instructions.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="235" column="1" lean-forward="false" selection-start-line="235" selection-start-column="1" selection-end-line="235" selection-end-column="1" />
+        <state relative-caret-position="390">
+          <caret line="212" column="29" lean-forward="false" selection-start-line="212" selection-start-column="29" selection-end-line="212" selection-end-column="29" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jvm/instructions/reference.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="770">
+          <caret line="608" column="9" lean-forward="false" selection-start-line="608" selection-start-column="9" selection-end-line="608" selection-end-column="9" />
+          <folding>
+            <element signature="e#22#129#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -7,7 +7,6 @@ import (
 	"jvmGo/jvm/utils"
 	"jvmGo/jvm/cmn"
 	"fmt"
-	"jvmGo/ch5/instructions"
 )
 
 func getfield(frame *rtdt.Frame) {
@@ -575,17 +574,17 @@ func callMethod(m *marea.Method, t *rtdt.Thread) {
 		// inject return code
 		switch m.RetD()[0] {
 		case 'V':
-			m.SetCode([]byte{instructions.OPCODE_rreturn})
+			m.SetCode([]byte{cmn.OPCODE_rreturn})
 		case 'D':
-			m.SetCode([]byte{instructions.OPCODE_dreturn})
+			m.SetCode([]byte{cmn.OPCODE_dreturn})
 		case 'F':
-			m.SetCode([]byte{instructions.OPCODE_freturn})
+			m.SetCode([]byte{cmn.OPCODE_freturn})
 		case 'J':
-			m.SetCode([]byte{instructions.OPCODE_lreturn})
+			m.SetCode([]byte{cmn.OPCODE_lreturn})
 		case 'L', '[':
-			m.SetCode([]byte{instructions.OPCODE_areturn})
+			m.SetCode([]byte{cmn.OPCODE_areturn})
 		default:
-			m.SetCode([]byte{instructions.OPCODE_ireturn})
+			m.SetCode([]byte{cmn.OPCODE_ireturn})
 		}
 		setUpCallingFrame(t, m)
 		lib.CallNative(m, t)
